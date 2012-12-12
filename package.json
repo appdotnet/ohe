@@ -1,0 +1,28 @@
+{
+    "name": "ohe",
+    "description": "lolwut",
+    "author": "Bryan Berg <bryan@ber.gd>",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "nconf": "0.6.5",
+        "node-gyp": "0.7.3",
+        "express": "3.0.3",
+        "socket.io": "git://github.com/LearnBoost/socket.io.git#fcd4f6acfc024636dd257ca7fe5a2792f01e1735",
+        "event-stream": "3.0.7",
+        "request": "2.12.0",
+        "async": "0.1.22",
+        "when": "1.6.1",
+        "connect-redis": "1.4.5",
+        "ejs": "0.8.3",
+        "redis": "0.8.2",
+        "underscore": "1.4.2",
+        "http-proxy": "0.8.4",
+        "q": "0.8.11",
+        "hiredis": "0.1.14"
+    },
+    "engines": {
+        "node": "0.8.x",
+        "npm": "1.1.x"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "sessions": {
+        "redis_url": "redis://127.0.0.1:6379/0",
+        "secret": "onwCiabOt02Rb94WyHL5oaRR160woJgZ"
+    },
+    "adn": {
+        "oauth_url_base": "https://alpha.yourbox.dev.mxmlabs.com",
+        "api_url_base": "https://alpha-api.yourbox.dev.mxmlabs.com",
+        "client_id": "<client_id>",
+        "client_secret": "<client_secret>",
+        "scope": "messages"
+    }
+}

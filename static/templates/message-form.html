@@ -1,0 +1,10 @@
+<div class="row-fluid">
+  <div class="span12">
+    <form name="messageForm" class="form-inline message-form">
+      <div class="input-append">
+        <input type="text" class="input-xxlarge" name="text" ng-model="message.text">
+        <button ng-click="submitMessage()" ng-disabled="!message.text" class="btn btn-primary">Send</button>
+      </div>
+    </form>
+  </div>
+</div>

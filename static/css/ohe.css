@@ -1,0 +1,85 @@
+body {
+  padding-top: 60px;
+}
+
+.message-list {
+  overflow-y: scroll;
+  border: 1px solid gray;
+  padding: 2px;
+  width: 100%;
+  height: 100%;
+}
+
+.message-form {
+    padding-top: 20px;
+}
+
+.ellipsize {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-wrapper {
+    color: rgb(51,51,51);
+    padding: 5px;
+    border-top: 1px solid rgb(229, 229, 229);
+}
+
+.recent-message {
+    margin-right: 100px;
+}
+
+.img-block {
+    margin-right: 10px;
+    width: 50px;
+}
+
+.subscribers, .recent-message {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+}
+
+.subscriber {
+    color: rgb(51,51,51);
+}
+
+.channel.unread {
+  background-color: #E7EBF2;
+  border: none;
+}
+.channel:hover {
+  background-color: #F6F7FA;
+  border: none;
+}
+
+.channel-list .ul-container {
+    width: 350px;
+    border: 1px solid rgb(244,244,244);
+}
+
+.channel-list ul {
+    padding: 0 14px 0 10px;
+}
+
+.channel-list li {
+    border-width: 1px 0;
+    position: relative;
+    margin-top: -1px;
+    border-color: rgb(232, 232, 232);
+    border-style: solid;
+}
+.channel-list li:first-child {
+    margin-top: 10px;
+    border-top: none;
+}
+.channel-list li:last-child {
+    border-bottom: none;
+}
+
+.channel {
+    padding: 7px 10px;
+    margin-left: 0px;
+}
