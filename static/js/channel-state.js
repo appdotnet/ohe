@@ -6,6 +6,7 @@
         var channel_cache = {};
         var channel_list = [];
         var channels_queried = false;
+        var channel_min_id;
 
         var query_subscribers = function (channel) {
             if (channel._subscribers_loaded) {
@@ -99,20 +100,34 @@
             });
         };
 
-        var query_channels = function () {
-            if (channels_queried) {
+        var query_channels = function (num_to_fetch, fetch_older) {
+            num_to_fetch = num_to_fetch || 0;
+            if (channels_queried && !fetch_older) {
                 var defer = $q.defer();
                 defer.resolve(channel_list);
                 return defer.promise;
             }
 
-            return $http.get('/adn-proxy/stream/0/channels').then(function (response) {
+            var params = {
+                count: num_to_fetch
+            };
+            if (channel_min_id) {
+                params.before_id = channel_min_id;
+            }
+            var fetched_channels = [];
+            return $http({
+                method: 'GET',
+                url: '/adn-proxy/stream/0/channels',
+                params: params
+            }).then(function (response) {
+                channel_min_id = response.data.meta.min_id;
                 var deferreds = [];
 
                 angular.forEach(response.data.data, function (value) {
                     var channel = new Channel(value);
                     if (channel.type === 'net.app.core.pm') {
                         channel_cache[channel.id] = channel;
+                        fetched_channels.push(channel);
                         deferreds.push(query_subscribers(channel));
                         deferreds.push(get_recent_message(channel));
                     }
@@ -124,7 +139,11 @@
                 channel_list = _.values(channel_cache);
 
                 $q.all(deferreds).then(function () {
-                    defer.resolve(channel_list);
+                    if (fetch_older) {
+                        defer.resolve(fetched_channels);
+                    } else {
+                        defer.resolve(channel_list);
+                    }
                 });
 
                 return defer.promise;

@@ -41,8 +41,10 @@
         return Channel;
     }).controller('ChannelListCtrl', function ($scope, $location, Channel, Message, channelState) {
         $scope.channels = [];
+        $scope.has_more_channels = true;
+        $scope.num_to_fetch = 10;
 
-        channelState.query_channels().then(function (channels) {
+        channelState.query_channels($scope.num_to_fetch, false).then(function (channels) {
             $scope.channels = channels;
         });
 
@@ -53,6 +55,15 @@
             Message.auto_create(_.pluck($scope.selectedUsers, 'id'), $scope.message).then(function (channel_id) {
                 if (channel_id) {
                     $location.path('/channel/' + channel_id);
+                }
+            });
+        };
+
+        $scope.loadOlderChannels = function () {
+            channelState.query_channels($scope.num_to_fetch, true).then(function (channels) {
+                $scope.channels.push.apply($scope.channels, channels);
+                if (!channels.length) {
+                    $scope.has_more_channels = false;
                 }
             });
         };

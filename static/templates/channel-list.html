@@ -1,31 +1,36 @@
 <div class="channel-list">
   <div class="row-fluid">
     <div class='ul-container'>
-        <ul class='unstyled'>
-            <li ng-repeat="channel in channels | orderBy:['-has_unread', '-recent_message.id']">
-                <a href="{{ channel.detail_url() }}">
-                    <div class="row {{channel.has_unread && 'unread'}} channel">
-                        <div class='pull-left img-block'>
-                            <img class='span12' ng-src="{{ channel.subscribers[0].avatar_image.url }}?w=50">
-                        </div>
-                        <div class='content-block'>
-                            <div class='timestamp pull-right'>
-                                <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
+        <div class='scrollable-outer'>
+            <div class='scrollable-inner'>
+                <ul class='unstyled'>
+                    <li ng-repeat="channel in channels | orderBy:['-has_unread', '-recent_message.created_at']">
+                        <a href="{{ channel.detail_url() }}">
+                            <div class="row {{channel.has_unread && 'unread'}} channel">
+                                <div class='pull-left img-block'>
+                                    <img class='span12' ng-src="{{ channel.subscribers[0].avatar_image.url }}?w=50">
+                                </div>
+                                <div class='content-block'>
+                                    <div class='timestamp pull-right'>
+                                        <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
+                                    </div>
+                                    <div class='subscribers'>
+                                        {{ channel.get_subscribers().join(', ') }}
+                                    </div>
+                                    <div class='recent-message'>
+                                        <small class='muted'>
+                                            <span ui-if="channel.recent_message.user.id == user_id">&larr; </span>
+                                            {{channel.recent_message.text}}
+                                        </small>
+                                    </div>
+                                </div>
                             </div>
-                            <div class='subscribers'>
-                                {{ channel.get_subscribers().join(', ') }}
-                            </div>
-                            <div class='recent-message'>
-                                <small class='muted'>
-                                    <span ui-if="channel.recent_message.user.id == user_id">&larr; </span>
-                                    {{channel.recent_message.text}}
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </li>
-        </ul>
+                        </a>
+                    </li>
+                    <li><a href='#' ng-show="has_more_channels && channels.length >= num_to_fetch" ng-click="loadOlderChannels()">Show Older</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
   </div>
 

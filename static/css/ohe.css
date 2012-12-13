@@ -83,3 +83,8 @@ body {
     padding: 7px 10px;
     margin-left: 0px;
 }
+
+.scrollable-outer {
+    height: 400px;
+    overflow-y: auto;
+}
