@@ -58,7 +58,7 @@
                   </a>
                   <ul class="dropdown-menu">
                     <li><a href="/logout" target="_self">Logout</a></li>
-                    <li ng-show="window.webkitNotifications"><a href='#' onclick="window.webkitNotifications && window.webkitNotifications.requestPermission()">Enable Notifications</a></li>
+                    <li ng-show="window.webkitNotifications"><a href='#' onclick="window.webkitNotifications && window.webkitNotifications.requestPermission(function () {})">Enable Notifications</a></li>
                   </ul>
                 </li>
               </ul>
