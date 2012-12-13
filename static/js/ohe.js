@@ -7,7 +7,8 @@
         $routeProvider.otherwise({ redirectTo: '/' });
         $httpProvider.defaults.headers.common['X-CSRF-Token'] = document.getElementById('csrftoken').getAttribute('data-token');
     }).run(function ($rootScope) {
-        $rootScope.user_id = document.getElementById('user').getAttribute('data-id');
+        var user = document.getElementById('user');
+        $rootScope.user_id = user && user.getAttribute('data-id');
         $rootScope.window = window;
         $rootScope.$on('$routeChangeSuccess', function (event, route) {
             $rootScope.selectedNav = route.$route.selectedNav;

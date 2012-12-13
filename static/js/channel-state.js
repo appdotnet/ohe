@@ -178,10 +178,11 @@
                     n.ondisplay = function () {
                         setTimeout(function () {
                             n.cancel();
-                        }, 4000);
+                        }, 5000);
                     };
                     n.onclick = function () {
-                        n.close();
+                        window.focus();
+                        n.cancel();
                     };
                     n.show();
                 }
