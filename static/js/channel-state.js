@@ -214,8 +214,10 @@
                         channel.has_unread = true;
                     }
 
-                    channel.messages.push(msg);
-                    display_notification(msg);
+                    if (!channel.messages || utils.comparable_id(_.last(channel.messages)) < utils.comparable_id(msg)) {
+                        channel.messages.push(msg);
+                        display_notification(msg);
+                    }
                 }
             }
 
