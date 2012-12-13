@@ -195,6 +195,14 @@
                 channel = channel_cache[obj.meta.id];
                 if (channel) {
                     angular.extend(channel, obj.data);
+                } else {
+                    // If we haven't seen this channel, go fetch it.
+                    get_channel(obj.meta.id);
+
+                    // Stash the non-personalized channel object.
+                    // This will cause further channel updates not to go back to
+                    // the wire and run updates.
+                    channel_cache[obj.meta.id] = channel;
                 }
             }
 
