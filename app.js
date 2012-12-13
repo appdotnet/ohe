@@ -85,7 +85,7 @@ app.configure(function () {
             path:'/',
             httpOnly: true,
             secure: secure,
-            maxAge: 86400000
+            maxAge: 86400000,
             domain: nconf.get('session:domain'),
         }
     }));
