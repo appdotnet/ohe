@@ -32,3 +32,7 @@ exports.logout = function (req, res) {
         res.redirect('/');
     }
 };
+
+exports.healthcheck = function (req, res) {
+    res.send('healthcheck=OK')
+};
