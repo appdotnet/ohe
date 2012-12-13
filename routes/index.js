@@ -1,7 +1,14 @@
 
 var auth = require('../ohe/auth');
+var nconf = require('nconf');
+
+var oauth_url_base = nconf.get('adn:oauth_url_base') || 'https://account.app.net';
 
 exports.index = function (req, res) {
+    if (nconf.get('adn:autologin') && !req.adn_user().is_authenticated()) {
+        res.redirect(auth.get_authenticate_url(req));
+    }
+
     res.render('index', {
         '_csrf': req.session._csrf,
         'is_authenticated': req.adn_user().is_authenticated(),
@@ -18,5 +25,10 @@ exports.oauth_return = function (req, res) {
 
 exports.logout = function (req, res) {
     auth.logout(req);
-    res.redirect('/');
+
+    if (nconf.get('adn:autologin')) {
+        res.redirect(oauth_url_base + '/logout');
+    } else {
+        res.redirect('/');
+    }
 };
