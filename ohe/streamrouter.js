@@ -113,6 +113,9 @@ StreamRouter.prototype.stream = function (token) {
         var get_users_for_channel = function (channel_id) {
             if (!channel_subs_cache[channel_id]) {
                 var deferred = Q.defer();
+                in_flight_request_promises[channel_id] = deferred.promise;
+                channel_subs_cache[channel_id] = [];
+
                 var headers = {
                     authorization: 'Bearer ' + app_token,
                     host: api_host_override
@@ -124,13 +127,11 @@ StreamRouter.prototype.stream = function (token) {
                 }, function (e, r, body) {
                     if (!e && r.statusCode === 200) {
                         var ids = JSON.parse(body).data || [];
-                        // maybe this stuff should be done in a "fin" clause, i'm not sure how the queueing with this and socketio io will race
-                        channel_subs_cache[channel_id] = ids;
+                        channel_subs_cache[channel_id] = _.uniq(channel_subs_cache[channel_id].concat(ids));
                         delete in_flight_request_promises[channel_id];
                         deferred.resolve(ids);
                     } else {
                         if (!e) {
-                            console.log('oh shit!!!');
                             console.dir(r);
                             e = 'Unexpected response code: ' + r.statusCode + ' ' + r.request.url;
                         }
@@ -138,7 +139,6 @@ StreamRouter.prototype.stream = function (token) {
                     }
                 });
 
-                in_flight_request_promises[channel_id] = deferred.promise;
 
                 return deferred.promise;
             }
