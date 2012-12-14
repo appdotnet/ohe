@@ -186,6 +186,9 @@
                         window.focus();
                         n.cancel();
                     };
+                    $(window).unload(function () {
+                        n.cancel();
+                    });
                     n.show();
                 }
             }
