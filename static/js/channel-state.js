@@ -33,7 +33,8 @@
 
         var query_messages = function (channel, recent_only) {
             var params = {
-                count: recent_only ? 1 : 200
+                count: recent_only ? 1 : 200,
+                include_deleted: 0
             };
 
             return $http({
