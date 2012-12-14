@@ -172,8 +172,10 @@
 
 
         var display_notification = function (msg) {
-            if ($rootScope.user_id !== msg.user.id) {
-                if (window.webkitNotifications && window.webkitNotifications.checkPermission() === 0) {
+            if ($rootScope.user_id !== msg.user.id && window.webkitNotifications) {
+                var permission = window.webkitNotifications.checkPermission();
+                if (permission === 0) {
+                    // notifications are enabled
                     var n = window.webkitNotifications.createNotification(msg.user.avatar_image.url, msg.user.username, msg.text);
                     n.ondisplay = function () {
                         setTimeout(function () {

@@ -1,0 +1,12 @@
+<div class='container'>
+  <div class='notification-alert'>
+    <div class='alert alert-error' ng-show="alert_message == 'notifications_globally_disabled'">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      Notifications are disabled. Please enable them in your web browser preferences and then try again.
+    </div>
+    <div class='alert alert-success' ng-show="alert_message == 'notifications_enabled'">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      Notifications successfully enabled.
+    </div>
+  </div>
+</div>

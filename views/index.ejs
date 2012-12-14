@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrftoken" id="csrftoken" data-token="<%= _csrf %>">
     <% if (is_authenticated) { %>
-      <meta name="user" id="user" data-id="<%= user.id %>">
+      <meta name="user" id="user" data-id="<%= user.id %>" data-username="<%= user.username %>">
     <% } %>
     <link href="/static/bootstrap/css/bootstrap.cerulean.css" rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
@@ -28,6 +28,7 @@
     <script src="/static/select2/select2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script src="/static/js/socket.js"></script>
+    <script src="/static/js/nav.js"></script>
     <script src="/static/js/messages.js"></script>
     <script src="/static/js/users.js"></script>
     <script src="/static/js/channel-state.js"></script>
@@ -47,21 +48,7 @@
           <a class="brand" href="/">&Omega;&nbsp;&nbsp;&nbsp;App.net</a>
           <div class="nav-collapse collapse">
             <% if (is_authenticated) { %>
-              <ul class="nav">
-                <li ng-class="{active:selectedNav == 'inbox'}"><a href="/">Inbox</a></li>
-              </ul>
-              <ul class="nav pull-right">
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    @<%= user.username %>
-                    <b class="caret"></b>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/logout" target="_self">Logout</a></li>
-                    <li ng-show="window.webkitNotifications"><a href='#' onclick="window.webkitNotifications && window.webkitNotifications.requestPermission(function () {})">Enable Notifications</a></li>
-                  </ul>
-                </li>
-              </ul>
+                <nav></nav>
             <% } %>
           </div>
         </div>
@@ -74,7 +61,8 @@
         <a href="<%= auth_url %>" target="_self">Please log in with App.net &rarr;</a></p>
       </div>
     <% } else { %>
-      <div class="container" ng-view></div>
+      <div ng-include="'/static/templates/alerts.html'"></div>
+      <div class="view" ng-view></div>
     <% } %>
   </body>
 </html>

@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('ohe', ['messages', 'channels']).config(function ($routeProvider, $locationProvider, $httpProvider) {
+    angular.module('ohe', ['messages', 'channels', 'nav']).config(function ($routeProvider, $locationProvider, $httpProvider) {
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix = '!';
         $routeProvider.otherwise({ redirectTo: '/' });
@@ -9,6 +9,7 @@
     }).run(function ($rootScope) {
         var user = document.getElementById('user');
         $rootScope.user_id = user && user.getAttribute('data-id');
+        $rootScope.username = user && user.getAttribute('data-username');
         $rootScope.window = window;
         $rootScope.$on('$routeChangeSuccess', function (event, route) {
             $rootScope.selectedNav = route.$route.selectedNav;

@@ -1,62 +1,64 @@
-<div class="channel-list">
-  <div class="row-fluid">
-    <div class='ul-container'>
-        <div class='scrollable-outer'>
-            <div class='scrollable-inner'>
-                <ul class='unstyled'>
-                    <li ng-repeat="channel in channels | orderBy:['-has_unread', '-recent_message.created_at']">
-                        <a href="{{ channel.detail_url() }}">
-                            <div class="row {{channel.has_unread && 'unread'}} channel">
-                                <div class='pull-left img-block'>
-                                    <img class='span12' ng-src="{{ channel.subscribers[0].avatar_image.url }}?w=50">
-                                </div>
-                                <div class='content-block'>
-                                    <div class='timestamp pull-right'>
-                                        <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
-                                    </div>
-                                    <div class='subscribers'>
-                                        {{ channel.get_subscribers().join(', ') }}
-                                    </div>
-                                    <div class='recent-message'>
-                                        <small class='muted'>
-                                            <span ui-if="channel.recent_message.user.id == user_id">&larr; </span>
-                                            {{channel.recent_message.text}}
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li><a href='#' ng-show="has_more_channels && channels.length >= num_to_fetch" ng-click="loadOlderChannels()">Show Older</a></li>
-                </ul>
-            </div>
-        </div>
+<div class="container">
+  <div class="channel-list">
+    <div class="row-fluid">
+      <div class='ul-container'>
+          <div class='scrollable-outer'>
+              <div class='scrollable-inner'>
+                  <ul class='unstyled'>
+                      <li ng-repeat="channel in channels | orderBy:['-has_unread', '-recent_message.created_at']">
+                          <a href="{{ channel.detail_url() }}">
+                              <div class="row {{channel.has_unread && 'unread'}} channel">
+                                  <div class='pull-left img-block'>
+                                      <img class='span12' ng-src="{{ channel.subscribers[0].avatar_image.url }}?w=50">
+                                  </div>
+                                  <div class='content-block'>
+                                      <div class='timestamp pull-right'>
+                                          <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
+                                      </div>
+                                      <div class='subscribers'>
+                                          {{ channel.get_subscribers().join(', ') }}
+                                      </div>
+                                      <div class='recent-message'>
+                                          <small class='muted'>
+                                              <span ui-if="channel.recent_message.user.id == user_id">&larr; </span>
+                                              {{channel.recent_message.text}}
+                                          </small>
+                                      </div>
+                                  </div>
+                              </div>
+                          </a>
+                      </li>
+                      <li><a href='#' ng-show="has_more_channels && channels.length >= num_to_fetch" ng-click="loadOlderChannels()">Show Older</a></li>
+                  </ul>
+              </div>
+          </div>
+      </div>
     </div>
-  </div>
 
-  <div class="row-fluid">
-    <div class="span5">
-      <form class="form-horizontal" ng-submit="createUser()">
-        <fieldset>
-          <legend>Send a message</legend>
-          <div class="control-group" ng-controller="UserSearchCtrl">
-            <label class="control-label" for="recipients">Recipients:</label>
-            <div class="controls">
-              <input type="hidden" ui-select2="usernameSelect" ng-model="selectedUsers" class="input-xxlarge" ng-multiple>
+    <div class="row-fluid">
+      <div class="span5">
+        <form class="form-horizontal" ng-submit="createUser()">
+          <fieldset>
+            <legend>Send a message</legend>
+            <div class="control-group" ng-controller="UserSearchCtrl">
+              <label class="control-label" for="recipients">Recipients:</label>
+              <div class="controls">
+                <input type="hidden" ui-select2="usernameSelect" ng-model="selectedUsers" class="input-xxlarge" ng-multiple>
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="message">Message:</label>
-            <div class="controls">
-              <textarea name="message" class="input-xxlarge" ng-model="message"></textarea>
+            <div class="control-group">
+              <label class="control-label" for="message">Message:</label>
+              <div class="controls">
+                <textarea name="message" class="input-xxlarge" ng-model="message"></textarea>
+              </div>
             </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Send</button>
-            <button type="button" class="btn">Cancel</button>
-          </div>
-        </fieldset>
-      </form>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Send</button>
+              <button type="button" class="btn">Cancel</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
     </div>
   </div>
 </div>

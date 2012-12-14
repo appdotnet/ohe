@@ -1,24 +1,24 @@
-  <div class="message-list-container">
-    <div class="message-list">
-        <div class='message-wrapper' ng-repeat="message in channel.messages">
-          <div class="row-fluid message" >
-            <div class="span2">
-                <div class='ellipsize span12 username'>
-                    <img class='hidden-phone' ng-src="{{ message.user.avatar_image.url }}?w=25">
-                    <strong class='muted'>{{ message.user.name}}</strong>
-                </div>
-            </div>
-            <div class="span2 pull-right">
-                <div class='muted'>{{ message.created_at | date:'MMM-d h:mm a' }}</div>
-            </div>
-            <div class="span8">
-              <div class="row-fluid">
-                <div class="span12">
-                  <div class="content" ng-bind-html-unsafe="message.html">
-                </div>
+<div class="message-list-container">
+  <div class="message-list">
+      <div class='message-wrapper' ng-repeat="message in channel.messages">
+        <div class="row-fluid message" >
+          <div class="span2">
+              <div class='ellipsize span12 username'>
+                  <img class='hidden-phone' ng-src="{{ message.user.avatar_image.url }}?w=25">
+                  <strong class='muted'>{{ message.user.name}}</strong>
+              </div>
+          </div>
+          <div class="span2 pull-right">
+              <div class='muted'>{{ message.created_at | date:'MMM-d h:mm a' }}</div>
+          </div>
+          <div class="span8">
+            <div class="row-fluid">
+              <div class="span12">
+                <div class="content" ng-bind-html-unsafe="message.html">
               </div>
             </div>
           </div>
         </div>
-    </div>
+      </div>
   </div>
+</div>
