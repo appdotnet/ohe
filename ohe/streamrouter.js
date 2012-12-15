@@ -135,6 +135,11 @@ StreamRouter.prototype.stream = function (token) {
                             console.dir(r);
                             e = 'Unexpected response code: ' + r.statusCode + ' ' + r.request.url;
                         }
+
+                        // If there was an error, dump the cache so we go back
+                        // and refresh the full list again.
+                        delete channel_subs_cache[channel_id];
+                        delete in_flight_request_promises[channel_id];
                         deferred.reject(new Error (e));
                     }
                 });
