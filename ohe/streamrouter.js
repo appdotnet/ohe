@@ -103,12 +103,12 @@ StreamRouter.prototype.stream = function (token) {
             // only accept incremental updates for channels
             // we have seen and received a server response for
             Q.when(in_flight_request_promises[channel_id], function () {
-                console.log('updated channel', channel_id, 'user', msg.meta.user_id, msg);
+                console.log('updated channel', channel_id, 'user', msg.data.user.id, msg);
                 if (channel_subs_cache[channel_id]) {
                     if (msg.meta.deleted) {
-                        channel_subs_cache[channel_id] = _.without(channel_subs_cache[channel_id], msg.meta.user_id);
+                        channel_subs_cache[channel_id] = _.without(channel_subs_cache[channel_id], msg.data.user.id);
                     } else {
-                        channel_subs_cache[channel_id].push(msg.meta.user_id);
+                        channel_subs_cache[channel_id].push(msg.data.user.id);
                         console.log('did it');
                     }
                 }
