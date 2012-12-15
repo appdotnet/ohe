@@ -79,8 +79,15 @@
                 promise = defer.promise;
             } else {
                 promise = $http.get('/adn-proxy/stream/0/channels/' + channel_id).then(function (response) {
-                    var channel = new Channel(response.data.data);
-                    channel_cache[channel.id] = channel;
+                    var channel = channel_cache[channel_id];
+
+                    if (channel) {
+                        angular.extend(channel, response.data.data);
+                    } else {
+                        channel = new Channel(response.data.data);
+                        channel_cache[channel.id] = channel;
+                    }
+
                     $rootScope.channel_list = _.values(channel_cache);
 
                     return channel;
