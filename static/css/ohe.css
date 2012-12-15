@@ -8,6 +8,11 @@ body {
   }
 }
 
+.dropdown .username {
+    max-width: 150px;
+    display: inline-block;
+}
+
 .message-list {
   overflow-y: scroll;
   border: 1px solid gray;

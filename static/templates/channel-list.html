@@ -5,7 +5,7 @@
           <div class='scrollable-outer'>
               <div class='scrollable-inner'>
                   <ul class='unstyled'>
-                      <li ng-repeat="channel in channels | orderBy:['-has_unread', '-recent_message.created_at']">
+                      <li ng-repeat="channel in channel_list | orderBy:['-has_unread', '-recent_message.created_at']">
                           <a href="{{ channel.detail_url() }}">
                               <div class="row {{channel.has_unread && 'unread'}} channel">
                                   <div class='pull-left img-block'>
@@ -28,7 +28,7 @@
                               </div>
                           </a>
                       </li>
-                      <li><a href='#' ng-show="has_more_channels && channels.length >= num_to_fetch" ng-click="loadOlderChannels()">Show Older</a></li>
+                      <li><a href='#' ng-show="has_more_channels && channel_list.length >= num_to_fetch" ng-click="loadOlderChannels()">Show Older</a></li>
                   </ul>
               </div>
           </div>

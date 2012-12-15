@@ -11,6 +11,7 @@
         $rootScope.user_id = user && user.getAttribute('data-id');
         $rootScope.username = user && user.getAttribute('data-username');
         $rootScope.window = window;
+        $rootScope.channels = [];
         $rootScope.$on('$routeChangeSuccess', function (event, route) {
             $rootScope.selectedNav = route.$route.selectedNav;
         });
