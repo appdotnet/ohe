@@ -27,5 +27,8 @@
                 }
             });
         };
+        $scope.show_enable_notifications_button = function () {
+            return $window.webkitNotifications && ($window.webkitNotifications.checkPermission() !== 0);
+        };
     });
 })();

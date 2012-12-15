@@ -1,17 +1,17 @@
 <div>
-<ul class="nav">
-  <li ng-class="{active:selectedNav == 'inbox'}"><a href="/">Inbox</a></li>
-</ul>
-<ul class="nav pull-right">
-  <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      {{username}}
-      <b class="caret"></b>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="/logout" target="_self">Logout</a></li>
-      <li ng-show="window.webkitNotifications"><a href='#' ng-click="enable_notifications()">Enable Notifications</a></li>
-    </ul>
-  </li>
-</ul>
+  <ul class="nav">
+    <li ng-class="{active:selectedNav == 'inbox'}"><a href="/">Inbox</a></li>
+  </ul>
+  <ul class="nav pull-right">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <span class='username ellipsize'>{{username}}</span>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="/logout" target="_self">Logout</a></li>
+        <li ng-show="show_enable_notifications_button()"><a href='#' ng-click="enable_notifications()">Enable Notifications</a></li>
+      </ul>
+    </li>
+  </ul>
 </div>
