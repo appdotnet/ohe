@@ -9,7 +9,7 @@
                           <a href="{{ channel.detail_url() }}">
                               <div class="row {{channel.has_unread && 'unread'}} channel">
                                   <div class='pull-left img-block'>
-                                      <img class='span12' ng-src="{{ channel.subscribers[0].avatar_image.url }}?w=50">
+                                      <img class='span12' alt='channel icon {{ channel.subscribers[0].username }}' ng-src="{{ channel.subscribers[0].avatar_image.url }}?w=50">
                                   </div>
                                   <div class='content-block'>
                                       <div class='timestamp pull-right'>
