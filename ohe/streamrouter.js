@@ -103,11 +103,13 @@ StreamRouter.prototype.stream = function (token) {
             // only accept incremental updates for channels
             // we have seen and received a server response for
             Q.when(in_flight_request_promises[channel_id], function () {
+                console.log('updated channel', channel_id, 'user', msg.meta.user_id);
                 if (channel_subs_cache[channel_id]) {
                     if (msg.meta.deleted) {
                         channel_subs_cache[channel_id] = _.without(channel_subs_cache[channel_id], msg.meta.user_id);
                     } else {
                         channel_subs_cache[channel_id].push(msg.meta.user_id);
+                        console.log('did it');
                     }
                 }
             });
@@ -136,6 +138,7 @@ StreamRouter.prototype.stream = function (token) {
                         channel_subs_cache[channel_id] = ids;
                         delete in_flight_request_promises[channel_id];
                         deferred.resolve(ids);
+                        console.log('resolved ->', ids);
                     } else {
                         if (!e) {
                             e = 'Unexpected response code: ' + r.statusCode + ' ' + r.request.url;
@@ -157,6 +160,7 @@ StreamRouter.prototype.stream = function (token) {
 
         var send_message_to_channel = function (msg, channel_id) {
             Q.when(get_users_for_channel(channel_id), function (user_ids) {
+                console.log('sending to -> ', channel_id);
                 _.each(user_ids, function (user_id) {
                     self.lightpoll.dispatch(user_id, msg);
                 });
