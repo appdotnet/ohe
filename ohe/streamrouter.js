@@ -102,20 +102,25 @@ StreamRouter.prototype.stream = function (token) {
 
             // only accept incremental updates for channels
             // we have seen and received a server response for
-            if (channel_subs_cache[channel_id]) {
-                if (msg.meta.deleted) {
-                    channel_subs_cache[channel_id] = _.without(channel_subs_cache[channel_id], msg.meta.user_id);
-                } else {
-                    channel_subs_cache[channel_id].push(msg.meta.user_id);
+            Q.when(in_flight_request_promises[channel_id], function () {
+                if (channel_subs_cache[channel_id]) {
+                    if (msg.meta.deleted) {
+                        channel_subs_cache[channel_id] = _.without(channel_subs_cache[channel_id], msg.meta.user_id);
+                    } else {
+                        channel_subs_cache[channel_id].push(msg.meta.user_id);
+                    }
                 }
-            }
+            });
         });
 
         var get_users_for_channel = function (channel_id) {
+            if (in_flight_request_promises[channel_id]) {
+                return in_flight_request_promises[channel_id];
+            }
+
             if (!channel_subs_cache[channel_id]) {
                 var deferred = Q.defer();
                 in_flight_request_promises[channel_id] = deferred.promise;
-                channel_subs_cache[channel_id] = [];
 
                 var headers = {
                     authorization: 'Bearer ' + app_token,
@@ -128,12 +133,11 @@ StreamRouter.prototype.stream = function (token) {
                 }, function (e, r, body) {
                     if (!e && r.statusCode === 200) {
                         var ids = JSON.parse(body).data || [];
-                        channel_subs_cache[channel_id] = _.uniq(channel_subs_cache[channel_id].concat(ids));
+                        channel_subs_cache[channel_id] = ids;
                         delete in_flight_request_promises[channel_id];
                         deferred.resolve(ids);
                     } else {
                         if (!e) {
-                            console.dir(r);
                             e = 'Unexpected response code: ' + r.statusCode + ' ' + r.request.url;
                         }
 
@@ -144,7 +148,6 @@ StreamRouter.prototype.stream = function (token) {
                         deferred.reject(new Error (e));
                     }
                 });
-
 
                 return deferred.promise;
             }
