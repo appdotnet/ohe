@@ -4,7 +4,6 @@
     angular.module('channelState', ['channels', 'messages', 'users', 'socket', 'utils'])
     .factory('channelState', function ($http, $rootScope, $q, Socket, User, Channel, Message, utils) {
         var channel_cache = {};
-        var channel_list = [];
         var channels_queried = false;
         var channel_min_id;
 
@@ -82,7 +81,7 @@
                 promise = $http.get('/adn-proxy/stream/0/channels/' + channel_id).then(function (response) {
                     var channel = new Channel(response.data.data);
                     channel_cache[channel.id] = channel;
-                    channel_list = _.values(channel_cache);
+                    $rootScope.channel_list = _.values(channel_cache);
 
                     return channel;
                 });
@@ -105,7 +104,7 @@
             num_to_fetch = num_to_fetch || 0;
             if (channels_queried && !fetch_older) {
                 var defer = $q.defer();
-                defer.resolve(channel_list);
+                defer.resolve($rootScope.channel_list);
                 return defer.promise;
             }
 
@@ -115,7 +114,6 @@
             if (channel_min_id) {
                 params.before_id = channel_min_id;
             }
-            var fetched_channels = [];
             return $http({
                 method: 'GET',
                 url: '/adn-proxy/stream/0/channels',
@@ -124,27 +122,24 @@
                 channel_min_id = response.data.meta.min_id;
                 var deferreds = [];
 
+                var fetched_channels = [];
                 angular.forEach(response.data.data, function (value) {
                     var channel = new Channel(value);
                     if (channel.type === 'net.app.core.pm') {
                         channel_cache[channel.id] = channel;
-                        fetched_channels.push(channel);
                         deferreds.push(query_subscribers(channel));
                         deferreds.push(get_recent_message(channel));
+                        fetched_channels.push(channel);
                     }
                 });
 
                 var defer = $q.defer();
 
                 channels_queried = true;
-                channel_list = _.values(channel_cache);
 
                 $q.all(deferreds).then(function () {
-                    if (fetch_older) {
-                        defer.resolve(fetched_channels);
-                    } else {
-                        defer.resolve(channel_list);
-                    }
+                    defer.resolve(fetched_channels);
+                    $rootScope.channel_list = _.values(channel_cache);
                 });
 
                 return defer.promise;
@@ -209,6 +204,7 @@
                     // This will cause further channel updates not to go back to
                     // the wire and run updates.
                     channel_cache[obj.meta.id] = channel;
+                    $rootScope.channel_list = _.values(channel_cache);
                 }
             }
 
