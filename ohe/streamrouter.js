@@ -103,7 +103,7 @@ StreamRouter.prototype.stream = function (token) {
             // only accept incremental updates for channels
             // we have seen and received a server response for
             Q.when(in_flight_request_promises[channel_id], function () {
-                console.log('updated channel', channel_id, 'user', msg.meta.user_id);
+                console.log('updated channel', channel_id, 'user', msg.meta.user_id, msg);
                 if (channel_subs_cache[channel_id]) {
                     if (msg.meta.deleted) {
                         channel_subs_cache[channel_id] = _.without(channel_subs_cache[channel_id], msg.meta.user_id);
@@ -138,7 +138,7 @@ StreamRouter.prototype.stream = function (token) {
                         channel_subs_cache[channel_id] = ids;
                         delete in_flight_request_promises[channel_id];
                         deferred.resolve(ids);
-                        console.log('resolved ->', ids);
+                        console.log('resolved ->', channel_id, ids);
                     } else {
                         if (!e) {
                             e = 'Unexpected response code: ' + r.statusCode + ' ' + r.request.url;
