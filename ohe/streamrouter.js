@@ -28,7 +28,7 @@ StreamRouter.prototype.get_or_create_stream = function (app_access_token, cb) {
         object_types: ["message", "channel", "stream_marker", "channel_subscription"],
         type: "long_poll",
         key: key,
-        filter: filter_id
+        filter_id: filter_id
     };
 
     var create_stream = function () {
@@ -58,10 +58,11 @@ StreamRouter.prototype.get_or_create_stream = function (app_access_token, cb) {
             var obj = JSON.parse(body);
             if (obj.data.length) {
                 var stream = obj.data[0];
-                console.log('found stream id ' +  stream.id);
                 var found_stream = _.pick(stream, _.keys(stream_template));
+                found_stream['filter_id'] = stream.filter && stream.filter.id;
 
                 if (_.isEqual(found_stream, stream_template)) {
+                    console.log('reusing stream id', stream.id);
                     cb(stream.endpoint);
                 } else {
                     // delete stream so we can recreate it with correct template
