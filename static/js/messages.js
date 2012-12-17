@@ -113,6 +113,12 @@
             templateUrl: '/static/templates/message-form.html',
             replace: true
         };
+    }).directive('roster', function () {
+        return {
+            restrict: 'E',
+            templateUrl: '/static/templates/roster.html',
+            replace: true
+        };
     }).factory('Message', function ($http) {
         var Message = function (obj) {
             angular.extend(this, obj);

@@ -99,3 +99,12 @@ body {
     height: 400px;
     overflow-y: auto;
 }
+
+.roster-member {
+  margin-bottom: 5px;
+}
+
+.roster {
+    max-height: 500px;
+    overflow-y: scroll;
+}
