@@ -12,7 +12,7 @@
                 var pinned_to_bottom = true;
 
                 // nasty javascript-based layout because bryan sucks at the CSS
-                scope.layout_dimensions = {};
+                scope.messages_layout_dimensions = {};
 
                 scope.check_dimensions = function () {
                     var dimensions = {
@@ -113,11 +113,35 @@
             templateUrl: '/static/templates/message-form.html',
             replace: true
         };
-    }).directive('roster', function () {
+    }).directive('roster', function ($timeout) {
         return {
             restrict: 'E',
             templateUrl: '/static/templates/roster.html',
-            replace: true
+            replace: true,
+            link: function (scope, element) {
+                var w = $(window);
+                // nasty copy + paste.. need to refactor
+                scope.roster_layout_dimensions = {};
+
+                scope.roster_check_dimensions = function () {
+                    var dimensions = {
+                        window_height: w.height(),
+                        window_width: w.width(),
+                        container_offset: element.offset()
+                    };
+
+                    if (!_.isEqual(scope.roster_layout_dimensions, dimensions)) {
+                        scope.roster_layout_dimensions = dimensions;
+
+                        // fix dimensions
+                        element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 70));
+                    }
+
+                    scope.timeout = $timeout(scope.roster_check_dimensions, 100);
+                };
+
+                scope.roster_check_dimensions();
+            }
         };
     }).factory('Message', function ($http) {
         var Message = function (obj) {
