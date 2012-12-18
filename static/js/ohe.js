@@ -1,7 +1,26 @@
 /*globals angular */
 
 (function () {
-    angular.module('ohe', ['messages', 'channels', 'nav']).config(function ($routeProvider, $locationProvider, $httpProvider) {
+    angular.module('ohe', ['messages', 'channels', 'nav',
+    function ($httpProvider) {
+        var interceptor = ['$q', function ($q) {
+            var success = function (response) {
+                return response;
+            };
+            var error = function (response) {
+                var status = response.status;
+                if (status === 401) {
+                    window.location.href = window.location.href;
+                }
+                return $q.reject(response);
+            };
+            return function (promise) {
+                return promise.then(success, error);
+            };
+        }];
+        $httpProvider.responseInterceptors.push(interceptor);
+    }
+    ]).config(function ($routeProvider, $locationProvider, $httpProvider) {
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix = '!';
         $routeProvider.otherwise({ redirectTo: '/' });

@@ -11,28 +11,6 @@
                 var w = $(window);
                 var pinned_to_bottom = true;
 
-                // nasty javascript-based layout because bryan sucks at the CSS
-                scope.messages_layout_dimensions = {};
-
-                scope.check_dimensions = function () {
-                    var dimensions = {
-                        window_height: w.height(),
-                        window_width: w.width(),
-                        container_offset: element.offset()
-                    };
-
-                    if (!_.isEqual(scope.layout_dimensions, dimensions)) {
-                        scope.layout_dimensions = dimensions;
-
-                        // fix dimensions
-                        element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 70));
-                    }
-
-                    scope.timeout = $timeout(scope.check_dimensions, 100);
-                };
-
-                scope.check_dimensions();
-
                 scope.$watch('channel.messages', function (newVal, oldVal) {
                     if (newVal && newVal.length || oldVal && oldVal.length) {
                         if (pinned_to_bottom) {
@@ -113,35 +91,33 @@
             templateUrl: '/static/templates/message-form.html',
             replace: true
         };
+    }).directive('resizeHeight', function ($timeout) {
+        return function (scope, element) {
+            var t;
+            var w = $(window);
+            var layout_dimensions = {};
+            var check_dimensions = function () {
+                var dimensions = {
+                    window_height: w.height(),
+                    window_width: w.width(),
+                    container_offset: element.offset()
+                };
+
+                if (!_.isEqual(layout_dimensions, dimensions)) {
+                    layout_dimensions = dimensions;
+
+                    // fix dimensions
+                    element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 70));
+                }
+                t = $timeout(check_dimensions, 100);
+            };
+            check_dimensions();
+        };
     }).directive('roster', function ($timeout) {
         return {
             restrict: 'E',
             templateUrl: '/static/templates/roster.html',
-            replace: true,
-            link: function (scope, element) {
-                var w = $(window);
-                // nasty copy + paste.. need to refactor
-                scope.roster_layout_dimensions = {};
-
-                scope.roster_check_dimensions = function () {
-                    var dimensions = {
-                        window_height: w.height(),
-                        window_width: w.width(),
-                        container_offset: element.offset()
-                    };
-
-                    if (!_.isEqual(scope.roster_layout_dimensions, dimensions)) {
-                        scope.roster_layout_dimensions = dimensions;
-
-                        // fix dimensions
-                        element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 70));
-                    }
-
-                    scope.timeout = $timeout(scope.roster_check_dimensions, 100);
-                };
-
-                scope.roster_check_dimensions();
-            }
+            replace: true
         };
     }).factory('Message', function ($http) {
         var Message = function (obj) {

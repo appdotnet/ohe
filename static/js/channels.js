@@ -1,26 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('channels', ['messages', 'users', 'ui', 'channelState',
-    function ($httpProvider) {
-        var interceptor = ['$q', function ($q) {
-            var success = function (response) {
-                return response;
-            };
-            var error = function (response) {
-                var status = response.status;
-                if (status === 401) {
-                    window.location.href = window.location.href;
-                }
-                return $q.reject(response);
-            };
-            return function (promise) {
-                return promise.then(success, error);
-            };
-        }];
-        $httpProvider.responseInterceptors.push(interceptor);
-    }
-    ]).config(function ($routeProvider) {
+    angular.module('channels', ['messages', 'users', 'ui', 'channelState']).config(function ($routeProvider) {
         $routeProvider.when('/', {
             controller: 'ChannelListCtrl',
             templateUrl: '/static/templates/channel-list.html',
