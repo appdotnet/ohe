@@ -1,9 +1,9 @@
 <div class='roster'>
     <h5>People</h5>
     <div>
-      <div class='roster-member' ng-repeat="subscriber in channel.subscribers">
-          <img width=25 height=25 alt='roster icon for {{ message.user.name }}' class='hidden-phone' ng-src="{{ subscriber.avatar_image.url }}?w=25">
-          <span class='username ellipsize'><strong>@{{subscriber.username}}</strong> <small>({{subscriber.name}})</small></span>
+      <div class='roster-member' ng-repeat="subscriber in channel.subscribers | orderBy:['username']">
+          <img width=25 height=25 alt='roster icon for {{ subscriber.user.name }}' class='hidden-phone' ng-src="{{ subscriber.avatar_image.url }}?w=25">
+          <span class='username'><strong>@{{subscriber.username}}</strong> <small class='ellipsize'>({{subscriber.name}})</small></span>
       </div>
     </div>
 </div>
