@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('channels', ['messages', 'users', 'ui', 'channelState',
-    function ($routeProvider, $locationProvider, $httpProvider) {
+    function ($httpProvider) {
         var interceptor = ['$q', function ($q) {
             var success = function (response) {
                 return response;
