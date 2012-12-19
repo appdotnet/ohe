@@ -17,7 +17,6 @@ angular.module('socket', ['utils']).factory('Socket', function ($rootScope, $htt
 
             $timeout(poll);
         }, function (response) {
-            console.log('Error in lightpoll, retrying');
             $timeout(poll);
         });
     };

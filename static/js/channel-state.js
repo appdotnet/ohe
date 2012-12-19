@@ -18,9 +18,7 @@
                 var subscribers = [];
 
                 _.map(response.data.data, function (user) {
-                    if ($rootScope.user_id !== user.id || response.data.data.length === 1) {
-                        subscribers.push(new User(user));
-                    }
+                    subscribers.push(new User(user));
                 });
 
                 channel.subscribers = subscribers;

@@ -34,8 +34,16 @@
             return '/channel/' + this.id;
         };
 
-        Channel.prototype.get_subscribers = function () {
-            return _.pluck(this.subscribers, 'name');
+        Channel.prototype.get_subscribers = function (include_viewer) {
+            var subscribers;
+            if (include_viewer) {
+                subscribers = this.subscribers;
+            } else {
+                subscribers = _.filter(this.subscribers, function (sub) {
+                    return sub.id !== $rootScope.user_id;
+                });
+            }
+            return _.pluck(subscribers, 'name');
         };
 
         return Channel;
