@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('channels', ['messages', 'users', 'ui', 'channelState']).config(function ($routeProvider) {
+    angular.module('channels', ['messages', 'users', 'ui', 'channelState', 'utils']).config(function ($routeProvider) {
         $routeProvider.when('/', {
             controller: 'ChannelListCtrl',
             templateUrl: '/static/templates/channel-list.html',
@@ -46,7 +46,7 @@
         };
 
         return Channel;
-    }).controller('ChannelListCtrl', function ($scope, $location, Channel, Message, channelState) {
+    }).controller('ChannelListCtrl', function ($scope, $location, Channel, Message, channelState, utils) {
         $scope.has_more_channels = true;
         $scope.num_to_fetch = 10;
 
@@ -64,17 +64,8 @@
             var interval;
             var one;
             $scope.$watch('channel_list', function (newVal, oldVal) {
-                if (newVal !== oldVal && !document.hasFocus()) {
-                    toggle_title();
-                    interval = window.setInterval(toggle_title, 1500);
-                    if (!one) {
-                        one = $(window, 'html').one('focus', function () {
-                            document.title = original_title;
-                            clearInterval(interval);
-                            interval = undefined;
-                            one = undefined;
-                        });
-                    }
+                if (newVal !== oldVal) {
+                    utils.title_bar_notification();
                 }
             }, true);
         });

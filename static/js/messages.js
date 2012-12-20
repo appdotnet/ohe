@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('messages', []).directive('messageList', function ($timeout) {
+    angular.module('messages', ['utils']).directive('messageList', function ($timeout, utils) {
         return {
             restrict: 'E',
             controller: 'MessageListCtrl',
@@ -83,37 +83,17 @@
                         }
                     }, true);
 
-                    var original_title = document.title;
-                    var new_title = "New Message";
-                    var toggle_title = function () {
-                        if (document.title === original_title) {
-                            document.title = new_title;
-                        } else {
-                            document.title = original_title;
-                        }
-                    };
-                    var interval;
-                    var one;
                     scope.$watch('channel.messages.length', function (newVal, oldVal) {
-                        if (newVal > oldVal && !interval) {
+                        if (newVal > oldVal) {
                             // make sure the new messages aren't all from the viewer
-                            // some assumptions in here about new messages always
+                            // there are some assumptions in here about new messages always
                             // getting appended to end of messages array
                             var new_messages = scope.channel.messages.slice(oldVal);
                             var has_others = _.some(new_messages, function (msg) {
                                 return msg.user.id !== scope.user_id;
                             });
-                            if (has_others && !document.hasFocus()) {
-                                toggle_title();
-                                interval = window.setInterval(toggle_title, 1500);
-                                if (!one) {
-                                    one = $(window, 'html').one('focus', function () {
-                                        document.title = original_title;
-                                        clearInterval(interval);
-                                        interval = undefined;
-                                        one = undefined;
-                                    });
-                                }
+                            if (has_others) {
+                                utils.title_bar_notification();
                             }
                         }
                     }, true);

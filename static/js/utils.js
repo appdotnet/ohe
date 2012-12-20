@@ -2,6 +2,18 @@
 
 (function () {
     angular.module('utils', []).factory('utils', function () {
+        var original_title = document.title;
+        var new_title = "New Message";
+        var toggle_title = function () {
+            if (document.title === original_title) {
+                document.title = new_title;
+            } else {
+                document.title = original_title;
+            }
+        };
+        var interval;
+        var one;
+
         return {
             id_newer: function (old_id, new_id) {
                 return parseInt(old_id, 10) <= parseInt(new_id, 10);
@@ -23,6 +35,20 @@
                     arr.push(chars.substr(rand, 1));
                 }
                 return arr.join('');
+            },
+            title_bar_notification: function () {
+                if (!document.hasFocus() && !interval) {
+                    toggle_title();
+                    interval = window.setInterval(toggle_title, 1500);
+                    if (!one) {
+                        one = $(window, 'html').one('focus', function () {
+                            document.title = original_title;
+                            clearInterval(interval);
+                            interval = undefined;
+                            one = undefined;
+                        });
+                    }
+                }
             }
         };
     });
