@@ -25,7 +25,6 @@
             this.subscribers = [];
             this._subscribers_loaded = false;
             this.messages = [];
-            this._messages_loaded = false;
             this.recent_message = undefined;
             this._recent_message_loaded = false;
         };
@@ -75,6 +74,8 @@
     }).controller('ChannelDetailCtrl', function ($scope, $element, $timeout, channelState, $routeParams) {
         channelState.get_channel($routeParams.channel_id).then(function (channel) {
             $scope.channel = channel;
+            // messages are also loaded at this point
+            $scope.$broadcast('channel_loaded');
         });
     });
 })();

@@ -11,14 +11,6 @@
                 var w = $(window);
                 var pinned_to_bottom = true;
 
-                scope.$watch('channel.messages', function (newVal, oldVal) {
-                    if (newVal && newVal.length || oldVal && oldVal.length) {
-                        if (pinned_to_bottom) {
-                            scroll_to_bottom();
-                        }
-                    }
-                }, true);
-
                 var fire_update_marker = function () {
                     var el = element.find('.message-list');
                     var parent_top = el.offset().top;
@@ -72,15 +64,67 @@
 
                     fire_update_marker();
                 });
-                scope.$on('submit-message', function (event) {
+                scope.$on('submit_message', function (event) {
                     scroll_to_bottom();
                 });
-                // fire_update_marker on initial load also
-                fire_update_marker();
 
                 scope.$on('$destroy', function () {
                     $timeout.cancel(scope.timeout);
                     element.find('.message-list').off('scroll.message-list');
+                });
+
+                var on_channel_loaded = function () {
+                    // everything that needs to wait until the channel is fully loaded
+                    scope.$watch('channel.messages', function (newVal, oldVal) {
+                        if (newVal && newVal.length || oldVal && oldVal.length) {
+                            if (pinned_to_bottom) {
+                                scroll_to_bottom();
+                            }
+                        }
+                    }, true);
+
+                    var original_title = document.title;
+                    var new_title = "New Message";
+                    var toggle_title = function () {
+                        if (document.title === original_title) {
+                            document.title = new_title;
+                        } else {
+                            document.title = original_title;
+                        }
+                    };
+                    var interval;
+                    var one;
+                    scope.$watch('channel.messages.length', function (newVal, oldVal) {
+                        if (newVal > oldVal && !interval) {
+                            // make sure the new messages aren't all from the viewer
+                            // some assumptions in here about new messages always
+                            // getting appended to end of messages array
+                            var new_messages = scope.channel.messages.slice(oldVal);
+                            var has_others = _.some(new_messages, function (msg) {
+                                return msg.user.id !== scope.user_id;
+                            });
+                            if (has_others) {
+                                toggle_title();
+                                interval = window.setInterval(toggle_title, 1500);
+                                if (!one) {
+                                    one = $(window, 'html').one('focus', function () {
+                                        document.title = original_title;
+                                        clearInterval(interval);
+                                        interval = undefined;
+                                        one = undefined;
+                                    });
+                                }
+                            }
+                        }
+                    }, true);
+
+                    // fire_update_marker on initial load also
+                    fire_update_marker();
+                };
+
+                var channel_loaded_deregister = scope.$on('channel_loaded', function () {
+                    on_channel_loaded();
+                    channel_loaded_deregister();
                 });
             }
         };
@@ -162,7 +206,7 @@
             var message = $scope.message;
 
             // preemptively empty the box
-            $scope.$emit('submit-message');
+            $scope.$emit('submit_message');
             $scope.message = new Message();
             $element.find('input').focus();
 
