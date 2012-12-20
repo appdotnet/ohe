@@ -2,6 +2,16 @@
 
 (function () {
     angular.module('utils', []).factory('utils', function () {
+        // workaround for http://code.google.com/p/chromium/issues/detail?id=64846
+        // otherwise would use document.hasFocus()
+        var has_focus = true;
+        $(window).on('focus', function () {
+            has_focus = true;
+        });
+        $(window).on('blur', function () {
+            has_focus = false;
+        });
+
         var original_title = document.title;
         var new_title = "New Message";
         var toggle_title = function () {
@@ -37,7 +47,7 @@
                 return arr.join('');
             },
             title_bar_notification: function () {
-                if (!document.hasFocus() && !interval) {
+                if (!has_focus && !interval) {
                     toggle_title();
                     interval = window.setInterval(toggle_title, 1500);
                     if (!one) {
