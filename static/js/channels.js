@@ -50,7 +50,34 @@
         $scope.has_more_channels = true;
         $scope.num_to_fetch = 10;
 
-        channelState.query_channels($scope.num_to_fetch, false);
+        channelState.query_channels($scope.num_to_fetch, false).then(function () {
+            // need to refactor this document title stuff so that it's not repeated
+            var original_title = document.title;
+            var new_title = "New Message";
+            var toggle_title = function () {
+                if (document.title === original_title) {
+                    document.title = new_title;
+                } else {
+                    document.title = original_title;
+                }
+            };
+            var interval;
+            var one;
+            $scope.$watch('channel_list', function (newVal, oldVal) {
+                if (newVal !== oldVal && !document.hasFocus()) {
+                    toggle_title();
+                    interval = window.setInterval(toggle_title, 1500);
+                    if (!one) {
+                        one = $(window, 'html').one('focus', function () {
+                            document.title = original_title;
+                            clearInterval(interval);
+                            interval = undefined;
+                            one = undefined;
+                        });
+                    }
+                }
+            }, true);
+        });
 
         $scope.selectedUsers = [];
         $scope.message = "";

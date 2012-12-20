@@ -103,7 +103,7 @@
                             var has_others = _.some(new_messages, function (msg) {
                                 return msg.user.id !== scope.user_id;
                             });
-                            if (has_others) {
+                            if (has_others && !document.hasFocus()) {
                                 toggle_title();
                                 interval = window.setInterval(toggle_title, 1500);
                                 if (!one) {
