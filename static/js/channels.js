@@ -48,9 +48,9 @@
         return Channel;
     }).controller('ChannelListCtrl', function ($scope, $location, Channel, Message, channelState, utils) {
         $scope.has_more_channels = true;
-        $scope.num_to_fetch = 10;
+        $scope.channel_fetch_size = 10;
 
-        channelState.query_channels($scope.num_to_fetch, false).then(function () {
+        channelState.query_channels($scope.channel_fetch_size, false).then(function () {
             $scope.$watch('channel_list', function (newVal, oldVal) {
                 if (newVal !== oldVal) {
                     utils.title_bar_notification();
@@ -70,8 +70,8 @@
         };
 
         $scope.loadOlderChannels = function () {
-            channelState.query_channels($scope.num_to_fetch, true).then(function (channels) {
-                if (!channels.length) {
+            channelState.query_channels($scope.channel_fetch_size, true).then(function (channels) {
+                if (channels.length < $scope.channel_fetch_size) {
                     $scope.has_more_channels = false;
                 }
             });
