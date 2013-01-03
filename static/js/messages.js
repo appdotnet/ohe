@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('messages', ['utils']).directive('messageList', function ($timeout, utils) {
+    angular.module('messages', ['utils']).directive('messageList', function ($timeout, utils, $rootScope, $http, Message) {
         return {
             restrict: 'E',
             controller: 'MessageListCtrl',
@@ -100,12 +100,39 @@
 
                     // fire_update_marker on initial load also
                     fire_update_marker();
+
+                    scope.has_older_messages = true;
                 };
 
                 var channel_loaded_deregister = scope.$on('channel_loaded', function () {
                     on_channel_loaded();
                     channel_loaded_deregister();
                 });
+
+                scope.loadOlderMessages = function () {
+                    var params = {
+                        count: $rootScope.message_fetch_size,
+                        before_id: scope.channel.messages[0].id,
+                        include_deleted: 0
+                    };
+
+                    $http({
+                        method: 'GET',
+                        url: '/adn-proxy/stream/0/channels/' + scope.channel.id + '/messages',
+                        params: params
+                    }).then(function (response) {
+                        var messages = [];
+
+                        angular.forEach(response.data.data, function (d) {
+                            messages.unshift(new Message(d));
+                        });
+                        scope.channel.messages = messages.concat(scope.channel.messages);
+
+                        if (messages.length < $rootScope.message_fetch_size) {
+                            scope.has_older_messages = false;
+                        }
+                    });
+                };
             }
         };
     }).directive('messageForm', function () {

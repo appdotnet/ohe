@@ -30,7 +30,7 @@
 
         var query_messages = function (channel, recent_only) {
             var params = {
-                count: recent_only ? 1 : 200,
+                count: recent_only ? 1 : $rootScope.message_fetch_size,
                 include_deleted: 0
             };
 

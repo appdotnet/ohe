@@ -34,5 +34,6 @@
         $rootScope.$on('$routeChangeSuccess', function (event, route) {
             $rootScope.selectedNav = route.$route.selectedNav;
         });
+        $rootScope.message_fetch_size = 50;
     });
 })();

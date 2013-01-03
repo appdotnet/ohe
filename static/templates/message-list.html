@@ -1,7 +1,8 @@
 <div class="message-list-container" resize-height>
   <div class="message-list">
+      <div ng-show='has_older_messages && channel.messages.length >= message_fetch_size' class='see-more message-wrapper'><a href='#' ng-click='loadOlderMessages()'>&#9650; Load Older Messages</a></div>
       <div class='message-wrapper' ng-repeat="message in channel.messages">
-        <div class="row-fluid message" >
+        <div class="row-fluid message">
           <div class="span2">
               <div class='ellipsize span12 username'>
                   <img width=25 height=25 alt='icon of {{ message.user.name }}' class='hidden-phone' ng-src="{{ message.user.avatar_image.url }}?w=25">
