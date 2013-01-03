@@ -110,9 +110,12 @@
                 });
 
                 scope.loadOlderMessages = function () {
+                    var oldest_message_id = scope.channel.messages[0].id;
+                    var oldest_message_elem = element.find('[data-message-id=' + oldest_message_id + ']');
+
                     var params = {
                         count: $rootScope.message_fetch_size,
-                        before_id: scope.channel.messages[0].id,
+                        before_id: oldest_message_id,
                         include_deleted: 0
                     };
 
@@ -131,6 +134,9 @@
                         if (messages.length < $rootScope.message_fetch_size) {
                             scope.has_older_messages = false;
                         }
+                        $timeout(function () {
+                            element.find('.message-list').scrollTop(oldest_message_elem.offset().top - 70);
+                        }, 1);
                     });
                 };
             }
