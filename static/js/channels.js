@@ -51,18 +51,6 @@
         $scope.num_to_fetch = 10;
 
         channelState.query_channels($scope.num_to_fetch, false).then(function () {
-            // need to refactor this document title stuff so that it's not repeated
-            var original_title = document.title;
-            var new_title = "New Message";
-            var toggle_title = function () {
-                if (document.title === original_title) {
-                    document.title = new_title;
-                } else {
-                    document.title = original_title;
-                }
-            };
-            var interval;
-            var one;
             $scope.$watch('channel_list', function (newVal, oldVal) {
                 if (newVal !== oldVal) {
                     utils.title_bar_notification();
