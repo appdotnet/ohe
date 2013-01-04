@@ -33,14 +33,22 @@
             return '/channel/' + this.id;
         };
 
-        Channel.prototype.get_subscribers = function (include_viewer) {
+        Channel.prototype.get_subscribers = function (include_viewer, recent_message) {
             var subscribers;
             if (include_viewer) {
                 subscribers = this.subscribers;
             } else {
-                subscribers = _.filter(this.subscribers, function (sub) {
-                    return sub.id !== $rootScope.user_id;
+                subscribers = _.reject(this.subscribers, function (sub) {
+                    return sub.id === $rootScope.user_id;
                 });
+            }
+
+            // if recent_message is supplied, have that user name at the beginning of the list
+            if (recent_message && recent_message.user.id !== $rootScope.user_id) {
+                subscribers = _.reject(subscribers, function (sub) {
+                    return sub.id === recent_message.user.id
+                });
+                subscribers.unshift({'name': recent_message.user.name});
             }
             return _.pluck(subscribers, 'name');
         };

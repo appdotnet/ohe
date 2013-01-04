@@ -16,7 +16,7 @@
                                           <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
                                       </div>
                                       <div class='subscribers'>
-                                          {{ channel.get_subscribers(false).join(', ') }}
+                                          {{ channel.get_subscribers(false, channel.recent_message).join(', ') }}
                                       </div>
                                       <div class='recent-message'>
                                           <small class='muted'>
