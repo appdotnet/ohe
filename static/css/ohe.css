@@ -50,7 +50,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 150px;
+    max-width: 90%;
 }
 
 .subscriber {
@@ -67,7 +67,6 @@ body {
 }
 
 .channel-list .ul-container {
-    width: 350px;
     border: 1px solid rgb(244,244,244);
 }
 
