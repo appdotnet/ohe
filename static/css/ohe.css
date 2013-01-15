@@ -106,3 +106,7 @@ body {
 .roster {
     overflow-y: scroll;
 }
+
+.alpha-link {
+    margin-left: 20px;
+}
