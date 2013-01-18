@@ -40,7 +40,8 @@ var session_store = new RedisStore({
 var lightpoll = new LightPoll({
     redis_client: get_rcon(),
     pub_client: get_rcon(),
-    sub_client: get_rcon()
+    sub_client: get_rcon(),
+    timeout: nconf.get('lightpoll:timeout') || 10
 });
 
 var stream_router = require('./ohe/streamrouter').create_router(app, lightpoll);

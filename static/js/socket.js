@@ -17,7 +17,7 @@ angular.module('socket', ['utils']).factory('Socket', function ($rootScope, $htt
 
             $timeout(poll);
         }, function (response) {
-            $timeout(poll);
+            $timeout(poll, 10000);
         });
     };
 

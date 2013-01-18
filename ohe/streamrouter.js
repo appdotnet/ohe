@@ -24,7 +24,7 @@ StreamRouter.prototype.get_or_create_stream = function (app_access_token, cb) {
     };
 
     var stream_template = {
-        object_types: ["message", "channel", "stream_marker", "channel_subscription"],
+        object_types: ["message", "channel", "stream_marker"],
         type: "long_poll",
         key: key,
         filter_id: filter_id
