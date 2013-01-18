@@ -77,7 +77,7 @@ app.configure(function () {
     app.use(express.query());
     app.use(cookieParser);
     app.use(express.session({
-        key: nconf.get('session:cookie_name') || 'connect.sid',
+        key: nconf.get('sessions:cookie_name') || 'connect.sid',
         store: session_store,
         secret: session_secret,
         proxy: true,
@@ -86,7 +86,7 @@ app.configure(function () {
             httpOnly: true,
             secure: secure,
             maxAge: 86400000,
-            domain: nconf.get('session:domain'),
+            domain: nconf.get('sessions:domain'),
         }
     }));
     app.use(auth.auth_middleware());

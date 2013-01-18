@@ -175,7 +175,6 @@ exports.get_app_token = function (cb) {
     });
 };
 
-exports.logout = function (req) {
-    req.session.user = undefined;
-    req._cached_omo_user = undefined;
+exports.logout = function (req, cb) {
+    req.session.destroy(cb);
 };

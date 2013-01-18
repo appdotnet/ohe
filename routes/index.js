@@ -24,13 +24,13 @@ exports.oauth_return = function (req, res) {
 };
 
 exports.logout = function (req, res) {
-    auth.logout(req);
-
-    if (nconf.get('adn:autologin')) {
-        res.redirect(oauth_url_base + '/logout');
-    } else {
-        res.redirect('/');
-    }
+    auth.logout(req, function () {
+        if (nconf.get('adn:autologin')) {
+            res.redirect(oauth_url_base + '/logout');
+        } else {
+            res.redirect('/');
+        }
+    });
 };
 
 exports.healthcheck = function (req, res) {
