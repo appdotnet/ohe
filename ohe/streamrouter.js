@@ -8,7 +8,7 @@ var api_url_base = nconf.get('adn:api_url_base') || 'https://alpha-api.app.net';
 var api_host_override = nconf.get('adn:api_host_override');
 
 var key = nconf.get('adn:stream_key') || 'pm_stream';
-var filter_id = nconf.get('adn:stream_filter_id') || 545;
+var filter_id = nconf.get('adn:stream_filter_id') || 859;
 
 function StreamRouter(app, lightpoll) {
     this.app = app;
