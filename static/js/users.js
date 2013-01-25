@@ -2,53 +2,78 @@
 
 (function () {
     angular.module('users', ['ui']).factory('User', function ($http) {
-        var User = function (data) {
-            if (data) {
+        var User = function (complete, data) {
+            if (complete) {
+                this.complete(data);
+            } else {
                 angular.extend(this, data);
             }
+        };
 
+        User.prototype.complete = function (data) {
+            angular.extend(this, data);
+            this.is_complete = true;
             this.text = '@' + this.username + ' (' + this.name + ')';
+
+            return this;
         };
 
-        User.get = function (user_id, callback) {
-            var user = new User();
+        User._cache = {};
+        User._pending = [];
 
-            $http.get('/adn-proxy/stream/0/users/' + user_id).then(function (response) {
-                angular.extend(user, response.data.data);
-                if (callback) {
-                    callback(user);
+        User.update = function (user) {
+            var cached_user = User._cache[user.id];
+            if (cached_user) {
+                User._pending = _.without(User._pending, cached_user);
+                return cached_user.complete(user);
+            } else {
+                return User._cache[user.id] = new User(true, user);
+            }
+        };
+
+        User.bulk_get = function (user_ids, fetch) {
+            var result = {};
+
+            _.each(_.uniq(user_ids), function (user_id) {
+                var user = User._cache[user_id];
+                if (!user) {
+                    user = User._cache[user_id] = new User(false, {id: user_id});
+                    User._pending.push(user);
                 }
+
+                result[user_id] = user;
             });
 
-            return user;
+            if (fetch) {
+                User.fetch_pending();
+            }
+
+            return result;
         };
 
-        User.prototype.follow = function (callback) {
-            $http.post('/adn-proxy/stream/0/users/' + user_id + '/follow').then(function (response) {
-                callback(new User(response.data.data));
-            });
-        };
+        User.fetch_pending = function () {
+            var pending = User._pending;
+            User._pending = [];
 
-        User.prototype.unfollow = function (callback) {
-            $http.delete('/adn-proxy/stream/0/users/' + user_id + '/follow').then(function (response) {
-                callback(new User(response.data.data));
-            });
-        };
-
-        User.query = function (callback) {
-            var users = [];
-
-            $http.get('/adn-proxy/stream/0/users').then(function (response) {
-                angular.forEach(response.data.data, function (value) {
-                    users.push(new User(value));
+            var callback = function (response) {
+                _.each(response.data.data, function (user) {
+                    User.update(user);
                 });
+            };
 
-                if (callback) {
-                    callback(users);
-                }
-            });
+            while (pending.length) {
+                var chunk = _.first(pending, 200);
+                pending = _.rest(pending, 200);
 
-            return users;
+                var joined_ids = _.pluck(chunk, 'id').join();
+                $http({
+                    method: 'GET',
+                    url: '/adn-proxy/stream/0/users',
+                    params: {
+                        ids: joined_ids
+                    }
+                }).then(callback);
+            }
         };
 
         User.get_search_select2 = function (include_users) {
@@ -77,7 +102,7 @@
                     results: function (data, page) {
                         return {
                             results: _.map(data.data, function (value) {
-                                return new User(value);
+                                return User.update(value);
                             })
                         };
                     }

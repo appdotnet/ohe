@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('messages', ['utils']).directive('messageList', function ($timeout, utils, $rootScope, $http, Message) {
+    angular.module('messages', ['users', 'utils']).directive('messageList', function ($timeout, utils, $rootScope, $http, Message) {
         return {
             restrict: 'E',
             controller: 'MessageListCtrl',
@@ -176,9 +176,18 @@
             templateUrl: '/static/templates/roster.html',
             replace: true
         };
-    }).factory('Message', function ($http) {
-        var Message = function (obj) {
-            angular.extend(this, obj);
+    }).factory('Message', function (User, $http) {
+        var Message = function (data) {
+            this.update(data);
+        };
+
+        Message.prototype.update = function (data) {
+            if (data) {
+                angular.extend(this, data);
+                this.user = User.update(data.user);
+            }
+
+            return this;
         };
 
         Message.prototype.create = function () {
@@ -191,7 +200,8 @@
                     text: self.text
                 }
             }).then(function (response) {
-                angular.extend(self, response.data.data);
+                self.update(response.data.data);
+
                 return self;
             });
         };

@@ -46,14 +46,14 @@ body {
     width: 50px;
 }
 
-.subscribers, .recent-message {
+.users, .recent-message {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 90%;
 }
 
-.subscriber {
+.user {
     color: rgb(51,51,51);
 }
 

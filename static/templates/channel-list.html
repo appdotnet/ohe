@@ -15,8 +15,13 @@
                                       <div class='timestamp pull-right'>
                                           <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
                                       </div>
-                                      <div class='subscribers'>
-                                          {{ channel.get_subscribers(false, channel.recent_message).join(', ') }}
+                                      <div class='users'>
+                                          <span ng-repeat="user in channel.users | orderBy:['id != channel.recent_message.user.id', '-id']">
+                                            <span ng-show="user.is_complete">
+                                              {{ user.username }}<span ng-show="!$last">, </span>
+                                            </span>
+                                          </span>
+                                          {{ channel.get_users(false).join(', ') }}
                                       </div>
                                       <div class='recent-message'>
                                           <small class='muted'>

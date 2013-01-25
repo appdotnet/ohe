@@ -7,30 +7,10 @@
         var channels_queried = false;
         var channel_min_id;
 
-        var query_subscribers = function (channel) {
-            if (channel._subscribers_loaded) {
-                var result = $q.defer();
-                result.resolve(channel.subscribers);
-                return result.promise;
-            }
-
-            return $http.get('/adn-proxy/stream/0/channels/' + channel.id + '/subscribers').then(function (response) {
-                var subscribers = [];
-
-                _.map(response.data.data, function (user) {
-                    subscribers.push(new User(user));
-                });
-
-                channel.subscribers = subscribers;
-                channel._subscribers_loaded = true;
-
-                return channel.subscribers;
-            });
-        };
-
-        var query_messages = function (channel, recent_only) {
+        var query_messages = function (channel) {
+            // TODO: enable this to backfill
             var params = {
-                count: recent_only ? 1 : $rootScope.message_fetch_size,
+                count: $rootScope.message_fetch_size,
                 include_deleted: 0
             };
 
@@ -49,38 +29,31 @@
                     messages.unshift(new Message(d));
                 });
 
-                channel.recent_message = _.last(messages);
-                channel._recent_message_loaded = true;
-
-                if (!recent_only) {
-                    channel.messages = messages;
-                }
+                channel.messages = messages;
             });
         };
 
-        var get_recent_message = function (channel) {
-            if (channel._recent_message_loaded) {
-                var result = $q.defer();
-                result.resolve(channel.recent_message);
-                return result.promise;
-            } else {
-                return query_messages(channel, true);
-            }
-        };
-
-        var get_channel = function (channel_id) {
+        var get_channel = function (channel_id, fetch_messages) {
             var promise;
 
             if (channel_cache[channel_id]) {
+                var channel = channel_cache[channel_id];
+                var msg = _.last(channel.messages || []);
+
+                // shortcut
+                if (msg && channel.recent_message_id === msg.id) {
+                    fetch_messages = false;
+                }
+
                 var defer = $q.defer();
-                defer.resolve(channel_cache[channel_id]);
+                defer.resolve(channel);
                 promise = defer.promise;
             } else {
                 promise = $http.get('/adn-proxy/stream/0/channels/' + channel_id).then(function (response) {
                     var channel = channel_cache[channel_id];
 
                     if (channel) {
-                        angular.extend(channel, response.data.data);
+                        channel.update(response.data.data);
                     } else {
                         channel = new Channel(response.data.data);
                         channel_cache[channel.id] = channel;
@@ -92,17 +65,15 @@
                 });
             }
 
-            return promise.then(function (channel) {
-                var defer = $q.defer();
-
-                var deferreds = [query_subscribers(channel), query_messages(channel)];
-
-                $q.all(deferreds).then(function () {
-                    defer.resolve(channel);
+            if (fetch_messages) {
+                return promise.then(function (channel) {
+                    return query_messages(channel).then(function () {
+                        return channel;
+                    });
                 });
-
-                return defer.promise;
-            });
+            } else {
+                return promise;
+            }
         };
 
         var query_channels = function (num_to_fetch, fetch_older) {
@@ -114,40 +85,36 @@
             }
 
             var params = {
-                count: num_to_fetch
+                count: num_to_fetch,
+                include_recent_message: 1,
+                channel_types: 'net.app.core.pm'
             };
+
             if (channel_min_id) {
                 params.before_id = channel_min_id;
             }
+
             return $http({
                 method: 'GET',
                 url: '/adn-proxy/stream/0/channels',
                 params: params
             }).then(function (response) {
                 channel_min_id = response.data.meta.min_id;
-                var deferreds = [];
-
                 var fetched_channels = [];
+
                 angular.forEach(response.data.data, function (value) {
-                    var channel = new Channel(value);
-                    if (channel.type === 'net.app.core.pm') {
-                        channel_cache[channel.id] = channel;
-                        deferreds.push(query_subscribers(channel));
-                        deferreds.push(get_recent_message(channel));
-                        fetched_channels.push(channel);
-                    }
+                    var channel = new Channel(value, true);
+                    channel_cache[channel.id] = channel;
+                    fetched_channels.push(channel);
                 });
 
-                var defer = $q.defer();
+                User.fetch_pending();
 
                 channels_queried = true;
 
-                $q.all(deferreds).then(function () {
-                    defer.resolve(fetched_channels);
-                    $rootScope.channel_list = _.values(channel_cache);
-                });
+                $rootScope.channel_list = _.values(channel_cache);
 
-                return defer.promise;
+                return fetched_channels;
             });
         };
 
@@ -200,10 +167,10 @@
             if (obj.meta.type === 'channel') {
                 channel = channel_cache[obj.meta.id];
                 if (channel) {
-                    angular.extend(channel, obj.data);
+                    channel.update(obj.data);
                 } else {
                     // If we haven't seen this channel, go fetch it.
-                    get_channel(obj.meta.id);
+                    get_channel(obj.meta.id, false);
 
                     // Stash the non-personalized channel object.
                     // This will cause further channel updates not to go back to
@@ -217,10 +184,7 @@
                 channel = channel_cache[obj.data.channel_id];
                 if (channel) {
                     var msg = new Message(obj.data);
-                    if (!channel.recent_message) {
-                        channel.recent_message = msg;
-                        channel._recent_message_loaded = true;
-                    } else if (utils.comparable_id(channel.recent_message) < utils.comparable_id(msg)) {
+                    if (!channel.recent_message || utils.comparable_id(channel.recent_message) < utils.comparable_id(msg)) {
                         channel.recent_message = msg;
                     }
 
@@ -246,7 +210,9 @@
 
                     if (channel.recent_message) {
                         channel.has_unread = utils.comparable_id(channel.recent_message) > utils.comparable_id(channel.marker);
-                    } // what if we don't have a recent message?
+                    } else {
+                        channel.has_unread = false;
+                    }
                 }
             }
         });

@@ -16,42 +16,50 @@
             templateUrl: '/static/templates/channel-detail.html'
         };
     }).factory('Channel', function ($q, $rootScope, $http, User, Message) {
-        var Channel = function (data) {
+        var Channel = function (data, batch) {
             if (data) {
-                angular.extend(this, data);
-                this.creator = new User(data.creator);
+                this.update(data, batch);
             }
 
-            this.subscribers = [];
-            this._subscribers_loaded = false;
             this.messages = [];
-            this.recent_message = undefined;
-            this._recent_message_loaded = false;
+        };
+
+        Channel.prototype.update = function (data, batch) {
+            angular.extend(this, data);
+            this.owner = User.update(data.owner);
+            this.users = _.values(User.bulk_get(this.get_user_ids(), !batch));
         };
 
         Channel.prototype.detail_url = function () {
             return '/channel/' + this.id;
         };
 
-        Channel.prototype.get_subscribers = function (include_viewer, recent_message) {
-            var subscribers;
+        Channel.prototype.get_users = function (include_viewer) {
+            return [];
+            var users;
             if (include_viewer) {
-                subscribers = this.subscribers;
+                users = this.users;
             } else {
-                subscribers = _.reject(this.subscribers, function (sub) {
+                users = _.reject(this.users, function (sub) {
                     return sub.id === $rootScope.user_id;
                 });
             }
 
             // if recent_message is supplied, have that user name at the beginning of the list
+            var recent_message = this.recent_message;
             if (recent_message && recent_message.user.id !== $rootScope.user_id) {
-                subscribers = _.reject(subscribers, function (sub) {
+                users = _.reject(users, function (sub) {
                     return sub.id === recent_message.user.id;
                 });
-                subscribers.unshift({'name': recent_message.user.name});
+                users.unshift(recent_message.user);
             }
-            return _.pluck(subscribers, 'name');
+
+            return users;
         };
+
+        Channel.prototype.get_user_ids = function () {
+            return _.union([this.owner.id], this.writers.user_ids);
+        }
 
         return Channel;
     }).controller('ChannelListCtrl', function ($scope, $location, Channel, Message, channelState, utils) {
@@ -86,7 +94,7 @@
         };
 
     }).controller('ChannelDetailCtrl', function ($scope, $element, $timeout, channelState, $routeParams) {
-        channelState.get_channel($routeParams.channel_id).then(function (channel) {
+        channelState.get_channel($routeParams.channel_id, true).then(function (channel) {
             $scope.channel = channel;
             // messages are also loaded at this point
             $scope.$broadcast('channel_loaded');
