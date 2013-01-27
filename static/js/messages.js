@@ -45,7 +45,6 @@
 
                 fire_update_marker = _.debounce(fire_update_marker, 300);
 
-
                 var scroll_to_bottom = function () {
                     var target = element.find('.message-list');
                     target.scrollTop(target[0].scrollHeight);
@@ -64,6 +63,7 @@
 
                     fire_update_marker();
                 });
+
                 scope.$on('submit_message', function (event) {
                     scroll_to_bottom();
                 });
@@ -73,41 +73,35 @@
                     element.find('.message-list').off('scroll.message-list');
                 });
 
-                var on_channel_loaded = function () {
-                    // everything that needs to wait until the channel is fully loaded
-                    scope.$watch('channel.messages', function (newVal, oldVal) {
-                        if (newVal && newVal.length || oldVal && oldVal.length) {
-                            if (pinned_to_bottom) {
-                                scroll_to_bottom();
-                            }
+                // everything that needs to wait until the channel is fully loaded
+                scope.$watch('channel.messages', function (newVal, oldVal) {
+                    if (newVal && newVal.length || oldVal && oldVal.length) {
+                        if (pinned_to_bottom) {
+                            scroll_to_bottom();
                         }
-                    }, true);
+                    }
+                }, true);
 
-                    scope.$watch('channel.messages.length', function (newVal, oldVal) {
-                        if (newVal > oldVal) {
-                            // make sure the new messages aren't all from the viewer
-                            // there are some assumptions in here about new messages always
-                            // getting appended to end of messages array
-                            var new_messages = scope.channel.messages.slice(oldVal);
-                            var has_others = _.some(new_messages, function (msg) {
-                                return msg.user.id !== scope.user_id;
-                            });
-                            if (has_others) {
-                                utils.title_bar_notification();
-                            }
+                scope.$watch('channel.messages.length', function (newVal, oldVal) {
+                    if (newVal > oldVal) {
+                        // make sure the new messages aren't all from the viewer
+                        // there are some assumptions in here about new messages always
+                        // getting appended to end of messages array
+                        var new_messages = scope.channel.messages.slice(oldVal);
+                        var has_others = _.some(new_messages, function (msg) {
+                            return msg.user.id !== scope.user_id;
+                        });
+
+                        if (has_others) {
+                            utils.title_bar_notification();
                         }
-                    }, true);
+                    }
+                }, true);
 
-                    // fire_update_marker on initial load also
-                    fire_update_marker();
+                // fire_update_marker on initial load also
+                fire_update_marker();
 
-                    scope.has_older_messages = true;
-                };
-
-                var channel_loaded_deregister = scope.$on('channel_loaded', function () {
-                    on_channel_loaded();
-                    channel_loaded_deregister();
-                });
+                scope.has_older_messages = true;
 
                 scope.loadOlderMessages = function () {
                     var oldest_message_id = scope.channel.messages[0].id;

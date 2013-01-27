@@ -5,12 +5,12 @@
         <div class="row-fluid message">
           <div class="span2">
               <div class='ellipsize span12 username'>
-                  <img width=25 height=25 alt='icon of {{ message.user.name }}' class='hidden-phone' ng-src="{{ message.user.avatar_image.url }}?w=25">
-                  <strong class='muted'>{{ message.user.name}}</strong>
+                  <img width=25 height=25 alt='icon of {{ message.user.username }}' class='hidden-phone' ng-src="{{ message.user.avatar_image.url }}?w=25">
+                  <strong class='muted'>{{ message.user.username}}</strong>
               </div>
           </div>
           <div class="span2 pull-right">
-              <div class='muted'>{{ message.created_at | date:'MMM-d h:mm a' }}</div>
+              <div class='muted'>{{ message.created_at | date:'MMM-d h:mma' }}</div>
           </div>
           <div class="span8">
             <div class="row-fluid">

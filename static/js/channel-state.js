@@ -38,10 +38,8 @@
 
             if (channel_cache[channel_id]) {
                 var channel = channel_cache[channel_id];
-                var msg = _.last(channel.messages || []);
 
-                // shortcut
-                if (msg && channel.recent_message_id === msg.id) {
+                if (channel.messages && channel.messages.length) {
                     fetch_messages = false;
                 }
 
@@ -195,7 +193,9 @@
                     }
 
                     if (!channel.messages || utils.comparable_id(_.last(channel.messages)) < utils.comparable_id(msg)) {
-                        channel.messages.push(msg);
+                        if (channel.messages && channel.messages.length) {
+                            channel.messages.push(msg);
+                        }
                         display_notification(msg);
                     }
                 }

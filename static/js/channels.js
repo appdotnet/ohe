@@ -96,8 +96,6 @@
     }).controller('ChannelDetailCtrl', function ($scope, $element, $timeout, channelState, $routeParams) {
         channelState.get_channel($routeParams.channel_id, true).then(function (channel) {
             $scope.channel = channel;
-            // messages are also loaded at this point
-            $scope.$broadcast('channel_loaded');
         });
     });
 })();
