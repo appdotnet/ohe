@@ -167,14 +167,14 @@
                 if (channel) {
                     channel.update(obj.data);
                 } else {
-                    // If we haven't seen this channel, go fetch it.
-                    get_channel(obj.meta.id, false);
-
                     // Stash the non-personalized channel object.
                     // This will cause further channel updates not to go back to
                     // the wire and run updates.
-                    channel_cache[obj.meta.id] = channel;
+                    channel_cache[obj.meta.id] = new Channel(channel);
                     $rootScope.channel_list = _.values(channel_cache);
+
+                    // If we haven't seen this channel, go fetch it.
+                    get_channel(obj.meta.id, false);
                 }
             }
 

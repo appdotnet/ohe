@@ -9,14 +9,14 @@
                           <a href="{{ channel.detail_url() }}">
                               <div class="row {{channel.has_unread && 'unread'}} channel">
                                   <div class='pull-left img-block'>
-                                      <img width=50 height=50 class='span12' alt='channel icon {{ channel.recent_message.user.username }}' ng-src="{{ channel.recent_message.user.avatar_image.url }}?w=50">
+                                      <img width=50 height=50 class='span12' alt='channel icon {{ channel.get_visible_user().username }}' ng-src="{{ channel.get_visible_user().avatar_image.url }}?w=50">
                                   </div>
                                   <div class='content-block'>
                                       <div class='timestamp pull-right'>
                                           <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
                                       </div>
                                       <div class='users'>
-                                          <span ng-repeat="user in channel.users | orderBy:['id != channel.recent_message.user.id', '-id']">
+                                          <span ng-repeat="user in channel.get_users()">
                                             <span ng-show="user.is_complete">
                                               {{ user.username }}<span ng-show="!$last">, </span>
                                             </span>

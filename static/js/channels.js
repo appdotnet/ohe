@@ -27,6 +27,11 @@
         Channel.prototype.update = function (data, batch) {
             angular.extend(this, data);
             this.owner = User.update(data.owner);
+
+            if (data.recent_message) {
+                this.recent_message = new Message(data.recent_message);
+            }
+
             this.users = _.values(User.bulk_get(this.get_user_ids(), !batch));
         };
 
@@ -34,8 +39,15 @@
             return '/channel/' + this.id;
         };
 
+        Channel.prototype.get_visible_user = function () {
+            if (this.recent_message && this.recent_message.user.id !== $rootScope.user_id) {
+                return this.recent_message.user;
+            }
+
+            return _.first(this.users);
+        }
+
         Channel.prototype.get_users = function (include_viewer) {
-            return [];
             var users;
             if (include_viewer) {
                 users = this.users;

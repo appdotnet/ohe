@@ -160,7 +160,7 @@
                     // fix dimensions
                     element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 70));
                 }
-                t = $timeout(check_dimensions, 100);
+                t = $timeout(check_dimensions, 200, false);
             };
             check_dimensions();
         };
