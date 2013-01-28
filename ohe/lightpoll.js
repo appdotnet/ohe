@@ -38,6 +38,12 @@ var LightPoll = function (options) {
 
         var key = 'user_client:' + self.req.adn_user().id;
 
+        // HACK: We never modify the session -- so don't write it back
+        // to redis after we're done, write it back now.
+        self.req.session.resetMaxAge();
+        self.req.session.save();
+        self.req.session = undefined;
+
         // renew user_id registration
         poller.redis_client.hset(key, self.client_id, +new Date(), function (err, result) {
             if (!err) {

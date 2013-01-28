@@ -33,6 +33,28 @@
             });
         };
 
+        var on_channel = function (data, fetch) {
+            var channel = channel_cache[data.id];
+
+            if (channel) {
+                channel.update(data);
+            } else {
+                channel = channel_cache[data.id] = new Channel(data);
+                $rootScope.channel_list = _.values(channel_cache);
+            }
+
+            if (fetch) {
+                get_channel(data.id, false);
+            }
+
+            return channel;
+        };
+
+        var channel_unsubscribe = function (channel_id) {
+            delete channel_cache[channel_id];
+            $rootScope.channel_list = _.values(channel_cache);
+        };
+
         var get_channel = function (channel_id, fetch_messages) {
             var promise;
 
@@ -48,18 +70,7 @@
                 promise = defer.promise;
             } else {
                 promise = $http.get('/adn-proxy/stream/0/channels/' + channel_id).then(function (response) {
-                    var channel = channel_cache[channel_id];
-
-                    if (channel) {
-                        channel.update(response.data.data);
-                    } else {
-                        channel = new Channel(response.data.data);
-                        channel_cache[channel.id] = channel;
-                    }
-
-                    $rootScope.channel_list = _.values(channel_cache);
-
-                    return channel;
+                    return on_channel(response.data.data);
                 });
             }
 
@@ -163,18 +174,14 @@
         $rootScope.$on('stream_push', function (event, obj) {
             var channel;
             if (obj.meta.type === 'channel') {
-                channel = channel_cache[obj.meta.id];
-                if (channel) {
-                    channel.update(obj.data);
-                } else {
-                    // Stash the non-personalized channel object.
-                    // This will cause further channel updates not to go back to
-                    // the wire and run updates.
-                    channel_cache[obj.meta.id] = new Channel(channel);
-                    $rootScope.channel_list = _.values(channel_cache);
+                on_channel(obj.data);
+            }
 
-                    // If we haven't seen this channel, go fetch it.
-                    get_channel(obj.meta.id, false);
+            if (obj.meta.type === 'channel_subscription') {
+                if (!obj.meta.is_deleted) {
+                    on_channel(obj.data.channel);
+                } else {
+                    channel_unsubscribe(obj.data.channel.id);
                 }
             }
 

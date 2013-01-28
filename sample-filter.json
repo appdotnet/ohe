@@ -1,24 +1,30 @@
 {
     "clauses": [
         {
-            "field": "/data/type", 
-            "object_type": "channel", 
-            "operator": "equals", 
+            "field": "/data/channel/type",
+            "object_type": "channel_subscription",
+            "operator": "equals",
             "value": "net.app.core.pm"
-        }, 
+        },
         {
-            "field": "/meta/channel_type", 
-            "object_type": "stream_marker", 
-            "operator": "equals", 
+            "field": "/data/type",
+            "object_type": "channel",
+            "operator": "equals",
             "value": "net.app.core.pm"
-        }, 
+        },
         {
-            "field": "/meta/channel_type", 
-            "object_type": "message", 
-            "operator": "equals", 
+            "field": "/meta/channel_type",
+            "object_type": "stream_marker",
+            "operator": "equals",
+            "value": "net.app.core.pm"
+        },
+        {
+            "field": "/meta/channel_type",
+            "object_type": "message",
+            "operator": "equals",
             "value": "net.app.core.pm"
         }
-    ], 
-    "match_policy": "include_any", 
+    ],
+    "match_policy": "include_any",
     "name": "net.app.core.pm filter for omega"
 }

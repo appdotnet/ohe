@@ -24,7 +24,7 @@ StreamRouter.prototype.get_or_create_stream = function (app_access_token, cb) {
     };
 
     var stream_template = {
-        object_types: ["message", "channel", "stream_marker"],
+        object_types: ["message", "channel", "stream_marker", "channel_subscription"],
         type: "long_poll",
         key: key,
         filter_id: filter_id
@@ -107,6 +107,10 @@ StreamRouter.prototype.stream = function (token) {
 
         stream.on('stream_marker', function (msg) {
             self.lightpoll.dispatch(msg.meta.user_id, msg);
+        });
+
+        stream.on('channel_subscription', function (msg) {
+            self.lightpoll.dispatch(msg.data.user.id, msg);
         });
 
         stream.on('error', function (error) {
