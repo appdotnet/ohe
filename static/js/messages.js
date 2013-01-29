@@ -143,15 +143,16 @@
             templateUrl: '/static/templates/message-form.html',
             replace: true
         };
-    }).directive('messageBody', function () {
+    }).directive('messageBody', function (utils) {
         return {
             restrict: 'A',
             templateUrl: '/static/templates/message-body.html',
             replace: true,
-            link: function (scope, element, attrs, controller) {
+            link: function (scope) {
                 var core_file_attachments = [];
+                var oembed_images = [];
                 _.each(scope.message.annotations, function (annotation) {
-                    if (annotation.type == 'net.app.core.attachments') {
+                    if (annotation.type === 'net.app.core.attachments') {
                         var file_list = annotation.value['net.app.core.file_list'];
                         _.map(file_list, function(file) {
                             var friendly_size = file.size + "B";
@@ -165,9 +166,25 @@
                             file.friendly_size = friendly_size;
                         });
                         core_file_attachments.push(annotation.value['net.app.core.file_list']);
+                    } else if (annotation.type === 'net.app.core.oembed') {
+                        var value = annotation.value;
+                        if (value.type === 'photo') {
+                            if (value.url && value.version === '1.0' && value.thumbnail_url &&
+                                value.thumbnail_width && value.thumbnail_height && value.width && value.height) {
+                                    if (value.thumbnail_url.indexOf('http:') === 0) {
+                                        // TODO: make secure url to avoid mixed content
+                                    } else {
+                                        var dims = utils.fit_to_box(value.thumbnail_width, value.thumbnail_height, 100, 100);
+                                        value.scaled_thumbnail_width = dims[0];
+                                        value.scaled_thumbnail_height = dims[1];
+                                        oembed_images.push(value);
+                                    }
+                                }
+                        }
                     }
                 });
                 scope.core_file_attachments = core_file_attachments;
+                scope.oembed_images = oembed_images;
             }
         };
     }).directive('resizeHeight', function ($timeout) {

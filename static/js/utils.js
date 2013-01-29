@@ -59,6 +59,18 @@
                         });
                     }
                 }
+            },
+            fit_to_box: function (w, h, max_w, max_h, expand) {
+                expand = expand || false;
+                // proportionately scale a box defined by (w,h) so that it fits within a box defined by (max_w, max_h)
+                // by default, only scaling down is allowed, unless expand=True, in which case scaling up is allowed
+                if ((w < max_w) && (h < max_h) && !expand) {
+                    return [w, h];
+                }
+                var largest_ratio = Math.max(w / max_w, h / max_h);
+                var new_height = parseInt(h / largest_ratio, 10);
+                var new_width = parseInt(w / largest_ratio, 10);
+                return [new_width, new_height];
             }
         };
     });
