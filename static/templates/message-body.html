@@ -1,0 +1,7 @@
+<div>
+    <div class='content' ng-bind-html-unsafe="message.html"></div>
+    <div class='attachments' ng-repeat="attachment in core_file_attachments">
+        <div class='files' ng-repeat="file in attachment">
+            <a href='{{file.url}}'>{{file.name}} ({{file.friendly_size}})</a>
+    </div>
+</div>
