@@ -45,7 +45,7 @@
             }
 
             return _.first(this.users);
-        }
+        };
 
         Channel.prototype.get_users = function (include_viewer) {
             var users;
@@ -71,7 +71,7 @@
 
         Channel.prototype.get_user_ids = function () {
             return _.union([this.owner.id], this.writers.user_ids);
-        }
+        };
 
         return Channel;
     }).controller('ChannelListCtrl', function ($scope, $location, Channel, Message, channelState, utils) {

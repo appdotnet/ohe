@@ -110,7 +110,8 @@
                     var params = {
                         count: $rootScope.message_fetch_size,
                         before_id: oldest_message_id,
-                        include_deleted: 0
+                        include_deleted: 0,
+                        include_annotations: 1
                     };
 
                     $http({
@@ -141,6 +142,33 @@
             controller: 'MessageFormCtrl',
             templateUrl: '/static/templates/message-form.html',
             replace: true
+        };
+    }).directive('messageBody', function () {
+        return {
+            restrict: 'A',
+            templateUrl: '/static/templates/message-body.html',
+            replace: true,
+            link: function (scope, element, attrs, controller) {
+                var core_file_attachments = [];
+                _.each(scope.message.annotations, function (annotation) {
+                    if (annotation.type == 'net.app.core.attachments') {
+                        var file_list = annotation.value['net.app.core.file_list'];
+                        _.map(file_list, function(file) {
+                            var friendly_size = file.size + "B";
+                            if (file.size >= 1e9) {
+                                friendly_size = (file.size / 1e9).toFixed(1) + "G";
+                            } else if (file.size > 1e6) {
+                                friendly_size = (file.size / 1e6).toFixed(1) + "M";
+                            } else if (file.size > 1e3) {
+                                friendly_size = (file.size / 1e3).toFixed(0) + "K";
+                            }
+                            file.friendly_size = friendly_size;
+                        });
+                        core_file_attachments.push(annotation.value['net.app.core.file_list']);
+                    }
+                });
+                scope.core_file_attachments = core_file_attachments;
+            }
         };
     }).directive('resizeHeight', function ($timeout) {
         return function (scope, element) {

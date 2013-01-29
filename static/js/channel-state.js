@@ -11,7 +11,8 @@
             // TODO: enable this to backfill
             var params = {
                 count: $rootScope.message_fetch_size,
-                include_deleted: 0
+                include_deleted: 0,
+                include_annotations: 1
             };
 
             return $http({
