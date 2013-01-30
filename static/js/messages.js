@@ -148,7 +148,8 @@
             restrict: 'A',
             templateUrl: '/static/templates/message-body.html',
             replace: true,
-            link: function (scope) {
+            controller: 'MessageBodyCtrl',
+            link: function (scope, element, attrs) {
                 var core_file_attachments = [];
                 var oembed_images = [];
                 _.each(scope.message.annotations, function (annotation) {
@@ -172,7 +173,7 @@
                             if (value.url && value.version === '1.0' && value.thumbnail_url &&
                                 value.thumbnail_width && value.thumbnail_height && value.width && value.height) {
                                     if (value.thumbnail_url.indexOf('http:') === 0) {
-                                        // TODO: make secure url to avoid mixed content
+                                        // TODO: make secure url to avoid mixed content warnings
                                     } else {
                                         var dims = utils.fit_to_box(value.thumbnail_width, value.thumbnail_height, 100, 100);
                                         value.scaled_thumbnail_width = dims[0];
@@ -186,6 +187,30 @@
                 scope.core_file_attachments = core_file_attachments;
                 scope.oembed_images = oembed_images;
             }
+        };
+    }).controller('MessageBodyCtrl', function ($scope, $http) {
+        $scope.get_file_url = function (message_id, file_id) {
+            $http({
+                method: 'GET',
+                url: '/adn-proxy/stream/0/channels/' + $scope.channel.id + '/messages/' + message_id,
+                params: {
+                    'include_annotations': 1
+                }
+            }).then(function (response) {
+                _.each($scope.message.annotations, function (annotation) {
+                    if (annotation.type === 'net.app.core.attachments') {
+                        var file_list = annotation.value['net.app.core.file_list'];
+                        _.each(file_list, function (file) {
+                            if (file.file_id === file_id) {
+                                setTimeout(function () {
+                                    window.open(file.url);
+                                }, 1000);
+                                return;
+                            }
+                        });
+                    }
+                });
+            });
         };
     }).directive('resizeHeight', function ($timeout) {
         return function (scope, element) {

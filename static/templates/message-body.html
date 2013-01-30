@@ -1,8 +1,10 @@
 <div>
     <div class='content' ng-bind-html-unsafe="message.html"></div>
     <div class='attachments' ng-repeat="attachment in core_file_attachments">
-        <div class='files' ng-repeat="file in attachment">
-            <a href='{{file.url}}'>{{file.name}} ({{file.friendly_size}})</a>
+        <div class='file' ng-repeat="file in attachment">
+            <a href='#' data-file-id='{{file.file_id}}' ng-click="get_file_url(message.id, file.file_id)">
+                {{file.name}} ({{file.friendly_size}})
+            </a>
         </div>
     </div>
     <div class='media' ng-repeat="image in oembed_images">
