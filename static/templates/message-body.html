@@ -9,7 +9,7 @@
     </div>
     <div class='media' ng-repeat="image in oembed_images">
         <a href='{{image.url}}' target='_blank'>
-            <img src='{{image.secure_thumbnail_url}}' width='{{image.scaled_thumbnail_width}}' height='{{image.scaled_thumbnail_height}}'>
+            <img ng-src='{{image.secure_thumbnail_url}}' width='{{image.scaled_thumbnail_width}}' height='{{image.scaled_thumbnail_height}}'>
         </a>
     </div>
 </div>
