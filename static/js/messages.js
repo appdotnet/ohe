@@ -143,7 +143,7 @@
             templateUrl: '/static/templates/message-form.html',
             replace: true
         };
-    }).directive('messageBody', function (utils) {
+    }).directive('messageBody', function (utils, $http) {
         return {
             restrict: 'A',
             templateUrl: '/static/templates/message-body.html',
@@ -170,17 +170,30 @@
                     } else if (annotation.type === 'net.app.core.oembed') {
                         var value = annotation.value;
                         if (value.type === 'photo') {
-                            if (value.url && value.version === '1.0' && value.thumbnail_url &&
-                                value.thumbnail_width && value.thumbnail_height && value.width && value.height) {
-                                    if (value.thumbnail_url.indexOf('http:') === 0) {
-                                        // TODO: make secure url to avoid mixed content warnings
-                                    } else {
-                                        var dims = utils.fit_to_box(value.thumbnail_width, value.thumbnail_height, 100, 100);
-                                        value.scaled_thumbnail_width = dims[0];
-                                        value.scaled_thumbnail_height = dims[1];
+                            if (value.url && value.version === '1.0' && value.thumbnail_url && value.thumbnail_width &&
+                                    value.thumbnail_height && value.width && value.height) {
+
+                                var dims = utils.fit_to_box(value.thumbnail_width, value.thumbnail_height, 100, 100);
+                                value.scaled_thumbnail_width = dims[0];
+                                value.scaled_thumbnail_height = dims[1];
+                                if (value.thumbnail_url.indexOf('http:') === 0) {
+                                    // make http urls secure to avoid mixed content warnings
+                                    $http({
+                                        method: 'GET',
+                                        url: '/camofy-url',
+                                        params: {
+                                            'url': value.thumbnail_url
+                                        }
+                                    }).then(function(response) {
+                                        value.secure_thumbnail_url = response.data;
                                         oembed_images.push(value);
-                                    }
+                                    });
+                                } else {
+                                    value.secure_thumbnail_url = value.thumbnail_url;
+                                    oembed_images.push(value);
                                 }
+
+                            }
                         }
                     }
                 });

@@ -111,6 +111,7 @@ app.get('/channel/:channel_id', routes.index);
 app.get('/return', routes.oauth_return);
 app.get('/logout', routes.logout);
 app.get('/healthcheck', routes.healthcheck);
+app.get('/camofy-url', routes.camofy_url);
 lightpoll.enable(app);
 
 server.listen(nconf.get('deploy:port') || 8666);

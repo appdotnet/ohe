@@ -58,7 +58,7 @@ StreamRouter.prototype.get_or_create_stream = function (app_access_token, cb) {
             if (obj.data.length) {
                 var stream = obj.data[0];
                 var found_stream = _.pick(stream, _.keys(stream_template));
-                found_stream['filter_id'] = stream.filter && stream.filter.id;
+                found_stream.filter_id = stream.filter && stream.filter.id;
 
                 if (_.isEqual(found_stream, stream_template)) {
                     console.log('reusing stream id', stream.id);
