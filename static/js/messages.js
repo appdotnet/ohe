@@ -136,12 +136,139 @@
                 };
             }
         };
-    }).directive('messageForm', function () {
+    }).directive('messageForm', function ($http) {
         return {
             restrict: 'E',
             controller: 'MessageFormCtrl',
             templateUrl: '/static/templates/message-form.html',
-            replace: true
+            replace: true,
+            link: function (scope, element, attrs) {
+                if (!(window.FileReader && window.FormData)) {
+                    return; // element is hidden also
+                }
+
+                scope.attachment = {
+                    file: null,
+                    id: null,
+                    token: null,
+                    annotations: null
+                };
+
+                var activator = element.find('[data-attach-btn]');
+                var file_input = element.find('[data-file-upload-input]');
+                var name_preview = element.find('[data-attachment-name]');
+                var upload_progress_cont = element.find('[data-upload-progress]');
+                var upload_progress_bar = upload_progress_cont.find('.bar');
+                var remove_file = element.find('[data-remove-attachment]');
+
+                var annotations_from_response = function (resp) {
+                    var annotations;
+                    if (resp.kind === 'image') {
+                        annotations = [{
+                            type: "net.app.core.oembed",
+                            value: {
+                                "+net.app.core.file": {
+                                    file_token: resp.file_token,
+                                    format: "oembed",
+                                    file_id: resp.id
+                                }
+                            }
+                        }];
+                    } else {
+                        annotations = [{
+                            type: "net.app.core.attachments",
+                            value: {
+                                "+net.app.core.file_list": [{
+                                    file_token: resp.file_token,
+                                    format: "metadata",
+                                    file_id: resp.id
+                                }]
+                            }
+                        }];
+                    }
+
+                    return annotations;
+                };
+
+                var onfile = function (file, on_file_read) {
+                    scope.attachment.file = file;
+                    upload_progress_cont.removeClass('hide');
+                    name_preview.find('[data-text]').text(file.name);
+                };
+
+                var onresetfile = function () {
+                    scope.attachment = {
+                        file: null,
+                        id: null,
+                        token: null,
+                        annotations: null
+                    };
+
+                    name_preview.find('[data-text]').text('').removeClass('text-success');
+                    upload_progress_cont.addClass('hide').removeClass('plain');
+                    upload_progress_bar.css('width', '0%').removeClass('hide');
+                    remove_file.addClass('hide');
+                    activator.removeClass('hide');
+                };
+
+                var onuploadstart = function () {
+                    upload_progress_cont.removeClass('hide');
+                    upload_progress_bar.css('width', '0%');
+                    activator.addClass('hide');
+                };
+
+                var onprogress = function (percent_done) {
+                    percent_done = Math.max(percent_done, 5);
+                    upload_progress_bar.css('width', percent_done + '%');
+                };
+
+                var onuploaddone = function (resp) {
+                    scope.attachment.id = resp.id;
+                    scope.attachment.token = resp.file_token;
+                    scope.attachment.annotations = annotations_from_response(resp.data);
+                    upload_progress_cont.addClass('plain');
+                    upload_progress_bar.addClass('hide');
+                    remove_file.removeClass('hide');
+                    name_preview.find('[data-text]').addClass('text-success');
+                    console.log('done upload');
+                };
+
+                var upload_to = function (form_data, progress) {
+                    return $.ajax({
+                        type: 'POST',
+                        url: '/adn-proxy/stream/0/files',
+                        data: form_data,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        progress: progress
+                    });
+                };
+
+                var options = {
+                    activator: activator,
+                    file_input: file_input,
+                    onfile: onfile,
+                    onresetfile: onresetfile,
+                    onuploadstart: onuploadstart,
+                    onprogress: onprogress,
+                    onuploaddone: onuploaddone,
+                    upload_on_change: true,
+                    upload_to: upload_to,
+                    extra_data: [
+                        ['type', 'net.app.omega.attachment']
+                    ]
+                };
+
+                var uploader = new OmegaFileUploader(options);
+                uploader.bind_events();
+                element.on('click', '[data-remove-attachment]', function () {
+                    uploader.reset_file_upload();
+                });
+                scope.$on('submit_message', function (event) {
+                    uploader.reset_file_upload();
+                });
+            }
         };
     }).directive('messageBody', function (utils, $http) {
         return {
@@ -207,7 +334,7 @@
                 method: 'GET',
                 url: '/adn-proxy/stream/0/channels/' + $scope.channel.id + '/messages/' + message_id,
                 params: {
-                    'include_annotations': 1
+                    include_annotations: 1
                 }
             }).then(function (response) {
                 _.each($scope.message.annotations, function (annotation) {
@@ -274,7 +401,8 @@
                 method: 'POST',
                 url: '/adn-proxy/stream/0/channels/' + self.channel_id + '/messages',
                 data: {
-                    text: self.text
+                    text: self.text,
+                    annotations: self.annotations || []
                 }
             }).then(function (response) {
                 self.update(response.data.data);
@@ -289,7 +417,8 @@
                 url: '/adn-proxy/stream/0/channels/pm/messages',
                 data: {
                     destinations: destinations,
-                    text: text
+                    text: text,
+                    annotation: self.annotations || []
                 }
             }).then(function (response) {
                 return response.data.data.channel_id;
@@ -300,10 +429,13 @@
     }).controller('MessageFormCtrl', function ($scope, $element, $routeParams, Message) {
         $scope.message = new Message();
 
-        $element.find('input').focus();
+        $element.find('input[name="text"]').focus();
 
         $scope.submitMessage = function () {
+
             var message = $scope.message;
+            // create annotations if there's a file attached
+            message.annotations = $scope.attachment.annotations || [];
 
             // preemptively empty the box
             $scope.$emit('submit_message');
@@ -315,6 +447,11 @@
                 message.create();
             }
         };
+
+        $scope.show_file_upload_button = function () {
+            return !!(window.File && window.FileList && window.FileReader && window.FormData);
+        };
+
     }).controller('MessageListCtrl', function ($scope, $element, channelState) {
         $scope.$on('update_marker', function (event, message) {
             if ($scope.channel) {

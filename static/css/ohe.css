@@ -8,6 +8,10 @@ body {
   }
 }
 
+.hide {
+    display: none;
+}
+
 .dropdown .username {
     max-width: 150px;
     display: inline-block;
@@ -109,4 +113,27 @@ body {
 
 .alpha-link {
     font-size: 18px;
+}
+
+.progress {
+    margin: -10px 0 5px 0;
+}
+
+.image-name {
+    position: relative;
+    left: 10px;
+    z-index: 1;
+    font-size: 11px;
+    font-weight: bold;
+}
+.image-name .image-name-text {
+    display: inline-block;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.remove-attachment {
+    cursor: pointer;
 }
