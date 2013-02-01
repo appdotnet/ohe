@@ -77,7 +77,9 @@
                 scope.$watch('channel.messages', function (newVal, oldVal) {
                     if (newVal && newVal.length || oldVal && oldVal.length) {
                         if (pinned_to_bottom) {
-                            scroll_to_bottom();
+                            $timeout(function () {
+                                scroll_to_bottom();
+                            }, 1, false);
                         }
                     }
                 }, true);
@@ -230,7 +232,6 @@
                     upload_progress_bar.addClass('hide');
                     remove_file.removeClass('hide');
                     name_preview.find('[data-text]').addClass('text-success');
-                    console.log('done upload');
                 };
 
                 var upload_to = function (form_data, progress) {
@@ -260,7 +261,7 @@
                     ]
                 };
 
-                var uploader = new OmegaFileUploader(options);
+                var uploader = new Omega.FileUploader(options);
                 uploader.bind_events();
                 element.on('click', '[data-remove-attachment]', function () {
                     uploader.reset_file_upload();
@@ -275,10 +276,10 @@
             restrict: 'A',
             templateUrl: '/static/templates/message-body.html',
             replace: true,
-            controller: 'MessageBodyCtrl',
             link: function (scope, element, attrs) {
                 var core_file_attachments = [];
                 var oembed_images = [];
+                var i = 0;
                 _.each(scope.message.annotations, function (annotation) {
                     if (annotation.type === 'net.app.core.attachments') {
                         var file_list = annotation.value['net.app.core.file_list'];
@@ -303,6 +304,7 @@
                                 var dims = utils.fit_to_box(value.thumbnail_width, value.thumbnail_height, 100, 100);
                                 value.scaled_thumbnail_width = dims[0];
                                 value.scaled_thumbnail_height = dims[1];
+                                value.annotation_index = i;
                                 if (value.thumbnail_url.indexOf('http:') === 0) {
                                     // make http urls secure to avoid mixed content warnings
                                     $http({
@@ -319,38 +321,14 @@
                                     value.secure_thumbnail_url = value.thumbnail_url;
                                     oembed_images.push(value);
                                 }
-
                             }
                         }
                     }
+                    i++;
                 });
                 scope.core_file_attachments = core_file_attachments;
                 scope.oembed_images = oembed_images;
             }
-        };
-    }).controller('MessageBodyCtrl', function ($scope, $http) {
-        $scope.get_file_url = function (message_id, file_id) {
-            $http({
-                method: 'GET',
-                url: '/adn-proxy/stream/0/channels/' + $scope.channel.id + '/messages/' + message_id,
-                params: {
-                    include_annotations: 1
-                }
-            }).then(function (response) {
-                _.each($scope.message.annotations, function (annotation) {
-                    if (annotation.type === 'net.app.core.attachments') {
-                        var file_list = annotation.value['net.app.core.file_list'];
-                        _.each(file_list, function (file) {
-                            if (file.file_id === file_id) {
-                                setTimeout(function () {
-                                    window.open(file.url);
-                                }, 1000);
-                                return;
-                            }
-                        });
-                    }
-                });
-            });
         };
     }).directive('resizeHeight', function ($timeout) {
         return function (scope, element) {

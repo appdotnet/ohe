@@ -30,7 +30,7 @@ var session_secret = nconf.get('sessions:secret');
 
 var get_rcon = function () {
     return redisurl.connect(nconf.get('sessions:redis_url'));
-}
+};
 
 var session_store = new RedisStore({
     client: get_rcon(),
@@ -87,7 +87,7 @@ app.configure(function () {
             httpOnly: true,
             secure: secure,
             maxAge: 86400000,
-            domain: nconf.get('sessions:domain'),
+            domain: nconf.get('sessions:domain')
         }
     }));
     app.use(auth.auth_middleware());
@@ -112,6 +112,7 @@ app.get('/return', routes.oauth_return);
 app.get('/logout', routes.logout);
 app.get('/healthcheck', routes.healthcheck);
 app.get('/camofy-url', routes.camofy_url);
+app.get('/file-url', routes.file_url);
 lightpoll.enable(app);
 
 server.listen(nconf.get('deploy:port') || 8666);

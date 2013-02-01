@@ -17,8 +17,7 @@
         });
     }(jQuery));
 
-    // TODO: make this less janky (no globals)
-    window.OmegaFileUploader = function (options) {
+    var FileUploader = function (options) {
         this.activator = options.activator;
         this.file_input = options.file_input;
         this.onfile = options.onfile || $.noop;
@@ -35,7 +34,7 @@
         this.upload_state = $.Deferred();
     };
 
-    $.extend(OmegaFileUploader.prototype, {
+    $.extend(FileUploader.prototype, {
         handle_change: function (e) {
             var file = (e.target.files && e.target.files.length) ? e.target.files[0] : false;
             if (!e.target.files && !file) {
@@ -125,4 +124,8 @@
             this.onprogress(percent_done);
         }
     });
+
+    Omega = {
+        FileUploader: FileUploader
+    };
 }());

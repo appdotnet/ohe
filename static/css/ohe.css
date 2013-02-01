@@ -137,3 +137,8 @@ body {
 .remove-attachment {
     cursor: pointer;
 }
+
+.media {
+    width: 100px;
+    height: 100px;
+}

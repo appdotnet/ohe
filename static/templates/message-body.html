@@ -2,13 +2,16 @@
     <div class='content' ng-bind-html-unsafe="message.html"></div>
     <div class='attachments' ng-repeat="attachment in core_file_attachments">
         <div class='file' ng-repeat="file in attachment">
-            <a href='#' data-file-id='{{file.file_id}}' ng-click="get_file_url(message.id, file.file_id)">
+            <a href='/file-url?channel_id={{channel.id}}&message_id={{message.id}}&file_id={{file.file_id}}'
+                data-file-id='{{file.file_id}}'
+                ng-click="get_file_url(message.id, file.file_id)"
+                target='_blank'>
                 {{file.name}} ({{file.friendly_size}})
             </a>
         </div>
     </div>
     <div class='media' ng-repeat="image in oembed_images">
-        <a href='{{image.url}}' target='_blank'>
+        <a href='/file-url?channel_id={{channel.id}}&message_id={{message.id}}&annotation_index={{image.annotation_index}}' target='_blank'>
             <img ng-src='{{image.secure_thumbnail_url}}' width='{{image.scaled_thumbnail_width}}' height='{{image.scaled_thumbnail_height}}'>
         </a>
     </div>
