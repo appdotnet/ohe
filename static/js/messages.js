@@ -223,6 +223,9 @@
                 var onprogress = function (percent_done) {
                     percent_done = Math.max(percent_done, 5);
                     upload_progress_bar.css('width', percent_done + '%');
+                    if (percent_done === 100) {
+                        upload_progress_cont.find('.progress').addClass('progress-striped active');
+                    }
                 };
 
                 var onuploaddone = function (resp) {

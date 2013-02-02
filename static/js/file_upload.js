@@ -110,7 +110,7 @@
             // Upload to is the actual network deferred
             this.current_upload = this.upload_to(data, $.proxy(function (e) {
                 if (e.lengthComputable) {
-                    var percent_done = parseInt((e.loaded / e.total * 100), 10);
+                    var percent_done = Math.round(e.loaded / e.total * 100);
                     this.onprogress(percent_done);
                 }
             }, this));

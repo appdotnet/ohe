@@ -132,6 +132,7 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color: #111;
 }
 
 .remove-attachment {
@@ -147,4 +148,13 @@ body {
 
 .send-button {
     float: right;
+}
+
+.progress {
+    position: relative;
+}
+.progress .bar {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
