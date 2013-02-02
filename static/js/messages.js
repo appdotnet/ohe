@@ -155,6 +155,7 @@
                     token: null,
                     annotations: null
                 };
+                scope.upload_in_progress = false;
 
                 var activator = element.find('[data-attach-btn]');
                 var file_input = element.find('[data-file-upload-input]');
@@ -205,16 +206,19 @@
                         token: null,
                         annotations: null
                     };
+                    scope.upload_in_progress = false;
 
                     name_preview.find('[data-text]').text('').removeClass('text-success');
                     upload_progress_cont.addClass('hide').removeClass('plain');
                     upload_progress_bar.css('width', '0%').removeClass('hide');
                     remove_file.addClass('hide');
                     activator.removeClass('hide');
+                    upload_progress_cont.find('.progress').addClass('progress-striped active');
                     element.find('input[name="text"]').focus();
                 };
 
                 var onuploadstart = function () {
+                    scope.upload_in_progress = true;
                     upload_progress_cont.removeClass('hide');
                     upload_progress_bar.css('width', '0%');
                     activator.addClass('hide');
@@ -229,6 +233,7 @@
                 };
 
                 var onuploaddone = function (resp) {
+                    scope.upload_in_progress = false;
                     scope.attachment.id = resp.id;
                     scope.attachment.token = resp.file_token;
                     scope.attachment.annotations = annotations_from_response(resp.data);
@@ -425,6 +430,9 @@
 
         $scope.submitMessage = function () {
 
+            if ($scope.upload_in_progress) {
+                return;
+            }
             var message = $scope.message;
             // create annotations if there's a file attached
             message.annotations = $scope.attachment.annotations || [];
