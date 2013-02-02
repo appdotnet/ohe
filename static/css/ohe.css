@@ -136,9 +136,15 @@ body {
 
 .remove-attachment {
     cursor: pointer;
+    width: 20px;
+    display: inline-block;
 }
 
 .media {
     width: 100px;
     height: 100px;
+}
+
+.send-button {
+    float: right;
 }

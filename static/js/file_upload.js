@@ -27,6 +27,7 @@
         this.onuploaddone = options.onuploaddone || $.noop;
         this.allow = options.allow || false;
         this.ondisallow = options.ondisallow || $.noop;
+        this.onempty = options.onempty || $.noop;
         this.max_file_size = options.max_file_size || false;
         this.upload_to = options.upload_to;
         this.extra_data = options.extra_data || [];
@@ -45,6 +46,11 @@
             }
 
             if (!file) {
+                return;
+            }
+
+            if (!file.size) {
+                this.onempty(file);
                 return;
             }
 

@@ -211,6 +211,7 @@
                     upload_progress_bar.css('width', '0%').removeClass('hide');
                     remove_file.addClass('hide');
                     activator.removeClass('hide');
+                    element.find('input[name="text"]').focus();
                 };
 
                 var onuploadstart = function () {
@@ -232,6 +233,12 @@
                     upload_progress_bar.addClass('hide');
                     remove_file.removeClass('hide');
                     name_preview.find('[data-text]').addClass('text-success');
+                    element.find('input[name="text"]').focus();
+                };
+
+                var onempty = function (file) {
+                    // TODO: some kind of notification
+                    console.log('File was empty.');
                 };
 
                 var upload_to = function (form_data, progress) {
@@ -256,6 +263,7 @@
                     onuploaddone: onuploaddone,
                     upload_on_change: true,
                     upload_to: upload_to,
+                    onempty: onempty,
                     extra_data: [
                         ['type', 'net.app.omega.attachment']
                     ]
@@ -382,10 +390,13 @@
                     text: self.text,
                     annotations: self.annotations || []
                 }
-            }).then(function (response) {
+            }).then(function doneCallback (response) {
                 self.update(response.data.data);
 
                 return self;
+            }, function failCallback (response) {
+                // TODO: some kind of notification
+                console.log(response.data.meta.error_message);
             });
         };
 
