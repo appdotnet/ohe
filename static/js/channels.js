@@ -87,15 +87,7 @@
         });
 
         $scope.selectedUsers = [];
-        $scope.message = "";
-
-        $scope.createUser = function () {
-            Message.auto_create(_.pluck($scope.selectedUsers, 'id'), $scope.message).then(function (channel_id) {
-                if (channel_id) {
-                    $location.path('/channel/' + channel_id);
-                }
-            });
-        };
+        $scope.message = new Message();
 
         $scope.loadOlderChannels = function () {
             channelState.query_channels($scope.channel_fetch_size, true).then(function (channels) {

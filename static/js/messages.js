@@ -138,11 +138,11 @@
                 };
             }
         };
-    }).directive('messageForm', function ($http) {
+    }).directive('fileUpload', function ($http) {
         return {
-            restrict: 'E',
+            restrict: 'A',
             controller: 'MessageFormCtrl',
-            templateUrl: '/static/templates/message-form.html',
+            templateUrl: '/static/templates/file-upload.html',
             replace: true,
             link: function (scope, element, attrs) {
                 if (!(window.FileReader && window.FormData)) {
@@ -157,7 +157,7 @@
                 };
                 scope.upload_in_progress = false;
 
-                var activator = element.find('[data-attach-btn]');
+                var activator = element.closest('form').find('[data-attach-btn]');
                 var file_input = element.find('[data-file-upload-input]');
                 var name_preview = element.find('[data-attachment-name]');
                 var upload_progress_cont = element.find('[data-upload-progress]');
@@ -287,6 +287,20 @@
                 });
             }
         };
+    }).directive('messageForm', function () {
+        return {
+            restrict: 'E',
+            controller: 'MessageFormCtrl',
+            replace: true,
+            templateUrl: '/static/templates/message-form.html'
+        };
+    }).directive('autoCreateMessageForm', function () {
+        return {
+            restrict: 'E',
+            controller: 'MessageFormCtrl',
+            replace: true,
+            templateUrl: '/static/templates/auto-create-message-form.html'
+        };
     }).directive('messageBody', function (utils, $http) {
         return {
             restrict: 'A',
@@ -408,14 +422,16 @@
             });
         };
 
-        Message.auto_create = function (destinations, text) {
+        Message.prototype.auto_create = function (destinations, text) {
+            var self = this;
+
             return $http({
                 method: 'POST',
                 url: '/adn-proxy/stream/0/channels/pm/messages',
                 data: {
-                    destinations: destinations,
-                    text: text,
-                    annotation: self.annotations || []
+                    destinations: self.destinations,
+                    text: self.text,
+                    annotations: self.annotations || []
                 }
             }).then(function (response) {
                 return response.data.data.channel_id;
@@ -423,13 +439,12 @@
         };
 
         return Message;
-    }).controller('MessageFormCtrl', function ($scope, $element, $routeParams, Message) {
+    }).controller('MessageFormCtrl', function ($scope, $element, $routeParams, Message, $location) {
         $scope.message = new Message();
 
         $element.find('input[name="text"]').focus();
 
         $scope.submitMessage = function () {
-
             if ($scope.upload_in_progress) {
                 return;
             }
@@ -448,10 +463,24 @@
             }
         };
 
+        $scope.createUser = function () {
+            if ($scope.upload_in_progress) {
+                return;
+            }
+            var message = $scope.message;
+            // create annotations if there's a file attached
+            message.annotations = $scope.attachment.annotations || [];
+            message.destinations = _.pluck($scope.selectedUsers, 'id');
+            message.auto_create().then(function (channel_id) {
+                if (channel_id) {
+                    $location.path('/channel/' + channel_id);
+                }
+            });
+        };
+
         $scope.show_file_upload_button = function () {
             return !!(window.File && window.FileList && window.FileReader && window.FormData);
         };
-
     }).controller('MessageListCtrl', function ($scope, $element, channelState) {
         $scope.$on('update_marker', function (event, message) {
             if ($scope.channel) {

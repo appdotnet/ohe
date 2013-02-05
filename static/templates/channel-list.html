@@ -38,31 +38,6 @@
           </div>
       </div>
     </div>
-
-    <div class="row-fluid">
-      <div class="span8">
-        <form class="form-horizontal" ng-submit="createUser()">
-          <fieldset>
-            <legend>Send a message</legend>
-            <div class="control-group" ng-controller="UserSearchCtrl">
-              <label class="control-label" for="recipients">Recipients:</label>
-              <div class="controls">
-                <input type="hidden" ui-select2="usernameSelect" ng-model="selectedUsers" class="span12" ng-multiple>
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="message">Message:</label>
-              <div class="controls">
-                <textarea name="message" class="span12" ng-model="message"></textarea>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" ng-disabled="!message || message.length > 256 || !selectedUsers.length" class="btn btn-primary">Send</button>
-              <button type="button" class="btn">Cancel</button>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-    </div>
+    <auto-create-message-form></auto-create-message-form>
   </div>
 </div>

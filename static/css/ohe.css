@@ -158,3 +158,6 @@ body {
     top: 0;
     left: 0;
 }
+.auto-create .file-upload {
+    margin-top: 15px;
+}

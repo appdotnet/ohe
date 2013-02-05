@@ -2,22 +2,11 @@
   <div class="span12">
     <form name="messageForm" class="form-inline message-form">
       <div class="input-append">
-        <div class='file-preview' ng-show='show_file_upload_button()' data-image-preview-container>
-          <div data-upload-progress class='hide'>
-            <div class="progress">
-              <span class="image-name" data-attachment-name>
-                <span class='remove-attachment hide' data-remove-attachment>x</span>
-                <span class="image-name-text" data-text></span>
-              </span>
-              <div class="bar" style="width: 0%;"></div>
-            </div>
-          </div>
-        </div>
-        <input type="file" style="display:none" name="file_upload" data-file-upload-input>
+        <div file-upload></div>
         <input type="text" class="input-xxlarge" name="text" ng-model="message.text">
+        <button class='btn' ng-show='show_file_upload_button()' data-attach-btn>File</button>
         <button value='submit' ng-click="submitMessage()" ng-disabled="!message.text || message.text.length > 256"
             class="btn btn-primary send-button">Send</button>
-        <button class='btn' ng-show='show_file_upload_button()' data-attach-btn>File</button>
       </div>
     </form>
   </div>
