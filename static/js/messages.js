@@ -450,7 +450,7 @@
             }
             var message = $scope.message;
             // create annotations if there's a file attached
-            message.annotations = $scope.attachment.annotations || [];
+            message.annotations = $scope.attachment && $scope.attachment.annotations || [];
 
             // preemptively empty the box
             $scope.$emit('submit_message');
@@ -469,7 +469,7 @@
             }
             var message = $scope.message;
             // create annotations if there's a file attached
-            message.annotations = $scope.attachment.annotations || [];
+            message.annotations = $scope.attachment && $scope.attachment.annotations || [];
             message.destinations = _.pluck($scope.selectedUsers, 'id');
             message.auto_create().then(function (channel_id) {
                 if (channel_id) {

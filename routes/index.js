@@ -60,7 +60,6 @@ exports.camofy_url = function (req, res) {
 
 exports.file_url = function (req, res) {
     var channel_id = req.query.channel_id;
-    var ts = Math.random();
     var message_id = req.query.message_id;
     var file_id = req.query.file_id;
     var annotation_index = req.query.annotation_index;
