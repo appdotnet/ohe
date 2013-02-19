@@ -10,11 +10,12 @@
         "event-stream": "3.0.7",
         "request": "2.12.0",
         "connect-redis": "1.4.5",
-        "ejs": "0.8.3",
+        "jade": "0.28.1",
         "redis": "0.8.2",
         "underscore": "1.4.2",
         "http-proxy": "0.8.4",
-        "hiredis": "0.1.14"
+        "hiredis": "0.1.14",
+        "asset-rack": "2.0.8"
     },
     "engines": {
         "node": "0.8.x",

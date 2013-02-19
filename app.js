@@ -6,6 +6,7 @@ var config_path = process.env.OHE_CONFIG_PATH || path.join(__dirname, '/config.j
 nconf.argv().env('__').file({file: config_path});
 
 var express = require('express');
+var jade = require('jade');
 var app = express();
 var server = require('http').createServer(app);
 var redisurl = require('./ohe/redisurl');
@@ -48,7 +49,7 @@ var stream_router = require('./ohe/streamrouter').create_router(app, lightpoll);
 
 app.configure(function () {
     app.set('views', __dirname + '/views');
-    app.set('view engine', 'ejs');
+    app.set('view engine', 'jade');
 });
 
 var cookieParser = express.cookieParser(session_secret);
@@ -94,7 +95,7 @@ app.configure(function () {
     app.use(express.csrf());
     app.use(adnproxy.middleware());
     app.use(express.bodyParser());
-    app.use("/static", express.static(__dirname + '/static'));
+    app.use("/static", express['static'](__dirname + '/static'));
     app.use(app.router);
     app.use(express.errorHandler());
 });
