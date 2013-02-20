@@ -6,10 +6,9 @@ var config_path = process.env.OHE_CONFIG_PATH || path.join(__dirname, '/config.j
 nconf.argv().env('__').file({file: config_path});
 
 var express = require('express');
-var rack = require('asset-rack');
 var jade = require('jade');
 var app = express();
-var http = require('http');
+var server = require('http').createServer(app);
 var redisurl = require('./ohe/redisurl');
 var RedisStore = require('connect-redis')(express);
 var LightPoll = require('./ohe/lightpoll').LightPoll;
@@ -74,13 +73,6 @@ app.configure('production', function () {
     app.use(auth.ssl_redirect_middleware());
 });
 
-var assets = new rack.Rack([
-    new rack.StaticAssets({
-        urlPrefix: '/static',
-        dirname: __dirname + '/static'
-    })
-]);
-
 app.configure(function () {
     app.use(express.favicon());
     app.use(express.methodOverride());
@@ -104,7 +96,6 @@ app.configure(function () {
     app.use(adnproxy.middleware());
     app.use(express.bodyParser());
     app.use("/static", express['static'](__dirname + '/static'));
-    app.use(assets);
     app.use(app.router);
     app.use(express.errorHandler());
 });
@@ -125,12 +116,7 @@ app.get('/camofy-url', routes.camofy_url);
 app.get('/file-url', routes.file_url);
 lightpoll.enable(app);
 
-var server;
-assets.on('complete', function () {
-    server = http.createServer(app);
-    server.listen(nconf.get('deploy:port') || 8666);
-    console.log('server is listening...');
-});
+server.listen(nconf.get('deploy:port') || 8666);
 
 // Stash these for debugging purposes.
 exports.app = app;
