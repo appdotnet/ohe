@@ -7,6 +7,7 @@ var _ = require('underscore');
 
 var oauth_url_base = nconf.get('adn:oauth_url_base') || 'https://account.app.net';
 
+
 exports.index = function (req, res) {
     if (nconf.get('adn:autologin') && !req.adn_user().is_authenticated()) {
         res.redirect(auth.get_authenticate_url(req));
