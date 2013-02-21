@@ -1,6 +1,10 @@
-@import "bootstrap/mixins";
-
 @import "adn_base_variables";
+@import "bootstrap/mixins";
+@import "mixin/yui_grid";
+@import "mixin/media_block";
+@import "bootstrap/type";
+
+@import "screen/grids";
 @import "font-awesome";
 @import "adn_base";
 
