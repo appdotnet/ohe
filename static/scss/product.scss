@@ -1,11 +1,39 @@
+// mixins and dependencies
 @import "adn_base_variables";
-@import "bootstrap/mixins";
 @import "mixin/yui_grid";
+@import "mixin/css3";
 @import "mixin/media_block";
-@import "bootstrap/type";
-
 @import "screen/grids";
+
+// bootstrap
+@import "bootstrap/mixins";
+@import "bootstrap/reset";
+@import "bootstrap/scaffolding";
+@import "bootstrap/layouts";
+@import "bootstrap/grid";
+@import "bootstrap/type";
+@import "bootstrap/code";
+@import "bootstrap/forms";
+@import "bootstrap/tables";
+@import "bootstrap/dropdowns";
+@import "bootstrap/wells";
+@import "bootstrap/component-animations";
+@import "bootstrap/close";
+@import "bootstrap/button-groups";
+@import "bootstrap/alerts";
+@import "bootstrap/navs";
+@import "bootstrap/navbar";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/modals";
+@import "bootstrap/responsive-767px-max";
+@import "bootstrap/utilities";
+@import "bootstrap/progress-bars";
+
+@import "bold_buttons";
 @import "font-awesome";
+
+// base styles
 @import "adn_base";
 
+// omega styles
 @import "ohe";

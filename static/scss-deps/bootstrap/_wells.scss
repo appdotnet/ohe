@@ -8,20 +8,11 @@
 }
 
 .well-style {
-  background-color: $themeAccent;
-  border: 1px solid #eee;
-  border: 1px solid rgba(0,0,0,.05);
-  @include border-radius(4px);
-  @include box-shadow(inset 0 1px 1px rgba(0,0,0,.05));
-
-  html.breakpoint-phone &,
-  html.breakpoint-tablet & {
-    border: 1px solid rgba(0,0,0,0.3);
-  }
+  background-color: $white;
+  border: 1px solid $grayLighter;
 
   blockquote {
-    border-color: #ddd;
-    border-color: rgba(0,0,0,.15);
+    border-color: $grayLighter;
   }
 }
 
@@ -33,11 +24,7 @@
 
 .well-elevated {
     @extend .well-style;
-    background-color: $grayLighter;
-    @include border-radius(5px);
-    border: 0;
-    @include box-shadow(#{inset 0 0 1px 1px white, 0 1px 5px rgba(0,0,0,0.3)});
-    @include gradient-vertical(lighten($grayLighter, 5%),$grayLighter);
+    @include box-shadow(0 2px 0 rgba(0, 0, 0, 0.05));
 }
 
 // Sizes

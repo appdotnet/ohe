@@ -1,5 +1,5 @@
 doctype html
-html(lang="en", ng-app="ohe")
+html(lang="en", ng-app="ohe", class="omega new-app-dot-net")
   head
     meta(charset="utf-8")
 
@@ -8,8 +8,9 @@ html(lang="en", ng-app="ohe")
     meta(name="csrftoken", id="csrftoken", data-token=_csrf)
     - if (is_authenticated)
       meta(name="user", id="user", data-id=user.id, data-username=user.username)
-    link(href="/static/bootstrap/css/bootswatch.cerulean.min.css", rel="stylesheet")
-    link(href="/static/bootstrap/css/bootstrap-responsive.css", rel="stylesheet")
+    // Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading
+    meta(http-equiv="cleartype", content="on")
+    link(href="https://fonts.googleapis.com/css?family=Montserrat", rel="stylesheet", type="text/css")
     link(href="/static/angular-ui/angular-ui.css", rel="stylesheet")
     link(href="/static/select2/select2.css", rel="stylesheet")
     link(href="/static/css/product.css", rel="stylesheet")
@@ -37,17 +38,19 @@ html(lang="en", ng-app="ohe")
     script(src="/static/js/ohe.js")
 
   body
-    div.navbar.navbar-inverse.navbar-fixed-top
-      div.navbar-inner
+    div.wrapper
+      div.nav.header.yui3-u-1
         div.container
-          a.brand(href="/") &Omega;&nbsp;&nbsp;&nbsp;App.net
-          - if (is_authenticated)
-            nav
+          div.yui3-u-1.clearfix
+            a.pull-left.logo(href="/")
+            div.navbar.pull-right
+              - if (is_authenticated)
+                nav
 
-    - if (!is_authenticated)
-      div.container
-        h1 Welcome to &Omega;
-        a(href=auth_url, target="_self") Please log in with App.net &rarr;
-    - else
-      div(ng-include="'/static/templates/alerts.html'")
-      div.view(ng-view)
+      - if (!is_authenticated)
+        div.container
+          h1 Welcome to &Omega;
+          a(href=auth_url, target="_self") Please log in with App.net &rarr;
+      - else
+        div(ng-include="'/static/templates/alerts.html'")
+        div.view(ng-view)

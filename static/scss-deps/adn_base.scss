@@ -239,8 +239,8 @@ html.breakpoint-phone {
 }
 
 .container {
-    html.breakpoint-phone &,
-    html.breakpoint-tablet & {
+    html.breakpoint-phone.new-app-dot-net &,
+    html.breakpoint-tablet.new-app-dot-net & {
         padding-right: 12px;
         padding-left: 12px;
     }
@@ -275,7 +275,7 @@ html.breakpoint-phone {
     a {
         @include transition(background-color 0.2s linear);
         &:hover, &:hover .logged-in-username, &:hover .invite-friend-link {
-            @include transition(background-color 0.15s linear);
+            @include transition(background-color 0.2s linear);
             hr {
                 width: 36px;
                 border-top-color: $themeSubText;
@@ -323,19 +323,76 @@ html.breakpoint-phone {
         .nav {
             margin: 0;
             li {
+                position: relative;
                 height: 78px;
-                border-left: 1px solid $grayLightest;
                 text-transform: uppercase;
                 font-family: $sansFontFamily;
                 font-size: 13px;
                 line-height: 13px;
                 text-align: center;
-                &:last-child {
+                a, .fake-link {
+                    border-left: 1px solid $grayLightest;
+                }
+                &:last-child a, &:last-child .fake-link {
                     border-right: 1px solid $grayLightest;
                 }
                 &.logged-in-block {
                     a, span.fake-link {
                         width: 195px;
+                    }
+                    &.dropdown.open-caret {
+                        &::after, &::before {
+                            position: absolute;
+                            content: '';
+                            display: inline-block;
+                            @include transition(border-top-color 0.15s linear);
+                        }
+                        &:hover, &.open {
+                            &::after {
+                                border-top-color: lighten($themeSolid, 5.5%);
+                                @include transition(border-top-color 0.2s linear);
+                            }
+                            a {
+                                color: darken($themeSubText, 20%);
+                                background-color: lighten($themeSolid, 5.5%);
+                            }
+                            .logged-in-username {
+                                color: $linkColorHover;
+                            }
+                            .dropdown-menu li a {
+                                background-color: $white;
+                                &:hover {
+                                    background-color: $themeSolid;
+                                }
+                            }
+                            hr {
+                                width: 36px;
+                                border-top-color: $themeSubText;
+                                @include transition(#{border-top-color 0.15s linear, width 0.15s linear});
+                            }
+                        }
+                        &::after {
+                            border-left: 4px solid transparent;
+                            border-right: 4px solid transparent;
+                            border-top: 4px solid $white;
+                            bottom: -4px;
+                            left: 95px;
+                            z-index: 1002;
+                            html.breakpoint-phone & {
+                                left: 36px;
+                            }
+                        }
+                        &::before {
+                            border-left: 5px solid transparent;
+                            border-right: 5px solid transparent;
+                            border-top: 5px solid $grayLighter;
+                            bottom: -6px;
+                            left: 94px;
+                            z-index: 1001;
+                            html.breakpoint-phone & {
+                                left: 35px;
+                            }
+                        }
                     }
                 }
                 a, span.fake-link {
@@ -347,16 +404,17 @@ html.breakpoint-phone {
 
                     color: darken($themeSubText, 10%);
                     text-shadow: none;
-                    &:hover, &:hover .logged-in-username {
-                        color: darken($themeSubText, 20%);
+                    @include transition(#{background-color 0.2s linear, color 0.2s linear});
+
+                    &:hover {
                         background-color: lighten($themeSolid, 5.5%);
-                        .logged-in-username {
-                            color: $linkColorHover;
-                        }
+                        @include transition(#{background-color 0.15s linear, color 0.15s linear});
                     }
+
                     &.green {
                         background-color: lighten($green, 36%);
                         &:hover, &:hover .invite-friend-link {
+                            background-color: lighten($green, 34.5%);
                             .invite-friend-link {
                                 color: darken($green, 7%);
                             }
@@ -391,7 +449,6 @@ html.breakpoint-phone {
                         text-transform: none;
                         font-size: 10px;
                         font-weight: bold;
-                        // @include transition(background-color 0.2s linear);
                     }
                     .logged-in-username {
                         color: $linkColor;
@@ -409,7 +466,66 @@ html.breakpoint-phone {
                           .logged-in-username {
                                 color: $linkColor;
                           }
+                          hr {
+                              margin: 4px auto 0 auto;
+                              width: 22px;
+                              border-top-color: $grayLighter;
+                          }
                      }
+                }
+                .dropdown-menu {
+                    position: absolute;
+                    margin: 0;
+                    width: 195px;
+                    padding: 0;
+                    border: 1px solid $grayLighter;
+                    background-color: $white;
+                    color: darken($themeSubText, 10%);
+                    @include box-shadow(0 2px 0 rgba(0, 0, 0, 0.05));
+                    @include border-radius(0);
+                    &::before, &::after {
+                        display: none;
+                    }
+                    html.breakpoint-phone & {
+                        min-width: 80px;
+                        width: 80px;
+                        li {
+                            height: auto;
+                        }
+                        a {
+                            padding: 0;
+                            margin: 0;
+                            height: auto;
+                        }
+                    }
+                    li {
+                        height: auto;
+                        a {
+                            display: block;
+                            padding: 0;
+                            height: 34px;
+                            border-left: 0;
+                            border-right: 0;
+                            border-bottom: 1px solid $grayLightest;
+                            text-transform: none;
+                            line-height: 34px;
+                            &:hover {
+                                i {
+                                    color: darken($themeSubText, 20%);
+                                }
+                            }
+                        }
+                        &:last-child a {
+                            border-bottom: none;
+                        }
+                        i {
+                            display: none;
+                            color: $themeSubText;
+                            html.breakpoint-phone & {
+                                display: inline-block;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -428,9 +544,12 @@ html.breakpoint-phone {
                         display: none;
                     }
                     .logged-in-username, .invite-friend-text-mobile {
-                        font-size: 9px;
+                        font-size: 8px;
                         margin-top: 0;
                         max-width: 115px;
+                    }
+                    .logged-in-username {
+                        max-width: 75px;
                     }
                     .invite-friend-text {
                         display:none;
@@ -485,12 +604,93 @@ html.breakpoint-phone {
         }
     }
 }
+html {
+    .nav-list {
+        width: 258px;
+        padding: 15px 0 15px 0;
+        border-right: 1px solid $grayLighter;
 
-.nav-list {
-    width: 258px;
-    padding: 15px 0 15px 0;
-    border-right: 1px solid $grayLighter;
-    html.breakpoint-phone &.mobile-note-fix {
+        .nav-header, li a {
+            padding: 10px;
+            margin: 0;
+            font-size: 16px;
+            line-height: 16px;
+            font-weight: normal;
+            text-shadow: none;
+            font-family: $headingsFontFamily;
+        }
+
+        .nav-header {
+            color: $themeAccent;
+            border-bottom: 1px solid $grayLighter;
+            padding-left: 0;
+            padding-bottom: 7px;
+            html.breakpoint-tablet & {
+                font-size: 14px;
+            }
+        }
+
+        .nav-list-inner {
+            padding: 15px;
+            padding-top: 10px;
+            padding-left: 0;
+            font-size: 12px;
+            font-style: italic;
+            line-height: 20px;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        li {
+
+            border-bottom: 1px solid $grayLightest;
+            &:last-child {
+                border-bottom: none;
+            }
+            a {
+                position: relative;
+                font-size: 13px;
+                color: $themeSubText;
+                padding-left: 30px;
+                @include transition(background-color 0.2s linear);
+
+                &:hover {
+                    background-color: $themeSolid;
+                    @include transition(background-color 0.15s linear);
+                    border-bottom: none;
+                }
+
+                .icon-chevron-right {
+                    position: absolute;
+                    top: 13px;
+                    right: 5px;
+                    display: none;
+                    font-size: 12px;
+                    line-height: normal;
+                }
+            }
+
+            &.active a, &.active a:hover {
+                background-color: $themeSubText;
+                text-shadow: none;
+                color: #fff;
+                .icon-chevron-right {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    &.breakpoint-phone .nav-list li.active {
+        a, a:hover {
+            .icon-chevron-right {
+                display: none;
+            }
+        }
+
+    }
+
+    &.breakpoint-phone .nav-list.mobile-note-fix {
         margin: 0;
         margin-top: -30px;
         padding: 0;
@@ -498,11 +698,11 @@ html.breakpoint-phone {
             padding: 0;
         }
     }
-    html.breakpoint-tablet & {
+    &.breakpoint-tablet .nav-list {
         width: 95%;
         margin-right: 5%;
     }
-    html.breakpoint-phone & {
+    &.breakpoint-phone .nav-list {
         margin-bottom: 0;
         border-bottom: 0;
         width: 100%;
@@ -512,86 +712,13 @@ html.breakpoint-phone {
         }
     }
 
-    .nav-header, li a {
-        padding: 10px;
-        margin: 0;
-        font-size: 16px;
-        line-height: 16px;
-        font-weight: normal;
-        text-shadow: none;
-        font-family: $headingsFontFamily;
-    }
-
-    html.breakpoint-tablet & {
+    &.breakpoint-tablet .nav-list {
         li a {
             font-size: 12px;
             padding-left: 20px;
         }
     }
-
-    .nav-header {
-        color: $themeAccent;
-        border-bottom: 1px solid $grayLighter;
-        padding-left: 0;
-        padding-bottom: 7px;
-        html.breakpoint-tablet & {
-            font-size: 14px;
-        }
-    }
-
-    .nav-list-inner {
-        padding: 15px;
-        padding-top: 10px;
-        padding-left: 0;
-        font-size: 12px;
-        font-style: italic;
-        line-height: 20px;
-        text-align: justify;
-        text-justify: inter-word;
-    }
-
-    li {
-
-        border-bottom: 1px solid $grayLightest;
-        &:last-child {
-            border-bottom: none;
-        }
-        a {
-            position: relative;
-            font-size: 13px;
-            color: $themeSubText;
-            padding-left: 30px;
-            @include transition(background-color 0.2s linear);
-
-            &:hover {
-                background-color: $themeSolid;
-                @include transition(background-color 0.15s linear);
-                border-bottom: none;
-            }
-
-            .icon-chevron-right {
-                position: absolute;
-                top: 13px;
-                right: 5px;
-                display: none;
-                font-size: 12px;
-                line-height: normal;
-            }
-        }
-
-        &.active a, &.active a:hover {
-            background-color: $themeSubText;
-            text-shadow: none;
-            .icon-chevron-right {
-                display: inline-block;
-                html.breakpoint-phone & {
-                    display: none;
-                }
-            }
-        }
-    }
 }
-
 .subnav-container {
     width: 100%;
     height: 34px;
@@ -701,8 +828,11 @@ html.breakpoint-phone {
 }
 
 div.site-footer {
-    position: absolute;
-    bottom: 0;
+    &.bottom-pegged {
+        position: absolute;
+        bottom: 0;
+    }
+
     margin-bottom: 0;
     padding-bottom: 30px;
     height: 210px;

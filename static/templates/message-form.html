@@ -5,8 +5,8 @@
         <div file-upload></div>
         <input type="text" class="input-xxlarge" name="text" ng-model="message.text">
         <button value='submit' ng-click="submitMessage()" ng-disabled="!message.text || message.text.length > 256"
-            class="btn btn-primary send-button">Send</button>
-        <button class='btn' ng-show='show_file_upload_button()' data-attach-btn>File</button>
+            class="btn btn-primary btn-small send-button">Send</button>
+        <button class='btn btn-small' ng-show='show_file_upload_button()' data-attach-btn>File</button>
       </div>
     </form>
   </div>
