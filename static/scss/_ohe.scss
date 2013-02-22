@@ -1,7 +1,6 @@
 html.omega {
     .nav.header .logo {
         background-image: url("/static/images/appdotnet-omega.png");
-        width: 200px;
     }
     .navbar .nav .active > a {
         background-color: #FBFBFB;
@@ -141,10 +140,6 @@ html.omega {
     height: 100px;
 }
 
-.send-button {
-    float: right;
-}
-
 .progress {
     position: relative;
 }
@@ -155,4 +150,13 @@ html.omega {
 }
 .auto-create .file-upload {
     margin-top: 15px;
+}
+
+form[name="messageForm"] {
+    input {
+        width: 400px;
+    }
+    .buttons {
+        margin-top: 5px;
+    }
 }

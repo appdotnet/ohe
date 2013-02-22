@@ -1,13 +1,13 @@
 <div class="row-fluid">
   <div class="span12">
     <form name="messageForm" class="form-inline message-form">
-      <div class="input-append">
-        <div file-upload></div>
-        <input type="text" class="input-xxlarge" name="text" ng-model="message.text">
+      <div file-upload></div>
+      <input type="text" class="yui3-u" name="text" ng-model="message.text">
+      <span class='yui3-u buttons'>
         <button value='submit' ng-click="submitMessage()" ng-disabled="!message.text || message.text.length > 256"
-            class="btn btn-primary btn-small send-button">Send</button>
+              class="btn btn-primary btn-small send-button pull-right">Send</button>
         <button class='btn btn-small' ng-show='show_file_upload_button()' data-attach-btn>File</button>
-      </div>
+      </span>
     </form>
   </div>
 </div>
