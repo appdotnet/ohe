@@ -11,7 +11,7 @@
 
             }
         };
-    }).controller('NavCtrl', function ($scope, $element, $window) {
+    }).controller('NavCtrl', ['$scope', '$element', '$window', function ($scope, $element, $window) {
         $scope.enable_notifications = function () {
             if (!$window.webkitNotifications) {
                 return;
@@ -30,5 +30,5 @@
         $scope.show_enable_notifications_button = function () {
             return $window.webkitNotifications && ($window.webkitNotifications.checkPermission() !== 0);
         };
-    });
+    }]);
 })();

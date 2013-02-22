@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('channels', ['messages', 'users', 'ui', 'channelState', 'utils']).config(function ($routeProvider) {
+    angular.module('channels', ['messages', 'users', 'ui', 'channelState', 'utils']).config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', {
             controller: 'ChannelListCtrl',
             templateUrl: '/static/templates/channel-list.html',
@@ -9,13 +9,13 @@
         }).when('/channel/:channel_id', {
             template: '<channel-detail></channel-detail>'
         });
-    }).directive('channelDetail', function ($timeout) {
+    }]).directive('channelDetail', ['$timeout', function ($timeout) {
         return {
             restrict: 'E',
             controller: 'ChannelDetailCtrl',
             templateUrl: '/static/templates/channel-detail.html'
         };
-    }).factory('Channel', function ($q, $rootScope, $http, User, Message) {
+    }]).factory('Channel', ['$q', '$rootScope', '$http', 'User', 'Message', function ($q, $rootScope, $http, User, Message) {
         var Channel = function (data, batch) {
             if (data) {
                 this.update(data, batch);
@@ -74,7 +74,7 @@
         };
 
         return Channel;
-    }).controller('ChannelListCtrl', function ($scope, $location, Channel, Message, channelState, utils) {
+    }]).controller('ChannelListCtrl', ['$scope', '$location', 'Channel', 'Message', 'channelState', 'utils', function ($scope, $location, Channel, Message, channelState, utils) {
         $scope.has_more_channels = true;
         $scope.channel_fetch_size = 10;
 
@@ -97,9 +97,9 @@
             });
         };
 
-    }).controller('ChannelDetailCtrl', function ($scope, $element, $timeout, channelState, $routeParams) {
+    }]).controller('ChannelDetailCtrl', ['$scope', '$element', '$timeout', 'channelState', '$routeParams', function ($scope, $element, $timeout, channelState, $routeParams) {
         channelState.get_channel($routeParams.channel_id, true).then(function (channel) {
             $scope.channel = channel;
         });
-    });
+    }]);
 })();

@@ -5,11 +5,16 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+        mangle: {
+            except: ['jQuery', '$', 'angular']
+        },
+        compress: true,
+        beautify: false
       },
       build: {
         src: 'static/js/*.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        dest: 'static/build/ohe.min.js'
       }
     },
     sass: {
@@ -17,18 +22,30 @@ module.exports = function(grunt) {
         options: {
             style: 'compressed',
             loadPath: [
-              '/home/bryan/code/mxml/ohe/static/scss-deps'
-            ]
+              'static/scss-deps'
+            ],
+        noCache: true
         },
         files: {
-          'build/ohe.min.css': 'static/scss/product.scss'
+          'static/build/ohe.min.css': 'static/scss/product.scss'
         }
       }
+    },
+    watch: {
+        js: {
+            files: ['static/js/*.js'],
+            tasks: ['uglify']
+        },
+        css: {
+            files: ['static/scss/*.scss'],
+            tasks: ['sass']
+        }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
   grunt.registerTask('default', ['sass', 'uglify']);

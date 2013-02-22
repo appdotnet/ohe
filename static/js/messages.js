@@ -1,14 +1,15 @@
 /*globals angular */
 
 (function () {
-    angular.module('messages', ['users', 'utils']).directive('messageList', function ($timeout, utils, $rootScope, $http, Message) {
+    angular.module('messages', ['users', 'utils']).directive('messageList',
+    ['$timeout', 'utils', '$rootScope', '$http', 'Message',
+    function ($timeout, utils, $rootScope, $http, Message) {
         return {
             restrict: 'E',
             controller: 'MessageListCtrl',
             templateUrl: '/static/templates/message-list.html',
             replace: true,
             link: function (scope, element, attrs, controller) {
-                var w = $(window);
                 var pinned_to_bottom = true;
 
                 var fire_update_marker = function () {
@@ -138,7 +139,7 @@
                 };
             }
         };
-    }).directive('fileUpload', function ($http) {
+    }]).directive('fileUpload', ['$http', function ($http) {
         return {
             restrict: 'A',
             controller: 'MessageFormCtrl',
@@ -287,7 +288,7 @@
                 });
             }
         };
-    }).directive('messageForm', function () {
+    }]).directive('messageForm', function () {
         return {
             restrict: 'E',
             controller: 'MessageFormCtrl',
@@ -301,7 +302,7 @@
             replace: true,
             templateUrl: '/static/templates/auto-create-message-form.html'
         };
-    }).directive('messageBody', function (utils, $http) {
+    }).directive('messageBody', ['utils', '$http', function (utils, $http) {
         return {
             restrict: 'A',
             templateUrl: '/static/templates/message-body.html',
@@ -360,7 +361,7 @@
                 scope.oembed_images = oembed_images;
             }
         };
-    }).directive('resizeHeight', function ($timeout) {
+    }]).directive('resizeHeight', ['$timeout', function ($timeout) {
         return function (scope, element) {
             var t;
             var w = $(window);
@@ -382,13 +383,13 @@
             };
             check_dimensions();
         };
-    }).directive('roster', function ($timeout) {
+    }]).directive('roster', ['$timeout', function ($timeout) {
         return {
             restrict: 'E',
             templateUrl: '/static/templates/roster.html',
             replace: true
         };
-    }).factory('Message', function (User, $http) {
+    }]).factory('Message', ['User', '$http', function (User, $http) {
         var Message = function (data) {
             this.update(data);
         };
@@ -439,7 +440,8 @@
         };
 
         return Message;
-    }).controller('MessageFormCtrl', function ($scope, $element, $routeParams, Message, $location) {
+    }]).controller('MessageFormCtrl', ['$scope', '$element', '$routeParams', 'Message', '$location',
+    function ($scope, $element, $routeParams, Message, $location) {
         $scope.message = new Message();
 
         $element.find('input[name="text"]').focus();
@@ -481,11 +483,11 @@
         $scope.show_file_upload_button = function () {
             return !!(window.File && window.FileList && window.FileReader && window.FormData);
         };
-    }).controller('MessageListCtrl', function ($scope, $element, channelState) {
+    }]).controller('MessageListCtrl', ['$scope', '$element', 'channelState', function ($scope, $element, channelState) {
         $scope.$on('update_marker', function (event, message) {
             if ($scope.channel) {
                 channelState.update_marker($scope.channel, message);
             }
         });
-    });
+    }]);
 })();

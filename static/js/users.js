@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('users', ['ui']).factory('User', function ($http) {
+    angular.module('users', ['ui']).factory('User', ['$http', function ($http) {
         var User = function (complete, data) {
             if (complete) {
                 this.complete(data);
@@ -111,7 +111,7 @@
         };
 
         return User;
-    }).controller('UserSearchCtrl', function ($scope, User) {
+    }]).controller('UserSearchCtrl', ['$scope', 'User', function ($scope, User) {
         // autocomplete
         $scope.usernameSelect = User.get_search_select2();
 
@@ -119,6 +119,6 @@
         $scope.$watch('selectedUsers', function (newValue, oldValue) {
             $scope.$parent.selectedUsers = newValue;
         });
-    });
+    }]);
 })();
 

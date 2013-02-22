@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('ohe', ['messages', 'channels', 'nav',
-    function ($httpProvider) {
+    ['$httpProvider', function ($httpProvider) {
         var interceptor = ['$q', function ($q) {
             var success = function (response) {
                 return response;
@@ -19,8 +19,8 @@
             };
         }];
         $httpProvider.responseInterceptors.push(interceptor);
-    }
-    ]).config(function ($routeProvider, $locationProvider, $httpProvider) {
+    }]
+    ]).config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix = '!';
         $routeProvider.otherwise({ redirectTo: '/' });
@@ -49,7 +49,7 @@
             }
         });
 
-    }).run(function ($rootScope) {
+    }]).run(['$rootScope', function ($rootScope) {
         var user = document.getElementById('user');
         $rootScope.user_id = user && user.getAttribute('data-id');
         $rootScope.username = user && user.getAttribute('data-username');
@@ -59,5 +59,5 @@
             $rootScope.selectedNav = route.$route.selectedNav;
         });
         $rootScope.message_fetch_size = 50;
-    });
+    }]);
 })();

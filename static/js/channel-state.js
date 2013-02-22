@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('channelState', ['channels', 'messages', 'users', 'socket', 'utils'])
-    .factory('channelState', function ($http, $rootScope, $q, Socket, User, Channel, Message, utils) {
+    .factory('channelState', ['$http', '$rootScope', '$q', 'Socket', 'User', 'Channel', 'Message', 'utils', function ($http, $rootScope, $q, Socket, User, Channel, Message, utils) {
         var channel_cache = {};
         var channels_queried = false;
         var channel_min_id;
@@ -231,5 +231,5 @@
             'query_channels': query_channels,
             'update_marker': update_marker
         };
-    });
+    }]);
 })();
