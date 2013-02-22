@@ -4,3 +4,5 @@ config.json*
 node_modules
 *.swo
 *.swp
+.sass-cache
+static/build
