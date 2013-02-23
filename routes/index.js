@@ -21,7 +21,7 @@ exports.index = function (req, res) {
         'css_deps_dist_file': nconf.get('deps.min.css'),
         'js_dist_file': nconf.get('ohe.min.js'),
         'js_deps_dist_file': nconf.get('deps.min.js'),
-        'env': 'prod'//req.app.settings.env
+        'env': req.app.settings.env
     });
 };
 
