@@ -1,7 +1,7 @@
 /*globals angular */
 
 (function () {
-    angular.module('ohe', ['messages', 'channels', 'nav',
+    angular.module('ohe', ['app.templates', 'messages', 'channels', 'nav',
     ['$httpProvider', function ($httpProvider) {
         var interceptor = ['$q', function ($q) {
             var success = function (response) {

@@ -7,7 +7,7 @@
         return {
             restrict: 'E',
             controller: 'MessageListCtrl',
-            templateUrl: '/static/templates/message-list.html',
+            templateUrl: 'message-list.html',
             replace: true,
             link: function (scope, element, attrs, controller) {
                 var pinned_to_bottom = true;
@@ -143,7 +143,7 @@
         return {
             restrict: 'A',
             controller: 'MessageFormCtrl',
-            templateUrl: '/static/templates/file-upload.html',
+            templateUrl: 'file-upload.html',
             replace: true,
             link: function (scope, element, attrs) {
                 if (!(window.FileReader && window.FormData)) {
@@ -293,19 +293,19 @@
             restrict: 'E',
             controller: 'MessageFormCtrl',
             replace: true,
-            templateUrl: '/static/templates/message-form.html'
+            templateUrl: 'message-form.html'
         };
     }).directive('autoCreateMessageForm', function () {
         return {
             restrict: 'E',
             controller: 'MessageFormCtrl',
             replace: true,
-            templateUrl: '/static/templates/auto-create-message-form.html'
+            templateUrl: 'auto-create-message-form.html'
         };
     }).directive('messageBody', ['utils', '$http', function (utils, $http) {
         return {
             restrict: 'A',
-            templateUrl: '/static/templates/message-body.html',
+            templateUrl: 'message-body.html',
             replace: true,
             link: function (scope, element, attrs) {
                 var core_file_attachments = [];
@@ -386,7 +386,7 @@
     }]).directive('roster', ['$timeout', function ($timeout) {
         return {
             restrict: 'E',
-            templateUrl: '/static/templates/roster.html',
+            templateUrl: 'roster.html',
             replace: true
         };
     }]).factory('Message', ['User', '$http', function (User, $http) {

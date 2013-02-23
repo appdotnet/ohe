@@ -4,7 +4,7 @@
     angular.module('channels', ['messages', 'users', 'ui', 'channelState', 'utils']).config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', {
             controller: 'ChannelListCtrl',
-            templateUrl: '/static/templates/channel-list.html',
+            templateUrl: 'channel-list.html',
             selectedNav: 'inbox'
         }).when('/channel/:channel_id', {
             template: '<channel-detail></channel-detail>'
@@ -13,7 +13,7 @@
         return {
             restrict: 'E',
             controller: 'ChannelDetailCtrl',
-            templateUrl: '/static/templates/channel-detail.html'
+            templateUrl: 'channel-detail.html'
         };
     }]).factory('Channel', ['$q', '$rootScope', '$http', 'User', 'Message', function ($q, $rootScope, $http, User, Message) {
         var Channel = function (data, batch) {

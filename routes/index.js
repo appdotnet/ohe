@@ -16,7 +16,9 @@ exports.index = function (req, res) {
         '_csrf': req.session._csrf,
         'is_authenticated': req.adn_user().is_authenticated(),
         'user': req.adn_user(),
-        'auth_url': auth.get_authenticate_url(req)
+        'auth_url': auth.get_authenticate_url(req),
+        'nconf': nconf,
+        'env': req.app.settings.env
     });
 };
 

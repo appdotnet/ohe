@@ -13,10 +13,17 @@ html(lang="en", ng-app="ohe", class="omega new-app-dot-net")
     // Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading
     meta(http-equiv="cleartype", content="on")
     link(href="https://fonts.googleapis.com/css?family=Montserrat", rel="stylesheet", type="text/css")
-    link(href="/static/angular-ui/angular-ui.css", rel="stylesheet")
-    link(href="/static/select2/select2.css", rel="stylesheet")
-    link(href="/static/css/product.css", rel="stylesheet")
     link(rel="apple-touch-icon-precomposed", href="/static/images/apple-touch-icon.png")
+
+    - if (env === 'development')
+      link(href="/static/angular-ui/angular-ui.css", rel="stylesheet")
+      link(href="/static/select2/select2.css", rel="stylesheet")
+      // still a little janky... might want a way to see uncompressed css in dev
+      link(href="/static/build/ohe.min.css", rel="stylesheet")
+    - else
+      link(href="/static/dist/" + nconf.get("deps.min.css"), rel="stylesheet")
+      link(href="/static/dist/" + nconf.get("ohe.min.css"), rel="stylesheet")
+
 
     // HTML5 shim, for IE6-8 support of HTML5 elements
     // [if lt IE 9]>
@@ -26,13 +33,32 @@ html(lang="en", ng-app="ohe", class="omega new-app-dot-net")
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.js")
 
-    script(src="/static/angular-ui/angular-ui.js")
-    script(src="/static/underscore/underscore.js")
-    script(src="/static/bootstrap/js/bootstrap.js")
-    script(src="/static/select2/select2.js")
-    script(src="/static/build/ohe.min.js")
+    // dist templates.js is included regardless of dev/prod (deal with it (°─°ノ) ノ ┻━┻ )
+    script(src="/static/dist/" + nconf.get("templates.js"));
 
+    - if (env === 'development')
+      // deps
+      script(src="/static/angular-ui/angular-ui.js")
+      script(src="/static/underscore/underscore.js")
+      script(src="/static/bootstrap/js/bootstrap.js")
+      script(src="/static/select2/select2.js")
 
+      // ohe
+      script(src="/static/js/file_upload.js")
+      script(src="/static/js/channel-state.js")
+      script(src="/static/js/channels.js")
+      script(src="/static/js/messages.js")
+      script(src="/static/js/nav.js")
+      script(src="/static/js/ohe.js")
+      script(src="/static/js/socket.js")
+      script(src="/static/js/users.js")
+      script(src="/static/js/utils.js")
+
+    - else
+      // deps
+      script(src="/static/dist/" + nconf.get("deps.min.js"));
+      // ohe
+      script(src="/static/dist/" + nconf.get("ohe.min.js"));
 
   body
     div.wrapper
@@ -49,5 +75,5 @@ html(lang="en", ng-app="ohe", class="omega new-app-dot-net")
           h1 Welcome to &Omega;
           a(href=auth_url, target="_self") Please log in with App.net &rarr;
       - else
-        div(ng-include="'/static/templates/alerts.html'")
+        div(ng-include="'alerts.html'")
         div.view(ng-view)

@@ -1,8 +1,10 @@
 config.js
 config.json*
+asset_map.json*
 .lvimrc
 node_modules
 *.swo
 *.swp
 .sass-cache
 static/build
+static/dist
