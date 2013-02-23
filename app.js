@@ -2,8 +2,10 @@ var path = require('path');
 var nconf = require('nconf');
 
 var config_path = process.env.OHE_CONFIG_PATH || path.join(__dirname, '/config.json');
+var asset_map_path = process.env.OHE_ASSET_MAP_PATH || path.join(__dirname, '/asset_map.json');
 
 nconf.argv().env('__').file({file: config_path});
+nconf.add('asset_map', {type: 'file', file: asset_map_path});
 
 var express = require('express');
 var jade = require('jade');
