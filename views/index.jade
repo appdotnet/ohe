@@ -19,6 +19,7 @@ html(lang="en", ng-app="ohe", class="omega new-app-dot-net")
       // still a little janky... might want a way to see uncompressed css in dev
       link(href="/static/build/ohe.min.css", rel="stylesheet")
     - else
+      link(href="/static/dist/" + css_deps_dist_file, rel="stylesheet")
       link(href="/static/dist/" + css_dist_file, rel="stylesheet")
 
 
