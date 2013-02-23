@@ -5,7 +5,7 @@
         return {
             restrict: 'E',
             controller: 'NavCtrl',
-            templateUrl: '/static/templates/nav.html',
+            templateUrl: 'nav.html',
             replace: true,
             link: function (scope, element) {
 

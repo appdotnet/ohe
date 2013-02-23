@@ -29,6 +29,13 @@ module.exports = function (grunt) {
         }
       }
     },
+    ngtemplates: {
+      app: {
+          options: {base: 'static/templates'},
+          src: ['static/templates/**.html'],
+          dest: 'static/build/templates.js'
+      }
+    },
     sass: {
       build: {
         options: {
@@ -76,15 +83,20 @@ module.exports = function (grunt) {
       css: {
         files: ['static/scss/*.scss'],
         tasks: ['sass', 'hash']
+      },
+      templates: {
+          files: ['static/templates/*.html'],
+          tasks: ['ngtemplates', 'hash']
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-hash');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['sass', 'uglify', 'copy', 'hash']);
+  grunt.registerTask('default', ['sass', 'ngtemplates', 'uglify', 'copy', 'hash']);
 };
