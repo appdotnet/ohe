@@ -17,10 +17,7 @@ exports.index = function (req, res) {
         'is_authenticated': req.adn_user().is_authenticated(),
         'user': req.adn_user(),
         'auth_url': auth.get_authenticate_url(req),
-        'css_dist_file': nconf.get('ohe.min.css'),
-        'css_deps_dist_file': nconf.get('deps.min.css'),
-        'js_dist_file': nconf.get('ohe.min.js'),
-        'js_deps_dist_file': nconf.get('deps.min.js'),
+        'nconf': nconf,
         'env': req.app.settings.env
     });
 };

@@ -51,6 +51,13 @@ module.exports = function (grunt) {
         }
       }
     },
+    copy: {
+        build: {
+            files: [
+                {expand: true, flatten: true, src: ['static/select2/select2.png', 'static/select2/spinner.gif'], dest: 'static/dist/'}
+            ]
+        }
+    },
     hash: {
       src: 'static/build/*.*',
       mapping: 'asset_map.json',
@@ -76,7 +83,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-hash');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['sass', 'uglify', 'hash']);
+  grunt.registerTask('default', ['sass', 'uglify', 'copy', 'hash']);
 };
