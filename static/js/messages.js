@@ -377,7 +377,7 @@
                     layout_dimensions = dimensions;
 
                     // fix dimensions
-                    element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 70));
+                    element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 130));
                 }
                 t = $timeout(check_dimensions, 200, false);
             };
@@ -482,6 +482,10 @@
 
         $scope.show_file_upload_button = function () {
             return !!(window.File && window.FileList && window.FileReader && window.FormData);
+        };
+
+        $scope.enable_send_button = function () {
+            return ($scope.message.text && $scope.message.text.length <= 256);
         };
     }]).controller('MessageListCtrl', ['$scope', '$element', 'channelState', function ($scope, $element, channelState) {
         $scope.$on('update_marker', function (event, message) {

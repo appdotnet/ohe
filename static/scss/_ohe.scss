@@ -154,9 +154,10 @@ html.omega {
 
 form[name="messageForm"] {
     input {
-        width: 400px;
+        width: 95%;
     }
-    .buttons {
-        margin-top: 5px;
-    }
+}
+
+.form-horizontal textarea {
+    height: auto;
 }

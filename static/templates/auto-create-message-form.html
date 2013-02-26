@@ -12,13 +12,16 @@
         <div class="control-group">
           <label class="control-label" for="message">Message:</label>
           <div class="controls">
-            <textarea name="message" class="span12" ng-model="message.text"></textarea>
+            <textarea name="message" class="span12" ng-model="message.text" rows="2"></textarea>
             <div file-upload></div>
           </div>
         </div>
         <div class="form-actions">
-          <button class='btn btn-small' ng-show='show_file_upload_button()' data-attach-btn>File</button>
-          <button type="submit" ng-disabled="!message || message.length > 256 || !selectedUsers.length" class="btn btn-primary btn-small">Send</button>
+          <span ng-class="{'text-error': message.text.length > 256}">{{256 - message.text.length}}</span>
+          <span class='pull-right'>
+            <button class='btn btn-small' ng-show='show_file_upload_button()' data-attach-btn>File</button>
+            <button type="submit" ng-disabled="!enable_send_button() || !selectedUsers.length" class="btn btn-primary btn-small">Send</button>
+          </span>
         </div>
       </fieldset>
     </form>

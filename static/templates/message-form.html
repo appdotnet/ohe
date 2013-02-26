@@ -2,11 +2,14 @@
   <div class="span12">
     <form name="messageForm" class="form-inline message-form">
       <div file-upload></div>
-      <input type="text" class="yui3-u" name="text" ng-model="message.text">
-      <span class='yui3-u buttons'>
-        <button value='submit' ng-click="submitMessage()" ng-disabled="!message.text || message.text.length > 256"
-              class="btn btn-primary btn-small send-button pull-right">Send</button>
-        <button class='btn btn-small' ng-show='show_file_upload_button()' data-attach-btn>File</button>
+      <input type="text" class='mg-b-10'name="text" autocomplete="off" ng-model="message.text">
+      <span class='yui3-u-1 actions'>
+        <span ng-class="{'text-error': message.text.length > 256}">{{ 256 - message.text.length}}</span>
+        <span class='pull-right'>
+          <button value='submit' ng-click="submitMessage()" ng-disabled="!enable_send_button()"
+                class="btn btn-primary btn-small send-button pull-right">Send</button>
+          <button class='btn btn-small' ng-show='show_file_upload_button()' data-attach-btn>File</button>
+        </span>
       </span>
     </form>
   </div>
