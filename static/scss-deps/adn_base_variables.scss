@@ -56,8 +56,8 @@ $linkColorHover:        darken($themeAttention, 5%);
 // Typography
 // -------------------------
 $sansFontFamily:        'Montserrat', Helvetica, Arial, sans-serif;
-$serifFontFamily:       Georgia, "Times New Roman", Times, serif !default;
-$monoFontFamily:        Menlo, Monaco, Consolas, "Courier New", monospace !default;
+$serifFontFamily:       Georgia, "Times New Roman", Times, serif;
+$monoFontFamily:        Menlo, Monaco, Consolas, "Courier New", monospace;
 
 $baseFontSize:          16px;
 $baseFontFamily:        $serifFontFamily;

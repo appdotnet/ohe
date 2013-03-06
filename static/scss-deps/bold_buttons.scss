@@ -202,7 +202,6 @@
     }
 }
 
-html.new-app-dot-net {
-  @include buttons('');
-  @include buttons('mgt-');
-}
+
+@include buttons('');
+@include buttons('mgt-');

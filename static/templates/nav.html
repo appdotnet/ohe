@@ -3,10 +3,13 @@
     <li class='logged-in-block' ng-class="{'active':selectedNav == 'inbox'}"><a href="/">Inbox</a></li>
     <li class='logged-in-block'><a href="https://alpha.app.net">Alpha</a></li>
     <li class="logged-in-block dropdown open-caret">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria_labelledby>
         <span class='logged-in-as'>Logged in as</span>
         <hr>
-        <span class='logged-in-username'>{{username}}</span>
+        <span class='logged-in-username'>
+            <span class='inner'>{{username}}</span>
+            <i class='icon-chevron-down'></i>
+        </span>
       </a>
       <ul class="dropdown-menu">
         <li><a href="/logout" target="_self">Logout</a></li>

@@ -8,3 +8,4 @@ node_modules
 .sass-cache
 static/build
 static/dist
+*.DS_Store

@@ -82,7 +82,7 @@ body {
             @include border-radius(0);
 
             &:focus {
-                border-color: $linkColor;
+                border-color: $themeSubText;
                 @include box-shadow(none);
             }
         }
@@ -162,6 +162,24 @@ body {
         font-weight: normal;
         text-shadow: none;
         @include opacity(30);
+    }
+
+    .transition-color,
+    .transition-color i,
+    .transition-color strong {
+        @include transition(color 0.2s linear);
+        &:hover, &:hover i, &:hover strong {
+            @include transition(color 0.15s linear);
+        }
+    }
+}
+
+.main-content-container-inner {
+    html.breakpoint-tablet & {
+        padding-left: 10px;
+    }
+    html.breakpoint-phone & {
+        padding: 0;
     }
 }
 
@@ -244,6 +262,12 @@ html.breakpoint-phone {
         padding-right: 12px;
         padding-left: 12px;
     }
+    &.main-container-alpha {
+        html.breakpoint-tablet & {
+            padding-right: 12px;
+            padding-left: 12px;
+        }
+    }
     .hide {
         display: none;
     }
@@ -274,7 +298,7 @@ html.breakpoint-phone {
     }
     a {
         @include transition(background-color 0.2s linear);
-        &:hover, &:hover .logged-in-username, &:hover .invite-friend-link {
+        &:hover, &:hover .logged-in-username, &:hover .notice-link {
             @include transition(background-color 0.2s linear);
             hr {
                 width: 36px;
@@ -285,8 +309,24 @@ html.breakpoint-phone {
     }
 }
 
+.fake-link.hover {
+    cursor: pointer;
+}
+
 .nav.header {
     html.breakpoint-phone & {
+        .m-nav-toggle {
+            display: inline-block;
+            margin: 9px 10px 0 0;
+            padding: 3px 6px 2px 6px;
+            border: 1px solid $grayLighter;
+            background-color: $white;
+            line-height: normal;
+            color: $themeSubText;
+            &:active {
+                background-color: $themeSolid;
+            }
+        }
         &.no-margin-bottom {
             margin-bottom: 0;
         }
@@ -311,7 +351,7 @@ html.breakpoint-phone {
             position: relative;
             background-size: 100px 34px;
             height: 34px;
-            width: 74px;
+            width: 20px;
         }
     }
     .navbar {
@@ -321,6 +361,8 @@ html.breakpoint-phone {
             margin-right: 0;
         }
         .nav {
+            $nav_block_width: 195px;
+            $nav_block_width_tablet: 190px;
             margin: 0;
             li {
                 position: relative;
@@ -336,28 +378,44 @@ html.breakpoint-phone {
                 &:last-child a, &:last-child .fake-link {
                     border-right: 1px solid $grayLightest;
                 }
+                .logged-in-username {
+                    @include transition(color 0.2s linear);
+                }
+                &.open-directory, &.notice {
+                    a {
+                        width: $nav_block_width;
+                        html.breakpoint-tablet & {
+                            width: $nav_block_width_tablet;
+                        }
+                    }
+                }
+
                 &.logged-in-block {
                     a, span.fake-link {
-                        width: 195px;
+                        width: $nav_block_width;
+                        html.breakpoint-tablet & {
+                            width: $nav_block_width_tablet;
+                        }
+                    }
+                    .icon-chevron-down {
+                        display: none;
                     }
                     &.dropdown.open-caret {
-                        &::after, &::before {
-                            position: absolute;
-                            content: '';
+                        .icon-chevron-down {
                             display: inline-block;
-                            @include transition(border-top-color 0.15s linear);
+                            font-size: 11px;
+                            margin-left: 3px;
+                            vertical-align: top;
+                            line-height: 19px;
                         }
                         &:hover, &.open {
-                            &::after {
-                                border-top-color: lighten($themeSolid, 5.5%);
-                                @include transition(border-top-color 0.2s linear);
-                            }
                             a {
                                 color: darken($themeSubText, 20%);
                                 background-color: lighten($themeSolid, 5.5%);
                             }
                             .logged-in-username {
                                 color: $linkColorHover;
+                                @include transition(color 0.15s linear);
                             }
                             .dropdown-menu li a {
                                 background-color: $white;
@@ -369,28 +427,6 @@ html.breakpoint-phone {
                                 width: 36px;
                                 border-top-color: $themeSubText;
                                 @include transition(#{border-top-color 0.15s linear, width 0.15s linear});
-                            }
-                        }
-                        &::after {
-                            border-left: 4px solid transparent;
-                            border-right: 4px solid transparent;
-                            border-top: 4px solid $white;
-                            bottom: -4px;
-                            left: 95px;
-                            z-index: 1002;
-                            html.breakpoint-phone & {
-                                left: 36px;
-                            }
-                        }
-                        &::before {
-                            border-left: 5px solid transparent;
-                            border-right: 5px solid transparent;
-                            border-top: 5px solid $grayLighter;
-                            bottom: -6px;
-                            left: 94px;
-                            z-index: 1001;
-                            html.breakpoint-phone & {
-                                left: 35px;
                             }
                         }
                     }
@@ -413,9 +449,9 @@ html.breakpoint-phone {
 
                     &.green {
                         background-color: lighten($green, 36%);
-                        &:hover, &:hover .invite-friend-link {
+                        &:hover, &:hover .notice-link {
                             background-color: lighten($green, 34.5%);
-                            .invite-friend-link {
+                            .notice-link {
                                 color: darken($green, 7%);
                             }
                         }
@@ -432,28 +468,34 @@ html.breakpoint-phone {
                             }
                         }
                     }
-                    .logged-in-as, .logged-in-username, .invite-friend-text, .invite-friend-link {
+                    .logged-in-as, .logged-in-username, .notice-text, .notice-link {
                         display: block;
                         font-size: 11px;
                     }
-                    .logged-in-as, .invite-friend-text {
+                    .logged-in-as, .notice-text {
                         margin-top: -13px;
                         margin-bottom: -1px;
                     }
-                    .logged-in-username, .invite-friend-link {
+                    .logged-in-username, .notice-link {
                         margin: 4px auto 0 auto;
+                        font-size: 11px;
+                    }
+                    span.inner, .notice-link {
                         max-width: 190px;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         text-transform: none;
-                        font-size: 10px;
-                        font-weight: bold;
                     }
                     .logged-in-username {
                         color: $linkColor;
+                        span.inner {
+                            display: inline-block;
+                            margin: 0;
+                            max-width: 170px;
+                        }
                     }
-                    .invite-friend-link {
+                    .notice-link {
                         color: $green;
                     }
                 }
@@ -476,7 +518,10 @@ html.breakpoint-phone {
                 .dropdown-menu {
                     position: absolute;
                     margin: 0;
-                    width: 195px;
+                    width: $nav_block_width;
+                    html.breakpoint-tablet & {
+                        width: $nav_block_width_tablet;
+                    }
                     padding: 0;
                     border: 1px solid $grayLighter;
                     background-color: $white;
@@ -533,6 +578,14 @@ html.breakpoint-phone {
             margin-right: -12px;
             .nav li {
                 height: 44px;
+                &.logged-in-block.dropdown.open-caret {
+                    .icon-chevron-down {
+                        display: block;
+                        margin-left: 36px;
+                        font-size: 7px;
+                        line-height: 10px;
+                    }
+                }
                 &.logged-in-block a {
                     width: 80px;
                 }
@@ -540,21 +593,25 @@ html.breakpoint-phone {
                     padding-top: 13px;
                     width: 80px;
                     height: 31px;
-                    hr, .logged-in-as, .invite-friend-link {
+                    hr, .logged-in-as, .notice-link {
                         display: none;
                     }
-                    .logged-in-username, .invite-friend-text-mobile {
-                        font-size: 8px;
-                        margin-top: 0;
-                        max-width: 115px;
+                    .logged-in-username,
+                    .notice-text-mobile {
+                        font-size: 9px;
+                        span.inner {
+                            max-width: 75px;
+                        }
                     }
                     .logged-in-username {
-                        max-width: 75px;
+                        margin-top: 5px;
+                        line-height: 10px;
                     }
-                    .invite-friend-text {
-                        display:none;
+                    .notice-text {
+                        display: none;
                     }
-                    .invite-friend-text-mobile {
+                    .notice-text-mobile {
+                        max-width: 115px;
                         color: darken($green, 5%);
                         display: block;
                     }
@@ -597,18 +654,38 @@ html.breakpoint-phone {
         color: $themeSubText;
         font-size: 18px;
         line-height: normal;
-        @include transition(color 0.2s linear);
-        &:hover {
-            color: lighten($themeAccent, 15%);
-            @include transition(color 0.15s linear);
-        }
     }
 }
+
 html {
     .nav-list {
         width: 258px;
-        padding: 15px 0 15px 0;
+        padding: 0 0 30px 0;
         border-right: 1px solid $grayLighter;
+
+        &.alerts {
+            padding: 0 0 10px 0;
+            .alert {
+                margin: 0 10px 0 0;
+                padding: 10px;
+                border: 1px solid lighten($themeAttention, 30%);
+                background-color: lighten($themeAttention, 38%);
+                text-align: center;
+                @include border-radius(0);
+                @include box-shadow(0 2px 0 rgba(0, 0, 0, 0.05));
+                p, a {
+                    margin: 0;
+                    padding: 0;
+                }
+                a {
+                    padding-left: 0;
+                    color: $linkColor;
+                    &:hover {
+                        background-color: transparent;
+                    }
+                }
+            }
+        }
 
         .nav-header, li a {
             padding: 10px;
@@ -627,6 +704,28 @@ html {
             padding-bottom: 7px;
             html.breakpoint-tablet & {
                 font-size: 14px;
+            }
+            .icon-remove-sign {
+                margin-right: 0;
+                &:hover {
+                    color: lighten($themeAccent, 15%);
+                }
+            }
+        }
+
+        .nav.header {
+            .m-nav-toggle {
+                display: inline-block;
+                border: none;
+                margin: 9px 10px 0 0;
+                padding: 3px 6px 2px 6px;
+                border: 1px solid $grayLighter;
+                background-color: $white;
+                line-height: normal;
+                color: $themeSubText;
+                &:active {
+                    background-color: $themeSolid;
+                }
             }
         }
 
@@ -681,6 +780,50 @@ html {
         }
     }
 
+    &.breakpoint-widescreen,
+    &.breakpoint-tablet {
+        &.breakpoint-height_small,
+        &.breakpoint-height_mini {
+            .nav-vertically-responsive {
+                li a {
+                    // font-size: 12px;
+                    i {
+                        font-size: 10px;
+                    }
+                    .icon-chevron-right {
+                        top: 9px;
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+
+        &.breakpoint-height_small {
+            .nav-vertically-responsive {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                li a {
+                    padding-top: 6px;
+                    padding-bottom: 6px;
+                }
+            }
+        }
+
+        &.breakpoint-height_mini {
+            .nav-vertically-responsive {
+                padding-top: 0;
+                li a {
+                    font-size: 11px;
+                    padding-top: 1px;
+                    padding-bottom: 1px;
+                    .icon-chevron-right {
+                        top: 4px;
+                    }
+                }
+            }
+        }
+    }
+
     &.breakpoint-phone .nav-list li.active {
         a, a:hover {
             .icon-chevron-right {
@@ -719,6 +862,7 @@ html {
         }
     }
 }
+
 .subnav-container {
     width: 100%;
     height: 34px;
