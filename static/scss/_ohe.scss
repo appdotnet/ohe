@@ -161,3 +161,9 @@ form[name="messageForm"] {
 .form-horizontal textarea {
     height: auto;
 }
+
+.file-upload {
+    .attachment-alert {
+        display: none;
+    }
+}

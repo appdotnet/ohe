@@ -27,7 +27,7 @@
         this.onuploaddone = options.onuploaddone || $.noop;
         this.allow = options.allow || false;
         this.ondisallow = options.ondisallow || $.noop;
-        this.onempty = options.onempty || $.noop;
+        this.onerror = options.onerror || $.noop;
         this.max_file_size = options.max_file_size || false;
         this.upload_to = options.upload_to;
         this.extra_data = options.extra_data || [];
@@ -50,7 +50,7 @@
             }
 
             if (!file.size) {
-                this.onempty(file);
+                this.onerror('empty', file);
                 return;
             }
 
@@ -60,9 +60,7 @@
             }
 
             if (this.max_file_size && this.max_file_size < file.size) {
-                var max_in_mb = 100;
-                var file_size_in_mb = Math.round((file.size / 1e6) * 100) / 100;
-                console.log('The max file size is ' + max_in_mb + 'MB. The file you tried to attach was ' + file_size_in_mb + 'MB');
+                this.onerror('too_large', file);
                 return;
             }
 

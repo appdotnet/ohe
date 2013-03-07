@@ -158,12 +158,15 @@
                 };
                 scope.upload_in_progress = false;
 
+                var uploader;
                 var activator = element.closest('form').find('[data-attach-btn]');
                 var file_input = element.find('[data-file-upload-input]');
                 var name_preview = element.find('[data-attachment-name]');
                 var upload_progress_cont = element.find('[data-upload-progress]');
                 var upload_progress_bar = upload_progress_cont.find('.bar');
                 var remove_file = element.find('[data-remove-attachment]');
+                var alert_area = element.find('[data-attachment-alert]');
+                var alert_area_text = alert_area.find('.text');
 
                 var annotations_from_response = function (resp) {
                     var annotations;
@@ -223,6 +226,8 @@
                     upload_progress_cont.removeClass('hide');
                     upload_progress_bar.css('width', '0%');
                     activator.addClass('hide');
+                    alert_area_text.text('');
+                    alert_area.hide();
                 };
 
                 var onprogress = function (percent_done) {
@@ -245,9 +250,16 @@
                     element.find('input[name="text"]').focus();
                 };
 
-                var onempty = function (file) {
+                var onerror = function (reason, file) {
                     // TODO: some kind of notification
-                    console.log('File was empty.');
+                    if (reason === 'empty') {
+                        alert_area_text.text('The file you attached was empty.');
+                        alert_area.show();
+                    } else if (reason === 'too_large') {
+                        var max_in_mb = uploader.max_file_size / 1e6;
+                        alert_area_text.text('The file you tried to attach was larger than the max file size, ' + max_in_mb + 'MB.');
+                        alert_area.show();
+                    }
                 };
 
                 var upload_to = function (form_data, progress) {
@@ -272,13 +284,14 @@
                     onuploaddone: onuploaddone,
                     upload_on_change: true,
                     upload_to: upload_to,
-                    onempty: onempty,
+                    onerror: onerror,
+                    max_file_size: 100e6,
                     extra_data: [
                         ['type', 'net.app.omega.attachment']
                     ]
                 };
 
-                var uploader = new Omega.FileUploader(options);
+                uploader = new Omega.FileUploader(options);
                 uploader.bind_events();
                 element.on('click', '[data-remove-attachment]', function () {
                     uploader.reset_file_upload();
