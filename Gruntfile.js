@@ -56,6 +56,26 @@ module.exports = function (grunt) {
           // hacked these file extensions from .css to .scss so grunt-sass-contrib will work (have a pull-request to fix this)
           'static/build/deps.min.css': ['static/angular-ui/angular-ui.scss', 'static/select2/select2.scss']
         }
+      },
+      build_dev: {
+        options: {
+          style: 'expanded',
+          loadPath: ['static/scss-deps'],
+          noCache: true
+        },
+        files: {
+          'static/build/ohe.min.css': 'static/scss/product.scss'
+        }
+      },
+      build_deps_dev: {
+        options: {
+          style: 'expanded',
+          noCache: true
+        },
+        files: {
+          // hacked these file extensions from .css to .scss so grunt-sass-contrib will work (have a pull-request to fix this)
+          'static/build/deps.min.css': ['static/angular-ui/angular-ui.scss', 'static/select2/select2.scss']
+        }
       }
     },
     copy: {
@@ -82,7 +102,7 @@ module.exports = function (grunt) {
       },
       css: {
         files: ['static/scss/*.scss'],
-        tasks: ['sass', 'hash']
+        tasks: ['sass:build_deps_dev', 'sass:build_dev', 'hash']
       },
       templates: {
           files: ['static/templates/*.html'],
@@ -99,4 +119,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['sass', 'ngtemplates', 'uglify', 'copy', 'hash']);
+  grunt.registerTask('dev', ['sass:build_deps_dev', 'sass:build_dev', 'ngtemplates', 'uglify', 'copy', 'hash'])
 };

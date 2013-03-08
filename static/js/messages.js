@@ -258,7 +258,7 @@
                     } else if (reason === 'too_large') {
                         var max_in_mb = uploader.max_file_size / 1e6;
                         // TODO: accurate max file size based on free tier, etc
-                        alert_area_text.text('The file you attached was too large.');
+                        alert_area_text.text('The file you tried to attach was too large.');
                         alert_area.show();
                     }
                 };

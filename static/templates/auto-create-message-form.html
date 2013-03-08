@@ -1,6 +1,6 @@
 <div class="row-fluid auto-create">
   <div class="span8">
-    <form class="form-horizontal" ng-submit="createUser()">
+    <form class="form-horizontal auto-create-message-form" ng-submit="createUser()">
       <fieldset>
         <legend>Send a message</legend>
         <div class="control-group" ng-controller="UserSearchCtrl">
@@ -19,7 +19,7 @@
         <div class="form-actions">
           <span ng-class="{'text-error': message.text.length > 256}">{{256 - message.text.length}}</span>
           <span class='pull-right'>
-            <button class='btn btn-small' ng-show='show_file_upload_button()' data-attach-btn>File</button>
+          <button class='btn-attach-file btn-small transition-color' ng-show='show_file_upload_button()' data-attach-btn><i class='icon-file'></i>Upload a file ...</button>
             <button type="submit" ng-disabled="!enable_send_button() || !selectedUsers.length" class="btn btn-primary btn-small">Send</button>
           </span>
         </div>
