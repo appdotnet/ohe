@@ -9,7 +9,7 @@
             controller: 'MessageListCtrl',
             templateUrl: 'message-list.html',
             replace: true,
-            link: function (scope, element, attrs, controller) {
+            link: function (scope, element) {
                 var pinned_to_bottom = true;
 
                 var fire_update_marker = function () {
@@ -65,7 +65,7 @@
                     fire_update_marker();
                 });
 
-                scope.$on('submit_message', function (event) {
+                scope.$on('submit_message', function () {
                     scroll_to_bottom();
                 });
 
@@ -139,13 +139,13 @@
                 };
             }
         };
-    }]).directive('fileUpload', ['$http', function ($http) {
+    }]).directive('fileUpload', [function () {
         return {
             restrict: 'A',
             controller: 'MessageFormCtrl',
             templateUrl: 'file-upload.html',
             replace: true,
-            link: function (scope, element, attrs) {
+            link: function (scope, element) {
                 if (!(window.FileReader && window.FormData)) {
                     return; // element is hidden also
                 }
@@ -297,7 +297,7 @@
                 element.on('click', '[data-remove-attachment]', function () {
                     uploader.reset_file_upload();
                 });
-                scope.$on('submit_message', function (event) {
+                scope.$on('submit_message', function () {
                     uploader.reset_file_upload();
                 });
             }
@@ -321,7 +321,7 @@
             restrict: 'A',
             templateUrl: 'message-body.html',
             replace: true,
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 var core_file_attachments = [];
                 var oembed_images = [];
                 var i = 0;
@@ -397,7 +397,7 @@
             };
             check_dimensions();
         };
-    }]).directive('roster', ['$timeout', function ($timeout) {
+    }]).directive('roster', [function () {
         return {
             restrict: 'E',
             templateUrl: 'roster.html',

@@ -9,7 +9,7 @@
         }).when('/channel/:channel_id', {
             template: '<channel-detail></channel-detail>'
         });
-    }]).directive('channelDetail', ['$timeout', function ($timeout) {
+    }]).directive('channelDetail', [function () {
         return {
             restrict: 'E',
             controller: 'ChannelDetailCtrl',

@@ -79,7 +79,7 @@
                 this.upload_file();
             }
         },
-        handle_activator_click: function (e) {
+        handle_activator_click: function () {
             this.file_input.trigger('click');
             return false;
         },

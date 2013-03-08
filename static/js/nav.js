@@ -6,10 +6,7 @@
             restrict: 'E',
             controller: 'NavCtrl',
             templateUrl: 'nav.html',
-            replace: true,
-            link: function (scope, element) {
-
-            }
+            replace: true
         };
     }).controller('NavCtrl', ['$scope', '$element', '$window', function ($scope, $element, $window) {
         $scope.enable_notifications = function () {
