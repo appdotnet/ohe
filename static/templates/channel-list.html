@@ -32,7 +32,8 @@
                               </div>
                           </a>
                       </li>
-                      <li><a href='#' ng-show="has_more_channels && channel_list.length >= channel_fetch_size" ng-click="loadOlderChannels()">Show Older</a></li>
+                      <li ng-show="has_more_channels && channel_list.length >= channel_fetch_size"><a href='#' ng-click="loadOlderChannels()">Show Older</a></li>
+                      <div class='no-channels' ng-show="!channel_list || channel_list.length == 0">No messages yet</div>
                   </ul>
               </div>
           </div>
