@@ -7,7 +7,7 @@
         <span ng-class="{'text-error': message.text.length > 256}">{{ 256 - message.text.length}}</span>
         <span class='pull-right'>
           <button value='submit' ng-click="submitMessage()" ng-disabled="!enable_send_button()"
-                ng-class="{'btn btn-primary btn-small send-button post-button pull-right': true, 'disabled': !enable_send_button()}" class="">Send</button>
+                ng-class="{'btn btn-primary btn-small send-button post-button pull-right': true, 'disabled': !enable_send_button()}">Send</button>
           <button class='btn-attach-file btn-small transition-color' ng-show='show_file_upload_button()' data-attach-btn><i class='icon-file'></i>Upload a file ...</button>
         </span>
       </span>
