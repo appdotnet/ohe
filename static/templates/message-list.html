@@ -2,23 +2,19 @@
   <div class="message-list">
       <div ng-show='has_older_messages && channel.messages.length >= message_fetch_size' class='see-more message-wrapper'><a href='#' ng-click='loadOlderMessages()'>&#9650; Load Older Messages</a></div>
       <div class='message-wrapper' ng-repeat="message in channel.messages"  data-message-id='{{message.id}}'>
-        <div class="row-fluid message">
-          <div class="span2">
-              <div class='ellipsize span12 username'>
-                  <img width=25 height=25 alt='icon of {{ message.user.username }}' class='hidden-phone' ng-src="{{ message.user.avatar_image.url }}?w=25">
-                  <strong class='muted'>{{ message.user.username}}</strong>
-              </div>
-          </div>
-          <div class="span2 pull-right">
-              <div class='muted'>{{ message.created_at | date:'MMM-d h:mma' }}</div>
-          </div>
-          <div class="span8">
-            <div class="row-fluid">
-              <div class="span12">
+        <div class="message">
+            <div class='content'>
+                <div class='media'>
+                    <div>
+                        <img class='yui3-u' width=25 height=25 alt='icon of {{ message.user.username }}' ng-src="{{ message.user.avatar_image.url }}?w=25">
+                        <strong class='muted yui3-u ellipsize username'>{{ message.user.username}}</strong>
+                    </div>
+                </div>
                 <div message-body></div>
-              </div>
+                <div class="yui3-u-1">
+                    <div class='muted ta-right timestamp'>{{ message.created_at | date:'MMM-d h:mma' }}</div>
+                </div>
             </div>
-          </div>
         </div>
       </div>
   </div>

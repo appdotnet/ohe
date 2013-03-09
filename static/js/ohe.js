@@ -49,6 +49,8 @@
             }
         });
 
+        $(window).on('resize', _.debounce(Modernizr.test_media_queries, 50));
+
     }]).run(['$rootScope', function ($rootScope) {
         var user = document.getElementById('user');
         $rootScope.user_id = user && user.getAttribute('data-id');

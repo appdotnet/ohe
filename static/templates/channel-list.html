@@ -1,42 +1,38 @@
 <div class="container">
   <div class="channel-list">
     <div class="row-fluid">
-      <div class='ul-container span8'>
-          <div class='scrollable-outer'>
-              <div class='scrollable-inner'>
-                  <ul class='unstyled'>
-                      <li ng-repeat="channel in channel_list | orderBy:['-has_unread', '-recent_message.created_at']">
-                          <a href="{{ channel.detail_url() }}">
-                              <div class="row {{channel.has_unread && 'unread'}} channel">
-                                  <div class='pull-left img-block'>
-                                      <img width=50 height=50 class='span12' alt='channel icon {{ channel.get_visible_user().username }}' ng-src="{{ channel.get_visible_user().avatar_image.url }}?w=50">
-                                  </div>
-                                  <div class='content-block'>
-                                      <div class='timestamp pull-right'>
-                                          <small class='muted span12'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
-                                      </div>
-                                      <div class='users'>
-                                          <span ng-repeat="user in channel.get_users()">
-                                            <span ng-show="user.is_complete">
-                                              {{ user.username }}<span ng-show="!$last">, </span>
-                                            </span>
-                                          </span>
-                                      </div>
-                                      <div class='recent-message'>
-                                          <small class='muted'>
-                                              <span ui-if="channel.recent_message.user.id == user_id">&larr; </span>
-                                              {{channel.recent_message.text}}
-                                          </small>
-                                      </div>
-                                  </div>
+      <div class='ul-container yui3-u-1'>
+          <ul class='unstyled'>
+              <li ng-repeat="channel in channel_list | orderBy:['-has_unread', '-recent_message.created_at']">
+                  <a href="{{ channel.detail_url() }}">
+                      <div class="row {{channel.has_unread && 'unread'}} channel">
+                          <div class='pull-left img-block'>
+                              <img width=50 height=50 alt='channel icon {{ channel.get_visible_user().username }}' ng-src="{{ channel.get_visible_user().avatar_image.url }}?w=50">
+                          </div>
+                          <div class='content-block'>
+                              <div class='timestamp pull-right'>
+                                  <small class='muted'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
                               </div>
-                          </a>
-                      </li>
-                      <li ng-show="has_more_channels && channel_list.length >= channel_fetch_size"><a href='#' ng-click="loadOlderChannels()">Show Older</a></li>
-                      <div class='no-channels' ng-show="!channel_list || channel_list.length == 0">No messages yet</div>
-                  </ul>
-              </div>
-          </div>
+                              <div class='users'>
+                                  <span ng-repeat="user in channel.get_users()">
+                                    <span ng-show="user.is_complete">
+                                      {{ user.username }}<span ng-show="!$last">, </span>
+                                    </span>
+                                  </span>
+                              </div>
+                              <div class='recent-message'>
+                                  <small class='muted'>
+                                      <span ui-if="channel.recent_message.user.id == user_id">&larr; </span>
+                                      {{channel.recent_message.text}}
+                                  </small>
+                              </div>
+                          </div>
+                      </div>
+                  </a>
+              </li>
+              <li class='show-older-channels ta-center' ng-show="has_more_channels && channel_list.length >= channel_fetch_size"><a href='#' ng-click="loadOlderChannels()">Show Older <i class='icon-chevron-down'></i></a></li>
+              <div class='no-channels' ng-show="!channel_list || channel_list.length == 0">No messages yet</div>
+          </ul>
       </div>
     </div>
     <auto-create-message-form></auto-create-message-form>

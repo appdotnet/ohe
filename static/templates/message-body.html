@@ -1,5 +1,5 @@
 <div>
-    <div class='content' ng-bind-html-unsafe="message.html"></div>
+    <div class='message-content' ng-bind-html-unsafe="message.html"></div>
     <div class='attachments' ng-repeat="attachment in core_file_attachments">
         <div class='file' ng-repeat="file in attachment">
             <a href='/file-url?channel_id={{channel.id}}&message_id={{message.id}}&file_id={{file.file_id}}'
@@ -10,7 +10,7 @@
             </a>
         </div>
     </div>
-    <div class='media' ng-repeat="image in oembed_images">
+    <div class='media-embed' ng-repeat="image in oembed_images">
         <a href='/file-url?channel_id={{channel.id}}&message_id={{message.id}}&annotation_index={{image.annotation_index}}' target='_blank'>
             <img ng-src='{{image.secure_thumbnail_url}}' width='{{image.scaled_thumbnail_width}}' height='{{image.scaled_thumbnail_height}}'>
         </a>

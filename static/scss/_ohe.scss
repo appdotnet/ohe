@@ -7,6 +7,9 @@ html.omega {
     .navbar .nav .active > a {
         background-color: $grayHighlight;
     }
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
 }
 
 .hide {
@@ -31,6 +34,16 @@ html.omega {
     padding-top: 20px;
 }
 
+.message {
+    @include media-block(150px, 0px, 0px);
+    .timestamp {
+        font-size: 12px;
+    }
+    .username {
+        width: 100px;
+    }
+}
+
 .ellipsize {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -53,7 +66,12 @@ html.omega {
     max-width: 90%;
 }
 
+.channel-detail {
+    margin-right: 20px;
+}
+
 .channel-list {
+    max-width: 950px;
     ul {
         padding-right: 10px;
     }
@@ -65,6 +83,13 @@ html.omega {
         border-style: solid;
         &:last-child {
             border-width: 1px 0 0 0;
+        }
+        &.show-older-channels {
+            font-family: $sansFontFamily;
+            font-size: 20px;
+            padding: 15px 0;
+            border-left: none;
+            border-right: none;
         }
     }
     .channel {
@@ -80,11 +105,6 @@ html.omega {
             border: none;
         }
     }
-}
-
-.scrollable-outer {
-    height: 400px;
-    overflow-y: auto;
 }
 
 .roster-member {
@@ -125,7 +145,7 @@ html.omega {
     width: 20px;
 }
 
-.media {
+.media-embed {
     width: 100px;
     height: 100px;
 }
@@ -138,8 +158,11 @@ html.omega {
     top: 0;
     left: 0;
 }
-.auto-create .file-upload {
-    margin-top: 15px;
+.auto-create {
+    max-width: 600px;
+    .file-upload {
+        margin-top: 15px;
+    }
 }
 
 form[name="messageForm"] {
