@@ -7,7 +7,7 @@ module.exports = function (grunt) {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
         mangle: {
-          except: ['jQuery', '$', 'angular']
+          except: ['jQuery', '$', 'angular', 'Modernizr']
         },
         compress: true,
         beautify: false
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         },
         files: {
           'static/build/deps.min.js': ['static/angular-ui/angular-ui.min.js', 'static/underscore/underscore-min.js',
-            'static/bootstrap/js/bootstrap.min.js', 'static/select2/select2.min.js']
+            'static/bootstrap/js/bootstrap.min.js', 'static/select2/select2.min.js', 'static/js/modernizr.js']
         }
       }
     },

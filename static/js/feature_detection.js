@@ -32,4 +32,6 @@
     Modernizr.addTest('filereader', function () {
         return !!(window.File && window.FileList && window.FileReader);
     });
+
+    $(window).on('resize', _.debounce(Modernizr.test_media_queries, 50));
 }());
