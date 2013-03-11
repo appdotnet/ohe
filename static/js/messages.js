@@ -391,7 +391,9 @@
                     layout_dimensions = dimensions;
 
                     // fix dimensions
-                    element.height(Math.max(0, dimensions.window_height - dimensions.container_offset.top - 130));
+                    var min_height = 200;
+                    var new_height = Math.max(min_height, dimensions.window_height - dimensions.container_offset.top - 130);
+                    element.height(new_height);
                 }
                 t = $timeout(check_dimensions, 200, false);
             };
