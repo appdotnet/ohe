@@ -10,6 +10,7 @@ html(lang="en", ng-app="ohe", class="omega new-app-dot-net")
     meta(name="csrftoken", id="csrftoken", data-token=_csrf)
     - if (is_authenticated)
       meta(name="user", id="user", data-id=user.id, data-username=user.username)
+    meta(name="config", id="config", data-alpha-url-base=alpha_url_base)
     // Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading
     meta(http-equiv="cleartype", content="on")
     link(href="https://fonts.googleapis.com/css?family=Montserrat", rel="stylesheet", type="text/css")

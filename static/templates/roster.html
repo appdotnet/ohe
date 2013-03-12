@@ -3,7 +3,7 @@
     <div>
       <div class='roster-member' ng-repeat="user in channel.get_users(true) | orderBy:['username']">
           <img width=25 height=25 alt='roster icon for {{ user.username }}' class='hidden-phone' ng-src="{{ user.avatar_image.url }}?w=25">
-          <span class='username'><strong>@{{user.username}}</strong> <small class='ellipsize'>({{user.name}})</small></span>
+          <span class='username'><a href='{{alpha_url_base}}/{{user.username}}'><strong>@{{user.username}}</strong></a> <small class='ellipsize'>({{user.name}})</small></span>
       </div>
     </div>
 </div>

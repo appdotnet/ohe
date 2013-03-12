@@ -4,9 +4,13 @@
         "secret": "<generate a random 32 character string>"
     },
     "adn": {
+        "oauth_url_base": "https://alpha.app.net",
+        "api_url_base": "https://alpha-api.app.net",
+        "alpha_url_base": "https://alpha.app.net",
         "client_id": "<client_id>",
         "client_secret": "<client_secret>",
-        "scope": "messages"
+        "scope": "messages",
+        "stream_filter_id": 859
     },
     "camo": {
         "host": "",

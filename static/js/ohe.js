@@ -50,8 +50,10 @@
         });
     }]).run(['$rootScope', function ($rootScope) {
         var user = document.getElementById('user');
+        var config = document.getElementById('config');
         $rootScope.user_id = user && user.getAttribute('data-id');
         $rootScope.username = user && user.getAttribute('data-username');
+        $rootScope.alpha_url_base = config && config.getAttribute('data-alpha-url-base');
         $rootScope.window = window;
         $rootScope.channel_list = [];
         $rootScope.$on('$routeChangeSuccess', function (event, route) {

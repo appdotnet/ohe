@@ -7,8 +7,8 @@
                 <div class='content'>
                     <div class='media'>
                         <div>
-                            <img class='yui3-u' width=25 height=25 alt='icon of {{ message.user.username }}' ng-src="{{ message.user.avatar_image.url }}?w=25">
-                            <strong class='muted yui3-u ellipsize username'>{{ message.user.username}}</strong>
+                            <a href='{{alpha_url_base}}/{{message.user.username}}'><img class='yui3-u' width=25 height=25 alt='icon of {{ message.user.username }}' ng-src="{{ message.user.avatar_image.url }}?w=25"></a>
+                            <a href='{{alpha_url_base}}/{{message.user.username}}'><strong class='muted yui3-u ellipsize username'>{{ message.user.username}}</strong></a>
                         </div>
                     </div>
                     <div message-body></div>

@@ -17,6 +17,7 @@ exports.index = function (req, res) {
         'is_authenticated': req.adn_user().is_authenticated(),
         'user': req.adn_user(),
         'auth_url': auth.get_authenticate_url(req),
+        'alpha_url_base': nconf.get('adn:alpha_url_base'),
         'nconf': nconf,
         'env': req.app.settings.env
     });
