@@ -16,11 +16,22 @@ html.omega {
     display: none;
 }
 
+.message-list-container {
+    // for iscroll
+    position: relative;
+    z-index: 1;
+    width: auto;
+    height: 300px;
+    overflow: hidden;
+    border: 1px solid $grayLight;
+    padding: 2px;
+}
+
 .message-list {
   overflow-y: scroll;
-  border: solid $grayLight;
-  border-width: 1px;
-  padding: 2px;
+  html.no-overflowscrolling.touch {
+    overflow-y: hidden;
+  }
   width: 100%;
   height: 100%;
 
@@ -41,6 +52,9 @@ html.omega {
     }
     .username {
         width: 100px;
+        html.breakpoint-phone {
+            width: 50px;
+        }
     }
 }
 

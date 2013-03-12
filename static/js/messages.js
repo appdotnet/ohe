@@ -74,6 +74,22 @@
                     element.find('.message-list').off('scroll.message-list');
                 });
 
+                var set_up_iscroll = function () {
+                    if ($('html.touch').length && $('html.no-overflowscrolling').length) {
+                        window.setTimeout(function () {
+                            $('.message-list').on('touchmove', function (e) {
+                                e.preventDefault();
+                            });
+                            $('.message-list').css('overflow-y', 'auto');
+                            var message_list_iscroll = new iScroll($('.message-list')[0]);
+                            message_list_iscroll.scrollTo(0, message_list_iscroll.maxScrollY, 0);
+                            $(window).on('resize', function () {
+                                message_list_iscroll.refresh();
+                            });
+                        }, 200);
+                    }
+                };
+
                 // everything that needs to wait until the channel is fully loaded
                 scope.$watch('channel.messages', function (newVal, oldVal) {
                     if (newVal && newVal.length || oldVal && oldVal.length) {
@@ -82,6 +98,7 @@
                                 scroll_to_bottom();
                             }, 1, false);
                         }
+                        set_up_iscroll();
                     }
                 }, true);
 

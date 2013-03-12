@@ -33,5 +33,9 @@
         return !!(window.File && window.FileList && window.FileReader);
     });
 
+    Modernizr.addTest('overflowscrolling', function(){
+        return Modernizr.testAllProps("overflowScrolling");
+    });
+
     $(window).on('resize', _.debounce(Modernizr.test_media_queries, 50));
 }());
