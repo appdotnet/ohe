@@ -3,22 +3,6 @@
       <ul class='unstyled'>
           <li ng-show='has_older_messages && channel.messages.length >= message_fetch_size' class='see-more message-wrapper'><a href='#' ng-click='loadOlderMessages()'>&#9650; Load Older Messages</a></li>
           <li message-container ng-repeat="message in channel.messages"></li>
-          <!-- <li class='message-wrapper' ng-repeat="message in channel.messages"  data-message-id='{{message.id}}'>
-            <div class="message">
-                <div class='content'>
-                    <div class='media'>
-                        <div>
-                            <a href='{{alpha_url_base}}/{{message.user.username}}'><img class='yui3-u' width=25 height=25 alt='icon of {{ message.user.username }}' ng-src="{{ message.user.avatar_image.url }}?w=25"></a>
-                            <a href='{{alpha_url_base}}/{{message.user.username}}'><strong class='muted yui3-u ellipsize username'>{{ message.user.username}}</strong></a>
-                        </div>
-                    </div>
-                    <div message-body></div>
-                    <div class="yui3-u-1">
-                        <div class='muted ta-right timestamp'>{{ message.created_at | date:'MMM-d h:mma' }}</div>
-                    </div>
-                </div>
-            </div>
-          </li> -->
       </ul>
   </div>
 </div>

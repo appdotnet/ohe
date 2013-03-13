@@ -91,8 +91,20 @@
                 yy: "%d years"
             }
         });
+        var four_weeks_in_secs = 2419200;
+        var one_year_in_secs = 31536000;
         return function (date_string) {
-            return moment(date_string).fromNow(true);
+            var now = new Date();
+            var then = new Date(date_string);
+            var delta = (now - then) / 1000;
+            var m = moment(date_string);
+            if (delta > one_year_in_secs) {
+                return m.format('DD MMM YY');
+            } else if (delta > four_weeks_in_secs) {
+                return m.format('DD MMM');
+            } else {
+                return m.fromNow(true);
+            }
         }
     }).directive('ngBackgroundImage', function(){
         return function(scope, element, attrs){
