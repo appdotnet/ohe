@@ -47,10 +47,10 @@
           </ul>
           <ul class='unstyled ul-horizontal footer-bottom'>
               <li>
-                  <a class='timestamp' title='{{ message.created_at | date:"MMM-d h:mma" }}'>
+                  <span class='timestamp' title='{{ message.created_at | date:"MMM-d h:mma" }}'>
                       <i class='yui3-u icon-time'></i>
                       {{ message.created_at | fromNow }}
-                  </a>
+                  </span>
               </li>
           </ul>
         </div>

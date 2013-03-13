@@ -21,11 +21,11 @@
 
                     // if there is no scrollbar:
                     if (el.get(0).scrollHeight > el.height()) {
-                        bottom_element = el.find('.message').last();
+                        bottom_element = el.find('.message-container').last();
                     } else {
                         // start from the bottom and find the first message with
                         // a visible midpoint
-                        $(el.find('.message').get().reverse()).each(function () {
+                        $(el.find('.message-container').get().reverse()).each(function () {
                             var mel = $(this);
                             var midpoint = mel.offset().top + (mel.height() / 2);
                             if (midpoint > parent_top  && midpoint < parent_bottom) {

@@ -214,18 +214,6 @@ html.omega {
     }
 }
 
-.message {
-    .timestamp {
-        //font-size: 12px;
-    }
-    .username {
-        //width: 100px;
-        html.breakpoint-phone {
-            //width: 50px;
-        }
-    }
-}
-
 .ellipsize {
   overflow: hidden;
   text-overflow: ellipsis;
