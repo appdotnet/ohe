@@ -24,8 +24,10 @@ module.exports = function (grunt) {
           beautify: false
         },
         files: {
-          'static/build/deps.min.js': ['static/angular-ui/angular-ui.min.js', 'static/underscore/underscore-min.js',
-            'static/bootstrap/js/bootstrap.min.js', 'static/select2/select2.min.js', 'static/js/modernizr.js', 'static/iscroll/src/iscroll-lite.js']
+          'static/build/deps.min.js': ['static/angular-ui/angular-ui.min.js',
+          'static/underscore/underscore-min.js', 'static/bootstrap/js/bootstrap.min.js',
+          'static/select2/select2.min.js', 'static/js/modernizr.js',
+          'static/iscroll/src/iscroll-lite.js', 'static/moment/moment.min.js']
         }
       }
     },

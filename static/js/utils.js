@@ -73,5 +73,34 @@
                 return [new_width, new_height];
             }
         };
-    });
+    }).filter('fromNow', function () {
+        moment.lang('en', {
+            relativeTime : {
+                future: "in %s",
+                past:   "%s ago",
+                s:  "%ds",
+                m:  "%dm",
+                mm: "%dm",
+                h:  "%dh",
+                hh: "%dh",
+                d:  "%dd",
+                dd: "%dd",
+                M:  "%d month",
+                MM: "%d months",
+                y:  "%d year",
+                yy: "%d years"
+            }
+        });
+        return function (date_string) {
+            return moment(date_string).fromNow(true);
+        }
+    }).directive('ngBackgroundImage', function(){
+        return function(scope, element, attrs){
+            attrs.$observe('ngBackgroundImage', function(value) {
+                element.css({
+                    'background-image': 'url(' + value +')',
+                });
+            });
+        };
+    })
 })();

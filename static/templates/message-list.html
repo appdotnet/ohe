@@ -2,7 +2,8 @@
   <div class="message-list">
       <ul class='unstyled'>
           <li ng-show='has_older_messages && channel.messages.length >= message_fetch_size' class='see-more message-wrapper'><a href='#' ng-click='loadOlderMessages()'>&#9650; Load Older Messages</a></li>
-          <li class='message-wrapper' ng-repeat="message in channel.messages"  data-message-id='{{message.id}}'>
+          <li message-container ng-repeat="message in channel.messages"></li>
+          <!-- <li class='message-wrapper' ng-repeat="message in channel.messages"  data-message-id='{{message.id}}'>
             <div class="message">
                 <div class='content'>
                     <div class='media'>
@@ -17,7 +18,7 @@
                     </div>
                 </div>
             </div>
-          </li>
+          </li> -->
       </ul>
   </div>
 </div>

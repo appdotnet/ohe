@@ -333,10 +333,10 @@
             replace: true,
             templateUrl: 'auto-create-message-form.html'
         };
-    }).directive('messageBody', ['utils', '$http', function (utils, $http) {
+    }).directive('messageContainer', ['utils', '$http', function (utils, $http) {
         return {
             restrict: 'A',
-            templateUrl: 'message-body.html',
+            templateUrl: 'message-container.html',
             replace: true,
             link: function (scope) {
                 var core_file_attachments = [];
