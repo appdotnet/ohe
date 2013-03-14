@@ -386,3 +386,18 @@ form[name="messageForm"] {
         }
     }
 }
+
+.selected-folder {
+    li {
+        padding: 0 5px;
+    }
+    a {
+        font-size: 14px;
+        color: $grayLight;
+        font-weight: normal;
+        &.active {
+            color: $grayDark;
+            font-weight: bold;
+        }
+    }
+}

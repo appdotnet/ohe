@@ -56,8 +56,13 @@
         $rootScope.alpha_url_base = config && config.getAttribute('data-alpha-url-base');
         $rootScope.window = window;
         $rootScope.channel_list = [];
-        $rootScope.$on('$routeChangeSuccess', function (event, route) {
-            $rootScope.selectedNav = route.$route.selectedNav;
+        $rootScope.muted_channel_list = [];
+        $rootScope.$on('$routeChangeSuccess', function (event, curr_route, prev_route) {
+            if (!curr_route.$route) {
+                $rootScope.selectedNav = 'inbox';
+            } else {
+                $rootScope.selectedNav = curr_route.$route.selectedNav;
+            }
         });
         $rootScope.message_fetch_size = 50;
     }]);

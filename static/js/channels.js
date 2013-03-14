@@ -6,6 +6,10 @@
             controller: 'ChannelListCtrl',
             templateUrl: 'channel-list.html',
             selectedNav: 'inbox'
+        }).when('/muted', {
+            controller: 'ChannelListCtrl',
+            templateUrl: 'channel-list.html',
+            selectedNav: 'muted'
         }).when('/channel/:channel_id', {
             template: '<channel-detail></channel-detail>'
         });
@@ -74,17 +78,24 @@
         };
 
         return Channel;
-    }]).controller('ChannelListCtrl', ['$scope', '$location', 'Channel', 'Message', 'channelState', 'utils', function ($scope, $location, Channel, Message, channelState, utils) {
+    }]).controller('ChannelListCtrl', ['$scope', '$rootScope', '$location', 'Channel', 'Message', 'channelState', 'utils', function ($scope, $rootScope, $location, Channel, Message, channelState, utils) {
         $scope.has_more_channels = true;
         $scope.channel_fetch_size = 5;
 
-        channelState.query_channels($scope.channel_fetch_size, false).then(function () {
+        var watch_notifications = function () {
             $scope.$watch('channel_list', function (newVal, oldVal) {
                 if (newVal !== oldVal) {
                     utils.title_bar_notification();
                 }
             }, true);
-        });
+        }
+        if ($rootScope.selectedNav === 'muted') {
+            channelState.fetch_muted_channels();
+        } else {
+            channelState.query_channels($scope.channel_fetch_size, false).then(function () {
+                watch_notifications();
+            });
+        }
 
         $scope.selectedUsers = [];
         $scope.message = new Message();
@@ -96,10 +107,21 @@
                 }
             });
         };
-
-    }]).controller('ChannelDetailCtrl', ['$scope', '$element', '$timeout', 'channelState', '$routeParams', function ($scope, $element, $timeout, channelState, $routeParams) {
+    }]).controller('ChannelDetailCtrl', ['$scope', '$element', '$timeout', 'channelState', '$routeParams', '$location', function ($scope, $element, $timeout, channelState, $routeParams, $location) {
         channelState.get_channel($routeParams.channel_id, true).then(function (channel) {
             $scope.channel = channel;
         });
+
+        $scope.muteChannel = function () {
+            channelState.mute_channel($scope.channel.id).then(function () {
+                $location.path('/');
+            });
+        };
+
+        $scope.unmuteChannel = function () {
+            channelState.unmute_channel($scope.channel.id).then(function () {
+                $location.path('/');
+            });
+        }
     }]);
 })();

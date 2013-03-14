@@ -35,13 +35,19 @@
         };
 
         var on_channel = function (data, fetch) {
-            var channel = channel_cache[data.id];
-
-            if (channel) {
-                channel.update(data);
+            var channel;
+            // don't add muted channels to the channel cache
+            if (data.you_muted) {
+                channel = new Channel(data);
             } else {
-                channel = channel_cache[data.id] = new Channel(data);
-                $rootScope.channel_list = _.values(channel_cache);
+                channel = channel_cache[data.id];
+
+                if (channel) {
+                    channel.update(data);
+                } else {
+                    channel = channel_cache[data.id] = new Channel(data);
+                    $rootScope.channel_list = _.values(channel_cache);
+                }
             }
 
             if (fetch) {
@@ -54,6 +60,27 @@
         var channel_unsubscribe = function (channel_id) {
             delete channel_cache[channel_id];
             $rootScope.channel_list = _.values(channel_cache);
+        };
+
+        var mute_channel = function (channel_id) {
+            return $http({
+                method: 'POST',
+                url: '/adn-proxy/stream/0/channels/' + channel_id + '/mute'
+            }).then(function () {
+                channel_unsubscribe(channel_id);
+            });
+        };
+
+        var unmute_channel = function (channel_id) {
+            return $http({
+                method: 'DELETE',
+                url: '/adn-proxy/stream/0/channels/' + channel_id + '/mute'
+            }).then(function () {
+                $http({
+                    method: 'POST',
+                    url: '/adn-proxy/stream/0/channels/' + channel_id + '/subscribe'
+                });
+            });
         };
 
         var get_channel = function (channel_id, fetch_messages) {
@@ -104,9 +131,10 @@
                 params.before_id = channel_min_id;
             }
 
+            var url = '/adn-proxy/stream/0/channels';
             return $http({
                 method: 'GET',
-                url: '/adn-proxy/stream/0/channels',
+                url: url,
                 params: params
             }).then(function (response) {
                 channel_min_id = response.data.meta.min_id;
@@ -128,6 +156,31 @@
             });
         };
 
+        var fetch_muted_channels = function () {
+            url = '/adn-proxy/stream/0/users/me/channels/muted';
+
+            var params = {
+                count: 200,
+                include_recent_message: 1,
+                channel_types: 'net.app.core.pm'
+            };
+            return $http({
+                method: 'GET',
+                url: url,
+                params: params
+            }).then(function (response) {
+                var fetched_channels = [];
+                angular.forEach(response.data.data, function (value) {
+                    var channel = new Channel(value, true);
+                    fetched_channels.push(channel);
+                });
+
+                $rootScope.muted_channel_list = _.values(fetched_channels);
+
+                return fetched_channels;
+            });
+        }
+
         var update_marker = function (channel, message) {
             // don't push the marker backwards
             var message_id = utils.comparable_id(message);
@@ -147,7 +200,6 @@
                 });
             }
         };
-
 
         var display_notification = function (msg) {
             if ($rootScope.user_id !== msg.user.id && window.webkitNotifications) {
@@ -229,7 +281,10 @@
         return {
             'get_channel': get_channel,
             'query_channels': query_channels,
-            'update_marker': update_marker
+            'fetch_muted_channels': fetch_muted_channels,
+            'update_marker': update_marker,
+            'mute_channel': mute_channel,
+            'unmute_channel': unmute_channel
         };
     }]);
 })();

@@ -1,9 +1,15 @@
 <div class="container">
+  <div class='selected-folder'>
+    <ul class='unstyled ul-horizontal'>
+        <li class='inbox'><a ng-class="{'active':selectedNav == 'inbox'}" href='/'>Inbox</a></li>
+        <li class='muted'><a ng-class="{'active':selectedNav == 'muted'}" href='/muted'>Muted</a></li>
+    </ul>
+  </div>
   <div class="channel-list">
     <div class="row-fluid">
       <div class='ul-container yui3-u-1'>
           <ul class='unstyled'>
-              <li ng-repeat="channel in channel_list | orderBy:['-has_unread', '-recent_message.created_at']">
+              <li ng-repeat="channel in (selectedNav == 'inbox' && channel_list || muted_channel_list) | orderBy:['-has_unread', '-recent_message.created_at']">
                   <a href="{{ channel.detail_url() }}">
                       <div class="row {{channel.has_unread && 'unread'}} channel">
                           <div class='pull-left img-block'>

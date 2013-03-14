@@ -110,6 +110,7 @@ if (connect_to_stream) {
 }
 
 app.get('/', routes.index);
+app.get('/muted', routes.index);
 app.get('/channel/:channel_id', routes.index);
 app.get('/return', routes.oauth_return);
 app.get('/logout', routes.logout);
