@@ -1,6 +1,7 @@
 <div>
   <ul class="nav">
-    <li class='logged-in-block'><a href="https://alpha.app.net">Alpha</a></li>
+    <li class='logged-in-block' ng-class="{'active': (selectedNav == 'inbox' || selectedNav == 'muted')}"><a href="/">Messages</a></li>
+    <li class='logged-in-block'><a href="{{alpha_url_base}}">Alpha</a></li>
     <li class="logged-in-block dropdown open-caret">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria_labelledby>
         <span class='logged-in-as'>Logged in as</span>
