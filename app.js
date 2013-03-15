@@ -109,11 +109,16 @@ if (connect_to_stream) {
     });
 }
 
-app.get('/', routes.index);
-app.get('/muted', routes.index);
-app.get('/channel/:channel_id', routes.index);
-app.get('/return', routes.oauth_return);
-app.get('/logout', routes.logout);
+var noCache = function (req, resp, next) {
+  resp.setHeader('Cache-Control', 'no-cache, no-store, max-age=0');
+  next();
+}
+
+app.get('/', noCache, routes.index);
+app.get('/muted', noCache, routes.index);
+app.get('/channel/:channel_id', noCache, routes.index);
+app.get('/return', noCache, routes.oauth_return);
+app.get('/logout', noCache, routes.logout);
 app.get('/healthcheck', routes.healthcheck);
 app.get('/camofy-url', routes.camofy_url);
 app.get('/file-url', routes.file_url);
