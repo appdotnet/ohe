@@ -68,19 +68,23 @@
                 url: '/adn-proxy/stream/0/channels/' + channel_id + '/mute'
             }).then(function () {
                 channel_unsubscribe(channel_id);
+                // clear it from the channel cache, if it was there
+                delete channel_cache[channel_id];
+                $rootScope.channel_list = _.values(channel_cache);
             });
         };
 
         var unmute_channel = function (channel_id) {
-            return $http({
+            var d1 = $http({
                 method: 'DELETE',
                 url: '/adn-proxy/stream/0/channels/' + channel_id + '/mute'
-            }).then(function () {
-                $http({
-                    method: 'POST',
-                    url: '/adn-proxy/stream/0/channels/' + channel_id + '/subscribe'
-                });
             });
+            var d2 = $http({
+                method: 'POST',
+                url: '/adn-proxy/stream/0/channels/' + channel_id + '/subscribe'
+            });
+
+            return $q.all(d1, d2);
         };
 
         var get_channel = function (channel_id, fetch_messages) {

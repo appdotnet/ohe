@@ -4,7 +4,7 @@
       <div class="channel-detail">
         <div class='channel-actions'>
           <ul class='unstyled ul-horizontal'>
-            <li ng-switch on="channel.you_muted">
+            <li ng-switch on="channel.you_muted || false">
               <a ng-switch-when="false" ng-click="muteChannel()" class='muted'>
                 <i class='icon-minus-sign'></i>
                 Mute this channel

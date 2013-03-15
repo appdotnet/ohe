@@ -119,7 +119,9 @@
         };
 
         $scope.unmuteChannel = function () {
-            channelState.unmute_channel($scope.channel.id).then(function () {
+            var channel_id = $scope.channel.id;
+            channelState.unmute_channel(channel_id).then(function () {
+                channelState.get_channel(channel_id, false);
                 $location.path('/');
             });
         }
