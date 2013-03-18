@@ -169,6 +169,20 @@ html.omega {
             }
         }
     }
+
+    .show-on-hover {
+        opacity: 0;
+        html.breakpoint-phone &,
+        html.breakpoint-tablet & {
+            opacity: 1;
+        }
+    }
+
+    &:hover .show-on-hover {
+        opacity: 1;
+        @include transition(opacity 0.1s linear);
+    }
+
     html.breakpoint-phone & {
         .message-footer {
             font-size: 9px;

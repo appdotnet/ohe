@@ -37,7 +37,6 @@
                 <div class='file' ng-repeat="file in attachment">
                   <a href='/file-url?channel_id={{channel.id}}&message_id={{message.id}}&file_id={{file.file_id}}'
                       data-file-id='{{file.file_id}}'
-                      ng-click="get_file_url(message.id, file.file_id)"
                       target='_blank'>
                       <i class='icon-file'></i>
                       {{file.name}} ({{file.friendly_size}})
@@ -51,6 +50,12 @@
                       <i class='yui3-u icon-time'></i>
                       {{ message.created_at | fromNow }}
                   </span>
+              </li>
+              <li class='show-on-hover pull-right yui3-u' ng-show="message.user.id == user_id">
+                <a ng-click="deleteMessage(message)">
+                    <i class='icon-remove'></i>
+                    Delete
+                </a>
               </li>
           </ul>
         </div>

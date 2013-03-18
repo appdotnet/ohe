@@ -245,22 +245,28 @@
             if (obj.meta.type === 'message') {
                 channel = channel_cache[obj.data.channel_id];
                 if (channel) {
-                    var msg = new Message(obj.data);
-                    if (!channel.recent_message || utils.comparable_id(channel.recent_message) < utils.comparable_id(msg)) {
-                        channel.recent_message = msg;
-                    }
-
-                    if (channel.marker) {
-                        channel.has_unread = utils.comparable_id(channel.recent_message) > utils.comparable_id(channel.marker);
+                    if (obj.meta.is_deleted) {
+                        channel.messages = _.reject(channel.messages, function (m) {
+                            return m.id === obj.data.id;
+                        });
                     } else {
-                        channel.has_unread = true;
-                    }
-
-                    if (!channel.messages || utils.comparable_id(_.last(channel.messages)) < utils.comparable_id(msg)) {
-                        if (channel.messages && channel.messages.length) {
-                            channel.messages.push(msg);
+                        var msg = new Message(obj.data);
+                        if (!channel.recent_message || utils.comparable_id(channel.recent_message) < utils.comparable_id(msg)) {
+                            channel.recent_message = msg;
                         }
-                        display_notification(msg);
+
+                        if (channel.marker) {
+                            channel.has_unread = utils.comparable_id(channel.recent_message) > utils.comparable_id(channel.marker);
+                        } else {
+                            channel.has_unread = true;
+                        }
+
+                        if (!channel.messages || utils.comparable_id(_.last(channel.messages)) < utils.comparable_id(msg)) {
+                            if (channel.messages && channel.messages.length) {
+                                channel.messages.push(msg);
+                            }
+                            display_notification(msg);
+                        }
                     }
                 }
             }

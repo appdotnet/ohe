@@ -154,6 +154,16 @@
                         }, 1);
                     });
                 };
+
+                scope.deleteMessage = function (msg) {
+                    var msg_id = msg.id;
+                    msg.delete().then(function () {
+                        var new_messages_list = _.reject(scope.channel.messages, function (m) {
+                            return m.id === msg_id;
+                        });
+                        scope.channel.messages = new_messages_list;
+                    });
+                }
             }
         };
     }]).directive('fileUpload', [function () {
@@ -471,6 +481,15 @@
                 return response.data.data.channel_id;
             });
         };
+
+        Message.prototype.delete = function () {
+            var self = this;
+
+            return $http({
+                method: 'DELETE',
+                url: '/adn-proxy/stream/0/channels/' + self.channel_id + '/messages/' + self.id
+            });
+        }
 
         return Message;
     }]).controller('MessageFormCtrl', ['$scope', '$element', '$routeParams', 'Message', '$location',
