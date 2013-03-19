@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('channelState', ['channels', 'messages', 'users', 'socket', 'utils'])
-    .factory('channelState', ['$http', '$rootScope', '$q', 'Socket', 'User', 'Channel', 'Message', 'utils', function ($http, $rootScope, $q, Socket, User, Channel, Message, utils) {
+    .factory('channelState', ['$http', '$rootScope', '$q', '$routeParams', 'Socket', 'User', 'Channel', 'Message', 'utils', function ($http, $rootScope, $q, $routeParams, Socket, User, Channel, Message, utils) {
         var channel_cache = {};
         var channels_queried = false;
         var channel_min_id;
@@ -262,8 +262,12 @@
                         }
 
                         if (!channel.messages || utils.comparable_id(_.last(channel.messages)) < utils.comparable_id(msg)) {
-                            if (channel.messages && channel.messages.length) {
-                                channel.messages.push(msg);
+                            if (channel.messages) {
+                                // this is a hack so that you can still send messages into an empty channel (eg all messages deleted)
+                                // need to fix this, channel.messages.length shouldn't be used to tell whether you're in a channel or in the main window
+                                if (channel.messages.length || $routeParams.channel_id) {
+                                    channel.messages.push(msg);
+                                }
                             }
                             display_notification(msg);
                         }
