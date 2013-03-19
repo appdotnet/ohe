@@ -261,14 +261,11 @@
                             channel.has_unread = true;
                         }
 
-                        var last_id = utils.comparable_id(_.last(channel.messages));
-                        var current_id = utils.comparable_id(msg);
-                        if (!channel.messages) {
+                        if (!channel.messages || utils.comparable_id(_.last(channel.messages)) < utils.comparable_id(msg)) {
+                            if (channel.messages && channel.messages.length) {
+                                channel.messages.push(msg);
+                            }
                             display_notification(msg);
-                            // channel will be created elsewhere with this message
-                        } else if (current_id > last_id || channel.messages.length === 0) {
-                            display_notification(msg);
-                            channel.messages.push(msg);
                         }
                     }
                 }
