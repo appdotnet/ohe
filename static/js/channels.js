@@ -44,7 +44,8 @@
         };
 
         Channel.prototype.get_visible_user = function () {
-            if (this.recent_message && this.recent_message.user.id !== $rootScope.user_id) {
+            if (this.recent_message && this.recent_message.user &&
+                this.recent_message.user.id !== $rootScope.user_id) {
                 return this.recent_message.user;
             }
 
@@ -63,7 +64,8 @@
 
             // if recent_message is supplied, have that user name at the beginning of the list
             var recent_message = this.recent_message;
-            if (recent_message && recent_message.user.id !== $rootScope.user_id) {
+            if (recent_message && recent_message.user &&
+                recent_message.user.id !== $rootScope.user_id) {
                 users = _.reject(users, function (sub) {
                     return sub.id === recent_message.user.id;
                 });
@@ -74,7 +76,11 @@
         };
 
         Channel.prototype.get_user_ids = function () {
-            return _.union([this.owner.id], this.writers.user_ids);
+            if (this.owner) {
+                return _.union([this.owner.id], this.writers.user_ids);
+            } else {
+                return this.writers.user_ids;
+            }
         };
 
         return Channel;

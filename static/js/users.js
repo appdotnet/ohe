@@ -22,7 +22,10 @@
         User._pending = [];
 
         User.update = function (user) {
-            var cached_user = User._cache[user.id];
+            if (!user) {
+                return;
+            }
+            var cached_user = User._cache[user.id || 0];
             if (cached_user) {
                 User._pending = _.without(User._pending, cached_user);
                 return cached_user.complete(user);
