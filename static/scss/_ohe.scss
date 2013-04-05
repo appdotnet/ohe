@@ -7,8 +7,10 @@ html.omega {
     .navbar .nav .active > a {
         background-color: $grayHighlight;
     }
-    body {
+    body, input[type=text], textarea {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    body {
         font-size: 14px;
     }
 }
