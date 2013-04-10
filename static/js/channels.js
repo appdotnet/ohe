@@ -10,6 +10,9 @@
             controller: 'ChannelListCtrl',
             templateUrl: 'channel-list.html',
             selectedNav: 'muted'
+        }).when('/new-message', {
+            controller: 'NewMessageCtrl',
+            templateUrl: 'new-message.html'
         }).when('/channel/:channel_id', {
             template: '<channel-detail></channel-detail>'
         });
@@ -94,7 +97,7 @@
                     utils.title_bar_notification();
                 }
             }, true);
-        }
+        };
         if ($rootScope.selectedNav === 'muted') {
             channelState.fetch_muted_channels();
         } else {
@@ -130,6 +133,16 @@
                 channelState.get_channel(channel_id, false);
                 $location.path('/');
             });
-        }
+        };
+
+        $scope.getRoster = function () {
+            if ($scope.channel) {
+                return $scope.channel.get_users(true);
+            }
+        };
+    }]).controller('NewMessageCtrl', ['User', '$rootScope', '$scope', function (User, $rootScope, $scope) {
+        $scope.getRoster = function () {
+            return $scope.selectedUsers;
+        };
     }]);
 })();

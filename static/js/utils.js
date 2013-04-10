@@ -1,4 +1,4 @@
-/*globals angular */
+/*globals angular,moment */
 
 (function () {
     angular.module('utils', []).factory('utils', function () {
@@ -105,14 +105,14 @@
             } else {
                 return m.fromNow(true);
             }
-        }
-    }).directive('ngBackgroundImage', function(){
-        return function(scope, element, attrs){
-            attrs.$observe('ngBackgroundImage', function(value) {
+        };
+    }).directive('ngBackgroundImage', function () {
+        return function (scope, element, attrs) {
+            attrs.$observe('ngBackgroundImage', function (value) {
                 element.css({
-                    'background-image': 'url(' + value +')',
+                    'background-image': 'url(' + value + ')'
                 });
             });
         };
-    })
+    });
 })();

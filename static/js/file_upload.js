@@ -1,3 +1,4 @@
+/*global Omega:true */
 (function () {
     (function addXhrProgressEvent($) {
         var originalXhr = $.ajaxSettings.xhr;

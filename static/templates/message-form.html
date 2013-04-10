@@ -2,7 +2,7 @@
   <div class="span12">
     <form name="messageForm" class="form-inline message-form">
       <div file-upload></div>
-      <input type="text" class='mg-b-10'name="text" autocomplete="off" ng-model="message.text">
+      <input type="text" class='mg-b-10 input-block-level'name="text" autocomplete="off" ng-model="message.text">
       <span class='yui3-u-1 actions'>
         <span ng-class="{'text-error': message.text.length > 256}">{{ 256 - message.text.length}}</span>
         <span class='pull-right'>

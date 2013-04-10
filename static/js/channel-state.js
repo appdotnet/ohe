@@ -161,7 +161,7 @@
         };
 
         var fetch_muted_channels = function () {
-            url = '/adn-proxy/stream/0/users/me/channels/muted';
+            var url = '/adn-proxy/stream/0/users/me/channels/muted';
 
             var params = {
                 count: 200,
@@ -183,7 +183,7 @@
 
                 return fetched_channels;
             });
-        }
+        };
 
         var update_marker = function (channel, message) {
             // don't push the marker backwards

@@ -1,4 +1,4 @@
-/*globals angular */
+/*globals angular,iScroll,Omega */
 
 (function () {
     angular.module('messages', ['users', 'utils']).directive('messageList',
@@ -163,7 +163,7 @@
                         });
                         scope.channel.messages = new_messages_list;
                     });
-                }
+                };
             }
         };
     }]).directive('fileUpload', [function () {
@@ -336,13 +336,6 @@
             replace: true,
             templateUrl: 'message-form.html'
         };
-    }).directive('autoCreateMessageForm', function () {
-        return {
-            restrict: 'E',
-            controller: 'MessageFormCtrl',
-            replace: true,
-            templateUrl: 'auto-create-message-form.html'
-        };
     }).directive('messageContainer', ['utils', '$http', function (utils, $http) {
         return {
             restrict: 'A',
@@ -355,7 +348,7 @@
                 _.each(scope.message.annotations, function (annotation) {
                     if (annotation.type === 'net.app.core.attachments') {
                         var file_list = annotation.value['net.app.core.file_list'];
-                        _.map(file_list, function(file) {
+                        _.map(file_list, function (file) {
                             var friendly_size = file.size + "B";
                             if (file.size >= 1e9) {
                                 friendly_size = (file.size / 1e9).toFixed(1) + "G";
@@ -385,7 +378,7 @@
                                         params: {
                                             'url': value.thumbnail_url
                                         }
-                                    }).then(function(response) {
+                                    }).then(function (response) {
                                         value.secure_thumbnail_url = response.data;
                                         oembed_images.push(value);
                                     });
@@ -456,11 +449,11 @@
                     text: self.text,
                     annotations: self.annotations || []
                 }
-            }).then(function doneCallback (response) {
+            }).then(function doneCallback(response) {
                 self.update(response.data.data);
 
                 return self;
-            }, function failCallback (response) {
+            }, function failCallback(response) {
                 // TODO: some kind of notification
                 console.log(response.data.meta.error_message);
             });
@@ -489,7 +482,7 @@
                 method: 'DELETE',
                 url: '/adn-proxy/stream/0/channels/' + self.channel_id + '/messages/' + self.id
             });
-        }
+        };
 
         return Message;
     }]).controller('MessageFormCtrl', ['$scope', '$element', '$routeParams', 'Message', '$location',
@@ -506,30 +499,26 @@
             // create annotations if there's a file attached
             message.annotations = $scope.attachment && $scope.attachment.annotations || [];
 
-            // preemptively empty the box
-            $scope.$emit('submit_message');
-            $scope.message = new Message();
-            $element.find('input').focus();
 
-            if ($scope.channel) {
-                message.channel_id = $scope.channel.id;
-                message.create();
-            }
-        };
+            var in_existing_channel = !!$routeParams.channel_id;
+            if (in_existing_channel) {
+                // preemptively empty the box
+                $scope.$emit('submit_message');
+                $scope.message = new Message();
+                $element.find('input').focus();
 
-        $scope.createUser = function () {
-            if ($scope.upload_in_progress) {
-                return;
-            }
-            var message = $scope.message;
-            // create annotations if there's a file attached
-            message.annotations = $scope.attachment && $scope.attachment.annotations || [];
-            message.destinations = _.pluck($scope.selectedUsers, 'id');
-            message.auto_create().then(function (channel_id) {
-                if (channel_id) {
-                    $location.path('/channel/' + channel_id);
+                if ($scope.channel) {
+                    message.channel_id = $scope.channel.id;
+                    message.create();
                 }
-            });
+            } else {
+                message.destinations = _.pluck($scope.selectedUsers, 'id');
+                message.auto_create().then(function (channel_id) {
+                    if (channel_id) {
+                        $location.path('/channel/' + channel_id);
+                    }
+                });
+            }
         };
 
         $scope.show_file_upload_button = function () {

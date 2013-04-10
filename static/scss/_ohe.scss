@@ -65,6 +65,25 @@ html.omega {
     background-size: $avatar_size $avatar_size;
 }
 
+.username-select {
+    position: relative;
+    label {
+        position: absolute;
+        z-index: 1;
+        left: 15px;
+        font-size: 15px;
+        margin-top: 8px;
+    }
+    .select2-choices {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 40px;
+    }
+    .select2-container-multi .select2-choices .select2-search-field input {
+        margin-top: 2px;
+    }
+}
+
 .message-container {
     @include media-block(53px, 15px, 15px);
     padding: 15px 15px 5px 15px;
@@ -259,7 +278,7 @@ html.omega {
 .channel-list {
     max-width: 950px;
     ul {
-        padding-right: 10px;
+        padding-right: 6px;
     }
 
     li {
@@ -344,18 +363,6 @@ html.omega {
     top: 0;
     left: 0;
 }
-.auto-create {
-    max-width: 600px;
-    .file-upload {
-        margin-top: 15px;
-    }
-}
-
-form[name="messageForm"] {
-    input {
-        width: 95%;
-    }
-}
 
 .form-horizontal textarea {
     height: auto;
@@ -367,7 +374,7 @@ form[name="messageForm"] {
     }
 }
 
-.message-form, .auto-create-message-form {
+.message-form {
     .send-button {
         width: 70px;
         font-size: 14px;
@@ -403,7 +410,7 @@ form[name="messageForm"] {
     }
 }
 
-.selected-folder {
+.channel-list-menu {
     font-family: $sansFontFamily;
     li {
         padding: 0 5px;
@@ -415,6 +422,10 @@ form[name="messageForm"] {
         &.active {
             color: $grayDark;
             font-weight: bold;
+        }
+        &.btn {
+            text-transform: none;
+            color: $white;
         }
     }
 }
