@@ -282,19 +282,18 @@ html.omega {
     }
 
     li {
-        border-width: 1px 1px 0 1px;
+        border-width: 1px 1px 0;
         position: relative;
         border-color: $grayLighter;
         border-style: solid;
-        &:last-child {
-            border-width: 1px 0 0 0;
+        &.last {
+            border-width: 1px;
         }
         &.show-older-channels {
             font-family: $sansFontFamily;
             font-size: 20px;
             padding: 15px 0;
-            border-left: none;
-            border-right: none;
+            border: none;
         }
     }
     .channel {
@@ -411,6 +410,7 @@ html.omega {
 }
 
 .channel-list-menu {
+    max-width: 950px;
     font-family: $sansFontFamily;
     li {
         padding: 0 5px;
