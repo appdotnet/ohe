@@ -485,11 +485,17 @@
         };
 
         return Message;
-    }]).controller('MessageFormCtrl', ['$scope', '$element', '$routeParams', 'Message', '$location',
-    function ($scope, $element, $routeParams, Message, $location) {
+    }]).controller('MessageFormCtrl', ['$scope', '$element', '$routeParams', 'Message',
+        '$location', '$timeout',
+    function ($scope, $element, $routeParams, Message, $location, $timeout) {
         $scope.message = new Message();
 
         $element.find('input[name="text"]').focus();
+
+        $timeout(function () {
+            $('input.select2-input').focus();
+        }, 1, false);
+
 
         $scope.submitMessage = function () {
             if ($scope.upload_in_progress) {
