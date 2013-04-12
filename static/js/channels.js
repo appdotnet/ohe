@@ -89,7 +89,7 @@
         return Channel;
     }]).controller('ChannelListCtrl', ['$scope', '$rootScope', '$location', 'Channel', 'Message', 'channelState', 'utils', function ($scope, $rootScope, $location, Channel, Message, channelState, utils) {
         $scope.has_more_channels = true;
-        $scope.channel_fetch_size = 5;
+        $scope.channel_fetch_size = 10;
 
         var watch_notifications = function () {
             $scope.$watch('channel_list', function (newVal, oldVal) {
