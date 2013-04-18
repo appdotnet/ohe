@@ -87,7 +87,7 @@
         };
 
         return Channel;
-    }]).controller('ChannelListCtrl', ['$scope', '$rootScope', '$location', 'Channel', 'Message', 'channelState', 'utils', function ($scope, $rootScope, $location, Channel, Message, channelState, utils) {
+    }]).controller('ChannelListCtrl', ['$scope', '$rootScope', '$location', 'Channel', 'Message', 'User', 'channelState', 'utils', function ($scope, $rootScope, $location, Channel, Message, User, channelState, utils) {
         $scope.has_more_channels = true;
         $scope.channel_fetch_size = 10;
 
@@ -115,6 +115,16 @@
                     $scope.has_more_channels = false;
                 }
             });
+        };
+
+        $scope.getRoster = function () {
+            var recent_user_ids = [];
+            angular.forEach($rootScope.channel_list, function (channel) {
+                recent_user_ids.push.apply(recent_user_ids, _.map(channel.writers.user_ids, function (elem) {
+                    return parseInt(elem, 10);
+                }));
+            });
+            return User.bulk_get(recent_user_ids);
         };
     }]).controller('ChannelDetailCtrl', ['$scope', '$element', '$timeout', 'channelState', '$routeParams', '$location', function ($scope, $element, $timeout, channelState, $routeParams, $location) {
         channelState.get_channel($routeParams.channel_id, true).then(function (channel) {

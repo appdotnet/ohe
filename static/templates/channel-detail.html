@@ -1,21 +1,21 @@
 <div class='container'>
   <div class='channel-detail-wrapper yui3-g'>
+    <div class='channel-actions yui3-u-1'>
+      <ul class='unstyled ul-horizontal'>
+        <li ng-switch on="channel.you_muted || false">
+          <a ng-switch-when="false" ng-click="muteChannel()" class='muted'>
+            <i class='icon-minus-sign'></i>
+            Mute this channel
+          </a>
+          <a ng-switch-when="true" ng-click="unmuteChannel()" class='muted'>
+            <i class='icon-plus-sign'></i>
+            Unmute this channel and resubscribe
+          </a>
+        </li>
+      </ul>
+    </div>
     <div class='yui3-u-2-3 m-yui3-u-1'>
       <div class="channel-detail">
-        <div class='channel-actions'>
-          <ul class='unstyled ul-horizontal'>
-            <li ng-switch on="channel.you_muted || false">
-              <a ng-switch-when="false" ng-click="muteChannel()" class='muted'>
-                <i class='icon-minus-sign'></i>
-                Mute this channel
-              </a>
-              <a ng-switch-when="true" ng-click="unmuteChannel()" class='muted'>
-                <i class='icon-plus-sign'></i>
-                Unmute this channel and resubscribe
-              </a>
-            </li>
-          </ul>
-        </div>
         <message-list></message-list>
         <message-form ng-hide='channel.you_muted'></message-form>
       </div>

@@ -78,8 +78,48 @@
                 }).then(callback);
             }
         };
+        return User;
+    }]).directive('userSearch', ['User', '$routeParams', '$timeout', '$rootScope', function (User, $routeParams, $timeout, $rootScope) {
+        return {
+            restrict: 'E',
+            controller: 'UserSearchCtrl',
+            templateUrl: 'user-search.html',
+            replace: true,
+            link: function (scope, element) {
+                // push this up the stack
+                scope.$watch('selectedUsers', function (newValue, oldValue) {
+                    scope.$parent.selectedUsers = newValue;
+                });
+                scope.selectedUsers = undefined;
+                var in_existing_channel = !!$routeParams.channel_id;
+                if (!in_existing_channel) {
+                    var userid = $routeParams.to;
+                    if (userid) {
+                        var users = User.bulk_get([parseInt(userid, 10)], true);
+                        // select2 doesn't seem to dynamically update, so sometimes
+                        // the username will say 'undefined' and not refresh
+                        // need to make the User stuff return deferreds
 
-        User.get_search_select2 = function (include_users) {
+                        // HACK: poll until the users are loaded (eg. the username property is loaded)
+                        var interval_count = 100;
+                        var interval = setInterval(function () {
+                            interval_count -= 1;
+                            var users_loaded = _.every(_.values(users), function (user) {
+                                return !!user.username;
+                            });
+                            if (users_loaded || interval_count <= 0) {
+                                scope.$apply(scope.selectedUsers = _.values(users));
+                                $('input[name="text"]').focus();
+                                clearInterval(interval);
+                            }
+                        }, 50);
+                    }
+                }
+            }
+        };
+    }]).controller('UserSearchCtrl', ['$scope', 'User', function ($scope, User) {
+        // autocomplete
+        var get_search_select2 = function (include_users) {
             return {
                 multiple: true,
                 minimumInputLength: 1,
@@ -112,16 +152,7 @@
                 }
             };
         };
-
-        return User;
-    }]).controller('UserSearchCtrl', ['$scope', 'User', function ($scope, User) {
-        // autocomplete
-        $scope.usernameSelect = User.get_search_select2();
-
-        // push this up the stack
-        $scope.$watch('selectedUsers', function (newValue, oldValue) {
-            $scope.$parent.selectedUsers = newValue;
-        });
+        $scope.usernameSelect = get_search_select2();
     }]);
 })();
 

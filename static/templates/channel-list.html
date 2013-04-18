@@ -1,12 +1,14 @@
-<div class="container">
-  <div class='channel-list-menu'>
-    <ul class='unstyled ul-horizontal'>
-        <li class='inbox'><a ng-class="{'active':selectedNav == 'inbox'}" href='/'>Inbox</a></li>
-        <li class='muted'><a ng-class="{'active':selectedNav == 'muted'}" href='/muted'>Muted</a></li>
-        <li class='new-message pull-right'><a class='btn btn-mini btn-primary' href='/new-message'><i class='icon-plus'></i> New Message</a></li>
-    </ul>
+<div class="container yui3-g">
+  <div class='channel-list-menu yui3-u-1'>
+    <div class='yui3-u-2-3'>
+      <ul class='unstyled ul-horizontal'>
+          <li class='inbox'><a ng-class="{'active':selectedNav == 'inbox'}" href='/'>Inbox</a></li>
+          <li class='muted'><a ng-class="{'active':selectedNav == 'muted'}" href='/muted'>Muted</a></li>
+          <li class='new-message pull-right'><a class='btn btn-mini btn-primary' href='/new-message'><i class='icon-plus'></i> New Message</a></li>
+      </ul>
+    </div>
   </div>
-  <div class="channel-list">
+  <div class="channel-list yui3-u-2-3 m-yui3-u-1">
     <div class="row-fluid">
       <div class='ul-container yui3-u-1'>
           <ul class='unstyled'>
@@ -41,6 +43,12 @@
               <div class='no-channels' ng-show="!channel_list || channel_list.length == 0">No messages yet</div>
           </ul>
       </div>
+    </div>
+  </div>
+  <div class="yui3-u-1-3 m-yui3-u-1">
+    <div class='roster-container'>
+      <h5 class='mg-b-10'>Recently Messaged</h5>
+      <roster></roster>
     </div>
   </div>
 </div>

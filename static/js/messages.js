@@ -505,7 +505,6 @@
             // create annotations if there's a file attached
             message.annotations = $scope.attachment && $scope.attachment.annotations || [];
 
-
             var in_existing_channel = !!$routeParams.channel_id;
             if (in_existing_channel) {
                 // preemptively empty the box
@@ -521,7 +520,7 @@
                 message.destinations = _.pluck($scope.selectedUsers, 'id');
                 message.auto_create().then(function (channel_id) {
                     if (channel_id) {
-                        $location.path('/channel/' + channel_id);
+                        $location.path('/channel/' + channel_id).search('to', null);
                     }
                 });
             }

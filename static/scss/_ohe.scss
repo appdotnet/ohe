@@ -321,6 +321,13 @@ html.omega {
 
 .roster {
     overflow-y: scroll;
+    .username {
+        margin-left: 5px;
+    }
+}
+
+.roster-container {
+    margin-left: 5px;
 }
 
 .alpha-link {
