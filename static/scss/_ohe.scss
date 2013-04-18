@@ -317,6 +317,15 @@ html.omega {
 
 .roster-member {
   margin-bottom: 5px;
+  .profile-link {
+      color: $grayLighter;
+      margin-left: 7px;
+  }
+  html.breakpoint-widescreen &:hover {
+      .profile-link {
+          display: inline-block;
+      }
+  }
 }
 
 .roster {
