@@ -330,6 +330,9 @@ html.omega {
 
 .roster {
     overflow-y: scroll;
+    html.brekapoint-phone & {
+        overflow-y: visible;
+    }
     .username {
         margin-left: 5px;
     }

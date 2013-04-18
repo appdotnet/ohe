@@ -12,6 +12,14 @@ body {
     -webkit-font-smoothing: antialiased;
     @include selection($white, lighten($themeSubText, 25%));
 
+    .subpixel {
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
+
+    &.purple-wrapper .wrapper {
+        background-color: $purpleDark;
+    }
+
     h1, h2, h3, h4, h5, h6 {
         text-transform: uppercase;
         &.no-text-transform {
@@ -132,7 +140,7 @@ body {
 
     .modal {
         border: 1px solid $grayLighter;
-        @include box-shadow(0 2px 0 3000px rgba(0, 0, 0, 0.1));
+        @include box-shadow(0 2px 0 3000px rgba(0, 0, 0, 0.5));
         @include border-radius(0);
         .modal-header {
             strong {
@@ -145,6 +153,9 @@ body {
             background-color: $bodyBackground;
             @include box-shadow(none);
         }
+        .btn + .btn {
+          margin-left: 8px;
+        }
     }
 
     .muted {
@@ -154,6 +165,9 @@ body {
     .note-style {
         @extend .muted;
         font-style: italic;
+        &.dark {
+            color: $themeAccent;
+        }
     }
 
     .close {
@@ -164,6 +178,30 @@ body {
         @include opacity(30);
     }
 
+    .dropdown-menu {
+        border: 1px solid $grayLighter;
+        background-color: $white;
+        color: darken($themeSubText, 10%);
+        @include box-shadow(0 2px 0 rgba(0, 0, 0, 0.05));
+        @include border-radius(0);
+        li {
+            a {
+                display: block;
+                border-bottom: 1px solid $grayLightest;
+                text-transform: none;
+                font-family: $sansFontFamily;
+                font-size: 13px;
+                color: darken($themeSubText, 20%);
+                &:hover {
+                    color: darken($themeSubText, 20%);
+                }
+            }
+            &:last-child a {
+                border-bottom: none;
+            }
+        }
+    }
+
     .transition-color,
     .transition-color i,
     .transition-color strong {
@@ -171,6 +209,10 @@ body {
         &:hover, &:hover i, &:hover strong {
             @include transition(color 0.15s linear);
         }
+    }
+
+    [class^="icon-"], [class*=" icon-"] {
+        -webkit-font-smoothing: antialiased;
     }
 }
 
@@ -246,7 +288,10 @@ html.breakpoint-phone {
         background-color: $purpleDark;
         color: $white;
     }
-    &.top-block {
+    &.inset-block {
+        @include box-shadow(inset 0 2px 0 rgba(0, 0, 0, 0.05));
+    }
+    &.top-block, &.new-top-block {
         margin-top: -30px;
         border-top: none;
         html.breakpoint-tablet &,
@@ -277,508 +322,7 @@ html.breakpoint-phone {
     padding: 30px 0 30px 0;
 }
 
-.nav.header, .site-footer {
-    margin-bottom: 30px;
-    width: 100%;
-    min-width: 1152px;
-    background-color: $white;
-    border-bottom: 1px solid $grayLighter;
-    html.breakpoint-phone &,
-    html.breakpoint-tablet & {
-        min-width: 100%;
-        margin-bottom: 35px;
-    }
-}
-
-.navbar, .nav.nav-tabs {
-    hr {
-        margin: 4px auto 0 auto;
-        width: 22px;
-        @include transition(#{border-top-color 0.2s linear, width 0.3s linear});
-    }
-    a {
-        @include transition(background-color 0.2s linear);
-        &:hover, &:hover .logged-in-username, &:hover .notice-link {
-            @include transition(background-color 0.2s linear);
-            hr {
-                width: 36px;
-                border-top-color: $themeSubText;
-                @include transition(#{border-top-color 0.15s linear, width 0.15s linear});
-            }
-        }
-    }
-}
-
-.fake-link.hover {
-    cursor: pointer;
-}
-
-.nav.header {
-    html.breakpoint-phone & {
-        .m-nav-toggle {
-            display: inline-block;
-            margin: 9px 10px 0 0;
-            padding: 3px 6px 2px 6px;
-            border: 1px solid $grayLighter;
-            background-color: $white;
-            line-height: normal;
-            color: $themeSubText;
-            &:active {
-                background-color: $themeSolid;
-            }
-        }
-        &.no-margin-bottom {
-            margin-bottom: 0;
-        }
-    }
-    .logo {
-        display: block;
-        width: 152px;
-        height: 68px;
-        margin: 5px 0 5px 0;
-        background-image: url(/static/makana/images/appdotnet-alpha.png);
-        background-size: 200px 68px;
-        background-repeat: no-repeat;
-        @include transition(opacity 0.2s linear);
-        html.breakpoint-retina & {
-            background-image: url(/static/makana/images/appdotnet-alpha@2x.png);
-        }
-        &:hover {
-            @include opacity(80);
-            @include transition(opacity 0.15s linear);
-        }
-        html.breakpoint-phone & {
-            position: relative;
-            background-size: 100px 34px;
-            height: 34px;
-            width: 20px;
-        }
-    }
-    .navbar {
-        margin: 0;
-        margin-right: 6px;
-        html.breakpoint-tablet & {
-            margin-right: 0;
-        }
-        .nav {
-            $nav_block_width: 195px;
-            $nav_block_width_tablet: 190px;
-            margin: 0;
-            li {
-                position: relative;
-                height: 78px;
-                text-transform: uppercase;
-                font-family: $sansFontFamily;
-                font-size: 13px;
-                line-height: 13px;
-                text-align: center;
-                a, .fake-link {
-                    border-left: 1px solid $grayLightest;
-                }
-                &:last-child a, &:last-child .fake-link {
-                    border-right: 1px solid $grayLightest;
-                }
-                .logged-in-username {
-                    @include transition(color 0.2s linear);
-                }
-                &.open-directory, &.notice {
-                    a {
-                        width: $nav_block_width;
-                        html.breakpoint-tablet & {
-                            width: $nav_block_width_tablet;
-                        }
-                    }
-                }
-
-                &.logged-in-block {
-                    a, span.fake-link {
-                        width: $nav_block_width;
-                        html.breakpoint-tablet & {
-                            width: $nav_block_width_tablet;
-                        }
-                    }
-                    .icon-chevron-down {
-                        display: none;
-                    }
-                    &.dropdown.open-caret {
-                        .icon-chevron-down {
-                            display: inline-block;
-                            font-size: 11px;
-                            margin-left: 3px;
-                            vertical-align: top;
-                            line-height: 19px;
-                        }
-                        &:hover, &.open {
-                            a {
-                                color: darken($themeSubText, 20%);
-                                background-color: lighten($themeSolid, 5.5%);
-                            }
-                            .logged-in-username {
-                                color: $linkColorHover;
-                                @include transition(color 0.15s linear);
-                            }
-                            .dropdown-menu li a {
-                                background-color: $white;
-                                &:hover {
-                                    background-color: $themeSolid;
-                                }
-                            }
-                            hr {
-                                width: 36px;
-                                border-top-color: $themeSubText;
-                                @include transition(#{border-top-color 0.15s linear, width 0.15s linear});
-                            }
-                        }
-                    }
-                }
-                a, span.fake-link {
-                    display: block;
-                    width: 106px;
-                    height: 48px;
-                    padding: 0;
-                    padding-top: 30px;
-
-                    color: darken($themeSubText, 10%);
-                    text-shadow: none;
-                    @include transition(#{background-color 0.2s linear, color 0.2s linear});
-
-                    &:hover {
-                        background-color: lighten($themeSolid, 5.5%);
-                        @include transition(#{background-color 0.15s linear, color 0.15s linear});
-                    }
-
-                    &.green {
-                        background-color: lighten($green, 36%);
-                        &:hover, &:hover .notice-link {
-                            background-color: lighten($green, 34.5%);
-                            .notice-link {
-                                color: darken($green, 7%);
-                            }
-                        }
-                    }
-                    &.sign-up {
-                        color: $green;
-                        hr {
-                            border-top-color: $green;
-                        }
-                        &:hover {
-                            color: darken($green, 10%);
-                            hr {
-                                border-top-color: darken($green, 10%);
-                            }
-                        }
-                    }
-                    .logged-in-as, .logged-in-username, .notice-text, .notice-link {
-                        display: block;
-                        font-size: 11px;
-                    }
-                    .logged-in-as, .notice-text {
-                        margin-top: -13px;
-                        margin-bottom: -1px;
-                    }
-                    .logged-in-username, .notice-link {
-                        margin: 4px auto 0 auto;
-                        font-size: 11px;
-                    }
-                    span.inner, .notice-link {
-                        max-width: 190px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        text-transform: none;
-                    }
-                    .logged-in-username {
-                        color: $linkColor;
-                        span.inner {
-                            display: inline-block;
-                            margin: 0;
-                            max-width: 170px;
-                        }
-                    }
-                    .notice-link {
-                        color: $green;
-                    }
-                }
-                span.fake-link {
-                     &:hover, &:hover .logged-in-username {
-                         background-color: $white;
-                          .logged-in-as {
-                              color: darken($themeSubText, 10%);
-                          }
-                          .logged-in-username {
-                                color: $linkColor;
-                          }
-                          hr {
-                              margin: 4px auto 0 auto;
-                              width: 22px;
-                              border-top-color: $grayLighter;
-                          }
-                     }
-                }
-                .dropdown-menu {
-                    position: absolute;
-                    margin: 0;
-                    width: $nav_block_width;
-                    html.breakpoint-tablet & {
-                        width: $nav_block_width_tablet;
-                    }
-                    padding: 0;
-                    border: 1px solid $grayLighter;
-                    background-color: $white;
-                    color: darken($themeSubText, 10%);
-                    @include box-shadow(0 2px 0 rgba(0, 0, 0, 0.05));
-                    @include border-radius(0);
-                    &::before, &::after {
-                        display: none;
-                    }
-                    html.breakpoint-phone & {
-                        min-width: 80px;
-                        width: 80px;
-                        li {
-                            height: auto;
-                        }
-                        a {
-                            padding: 0;
-                            margin: 0;
-                            height: auto;
-                        }
-                    }
-                    li {
-                        height: auto;
-                        a {
-                            display: block;
-                            padding: 0;
-                            height: 34px;
-                            border-left: 0;
-                            border-right: 0;
-                            border-bottom: 1px solid $grayLightest;
-                            text-transform: none;
-                            line-height: 34px;
-                            &:hover {
-                                i {
-                                    color: darken($themeSubText, 20%);
-                                }
-                            }
-                        }
-                        &:last-child a {
-                            border-bottom: none;
-                        }
-                        i {
-                            display: none;
-                            color: $themeSubText;
-                            html.breakpoint-phone & {
-                                display: inline-block;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        html.breakpoint-phone & {
-            margin-right: -12px;
-            .nav li {
-                height: 44px;
-                &.logged-in-block.dropdown.open-caret {
-                    .icon-chevron-down {
-                        display: block;
-                        margin-left: 36px;
-                        font-size: 7px;
-                        line-height: 10px;
-                    }
-                }
-                &.logged-in-block a {
-                    width: 80px;
-                }
-                a, span.fake-link {
-                    padding-top: 13px;
-                    width: 80px;
-                    height: 31px;
-                    hr, .logged-in-as, .notice-link {
-                        display: none;
-                    }
-                    .logged-in-username,
-                    .notice-text-mobile {
-                        font-size: 9px;
-                        span.inner {
-                            max-width: 75px;
-                        }
-                    }
-                    .logged-in-username {
-                        margin-top: 5px;
-                        line-height: 10px;
-                    }
-                    .notice-text {
-                        display: none;
-                    }
-                    .notice-text-mobile {
-                        max-width: 115px;
-                        color: darken($green, 5%);
-                        display: block;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.upsell-banner {
-    position: relative;
-    width: 100%;
-    border-top: 1px solid $grayLighter;
-    background-color: $themeSolid;
-    .upsell-banner-inner {
-        padding: 40px 0 40px 0;
-        h1 {
-            position: relative;
-            top: 3px;
-            font-size: 25px;
-            line-height: normal;
-            display: inline-block;
-            margin-right: 20px;
-            html.breakpoint-tablet &,
-            html.breakpoint-phone & {
-                display: block;
-                font-size: 16px;
-                top: 0;
-                margin: 0 60px 20px 60px;
-            }
-        }
-    }
-    .icon-remove {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        padding: 9px 11px 9px 11px;
-        cursor: pointer;
-        border: 1px solid $grayLighter;
-        color: $themeSubText;
-        font-size: 18px;
-        line-height: normal;
-    }
-}
-
 html {
-    .nav-list {
-        width: 258px;
-        padding: 0 0 30px 0;
-        border-right: 1px solid $grayLighter;
-
-        &.alerts {
-            padding: 0 0 10px 0;
-            .alert {
-                margin: 0 10px 0 0;
-                padding: 10px;
-                border: 1px solid lighten($themeAttention, 30%);
-                background-color: lighten($themeAttention, 38%);
-                text-align: center;
-                @include border-radius(0);
-                @include box-shadow(0 2px 0 rgba(0, 0, 0, 0.05));
-                p, a {
-                    margin: 0;
-                    padding: 0;
-                }
-                a {
-                    padding-left: 0;
-                    color: $linkColor;
-                    &:hover {
-                        background-color: transparent;
-                    }
-                }
-            }
-        }
-
-        .nav-header, li a {
-            padding: 10px;
-            margin: 0;
-            font-size: 16px;
-            line-height: 16px;
-            font-weight: normal;
-            text-shadow: none;
-            font-family: $headingsFontFamily;
-        }
-
-        .nav-header {
-            color: $themeAccent;
-            border-bottom: 1px solid $grayLighter;
-            padding-left: 0;
-            padding-bottom: 7px;
-            html.breakpoint-tablet & {
-                font-size: 14px;
-            }
-            .icon-remove-sign {
-                margin-right: 0;
-                &:hover {
-                    color: lighten($themeAccent, 15%);
-                }
-            }
-        }
-
-        .nav.header {
-            .m-nav-toggle {
-                display: inline-block;
-                border: none;
-                margin: 9px 10px 0 0;
-                padding: 3px 6px 2px 6px;
-                border: 1px solid $grayLighter;
-                background-color: $white;
-                line-height: normal;
-                color: $themeSubText;
-                &:active {
-                    background-color: $themeSolid;
-                }
-            }
-        }
-
-        .nav-list-inner {
-            padding: 15px;
-            padding-top: 10px;
-            padding-left: 0;
-            font-size: 12px;
-            font-style: italic;
-            line-height: 20px;
-            text-align: justify;
-            text-justify: inter-word;
-        }
-
-        li {
-
-            border-bottom: 1px solid $grayLightest;
-            &:last-child {
-                border-bottom: none;
-            }
-            a {
-                position: relative;
-                font-size: 13px;
-                color: $themeSubText;
-                padding-left: 30px;
-                @include transition(background-color 0.2s linear);
-
-                &:hover {
-                    background-color: $themeSolid;
-                    @include transition(background-color 0.15s linear);
-                    border-bottom: none;
-                }
-
-                .icon-chevron-right {
-                    position: absolute;
-                    top: 13px;
-                    right: 5px;
-                    display: none;
-                    font-size: 12px;
-                    line-height: normal;
-                }
-            }
-
-            &.active a, &.active a:hover {
-                background-color: $themeSubText;
-                text-shadow: none;
-                color: #fff;
-                .icon-chevron-right {
-                    display: inline-block;
-                }
-            }
-        }
-    }
 
     &.breakpoint-widescreen,
     &.breakpoint-tablet {
@@ -800,8 +344,7 @@ html {
 
         &.breakpoint-height_small {
             .nav-vertically-responsive {
-                padding-top: 5px;
-                padding-bottom: 5px;
+                padding: 0 0 3px 0;
                 li a {
                     padding-top: 6px;
                     padding-bottom: 6px;
@@ -811,7 +354,7 @@ html {
 
         &.breakpoint-height_mini {
             .nav-vertically-responsive {
-                padding-top: 0;
+                padding: 0 0 5px 0;
                 li a {
                     font-size: 11px;
                     padding-top: 1px;
@@ -824,43 +367,6 @@ html {
         }
     }
 
-    &.breakpoint-phone .nav-list li.active {
-        a, a:hover {
-            .icon-chevron-right {
-                display: none;
-            }
-        }
-
-    }
-
-    &.breakpoint-phone .nav-list.mobile-note-fix {
-        margin: 0;
-        margin-top: -30px;
-        padding: 0;
-        .nav-list-inner {
-            padding: 0;
-        }
-    }
-    &.breakpoint-tablet .nav-list {
-        width: 95%;
-        margin-right: 5%;
-    }
-    &.breakpoint-phone .nav-list {
-        margin-bottom: 0;
-        border-bottom: 0;
-        width: 100%;
-        border-right: none;
-        &:last-child {
-            margin-bottom: 30px;
-        }
-    }
-
-    &.breakpoint-tablet .nav-list {
-        li a {
-            font-size: 12px;
-            padding-left: 20px;
-        }
-    }
 }
 
 .subnav-container {
@@ -1074,7 +580,7 @@ div.site-footer {
         margin-top: 6px;
         width: 10px;
     }
-    i {
+    i, .nav & i {
         color: $grayLighter;
         font-size: 50px;
         line-height: 80px;
@@ -1137,7 +643,7 @@ div.site-footer {
             .bio-preview {
                 overflow: hidden;
                 max-height: 110px;
-                padding-left: 18px;
+                padding-left: 29px;
                 padding-top: 12px;
                 html.breakpoint-phone & {
                     display: none;
@@ -1224,55 +730,15 @@ html.breakpoint-phone {
     }
 }
 
-.upload-buttons-and-bio {
-    margin-left: 30px;
-
-    .btn {
-        display: block;
-        padding: 12px;
-        margin-bottom: 10px;
-        width: 100%;
-        @include box-sizing(border-box);
-        html.breakpoint-tablet & {
-            max-width: 553px;
-            margin: 0 auto 10px auto;
-        }
-    }
-
-    .char-counter-block {
-        margin-top: 20px;
-        color: $themeSubText;
-    }
-
-    .field-description,
-    .field-description textarea {
-        margin-bottom: 0;
-    }
-
-    form.bio-textarea {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    label {
-        display: none;
-    }
-
-    .bio-label {
-        font-family: $sansFontFamily;
-        font-size: 13px;
-        color: $themeAccent;
-    }
-
-    textarea {
-        resize: vertical;
-        height: 100px;
-        @include box-sizing(border-box);
-    }
-
-    html.breakpoint-tablet &,
-    html.breakpoint-phone & {
-        margin-top: 30px;
-        margin-left: 0;
-    }
+.pointer {
+    cursor: pointer;
+}
+.link-color {
+    color: $linkColor;
+}
+.no-padding {
+    padding: 0;
+}
+.italic {
+    font-style: italic;
 }

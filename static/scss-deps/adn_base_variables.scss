@@ -72,14 +72,14 @@ $headingsColor:         lighten($themeAccent, 15%); // empty to use BS default, 
 // Tables
 // -------------------------
 $tableBackground:                   transparent !default; // overall background-color
-$tableBackgroundAccent:             #f9f9f9 !default; // for striping
+$tableBackgroundAccent:             darken(#f9f9f9, 5%) !default; // for striping
 $tableBackgroundHover:              #f5f5f5 !default; // for hover
 $tableBorder:                       #ddd !default; // table and cell border
 
 
 // Buttons
 // -------------------------
-$btnBackground:                     lighten($grayLighter, .5%);
+$btnBackground:                     $grayLighter;
 $btnBackgroundHighlight:            darken($grayLighter, 11%);
 $btnBorder:                         #1b1b1c;
 
