@@ -435,11 +435,16 @@ html.omega {
 .channel-list-menu {
     max-width: 950px;
     font-family: $sansFontFamily;
+    margin-bottom: 5px;
+    ul {
+        height: 24px;
+        line-height: 28px;
+    }
     li {
         padding: 0 5px;
     }
     a {
-        font-size: 14px;
+        font-size: 12px;
         color: $grayLight;
         font-weight: normal;
         &.active {
@@ -447,8 +452,8 @@ html.omega {
             font-weight: bold;
         }
         &.btn {
-            text-transform: none;
             color: $white;
+            line-height: normal;
         }
     }
 }
