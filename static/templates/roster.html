@@ -1,4 +1,4 @@
-<div class='roster' resize-height bottom-margin="130" max-height="620">
+<div class='roster' resize-height bottom-margin="30" max-height="620">
   <div class='roster-member' ng-repeat="user in getRoster() | orderBy:['username']">
     <img width=25 height=25 alt='roster icon for {{ user.username }}' class='hidden-phone' ng-src="{{ user.avatar_image.url }}?w=25">
     <span class='username'><a href='#' ng-click='getChatUrl(user.id)'><strong>@{{user.username}}</strong></a> <a class='profile-link yui3-u-none m-yui3-u t-yui3-u' alt='go to profile' href='{{alpha_url_base}}/{{user.username}}'><i class='icon-user'></i></a></span>

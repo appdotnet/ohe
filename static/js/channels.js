@@ -118,18 +118,31 @@
             return $scope.num_channels_to_show < $rootScope.channel_list.length;
         };
 
+        $scope.recent_users = [];
+
+        $scope.$watch('channel_list', function (newVal, oldVal) {
+            if (newVal !== oldVal || !$scope.recent_users.length) {
+                var recent_user_ids = [];
+                var max_users = 20;
+                var root_id = parseInt($rootScope.user_id, 10);
+                angular.forEach($rootScope.channel_list, function (channel) {
+                    if (recent_user_ids.length < max_users) {
+                        var user_ids = _.map(_.pluck(channel.users, 'id'), function (id) {
+                            return parseInt(id, 10);
+                        });
+                        user_ids = _.reject(user_ids, function (user_id) {
+                            return user_id === root_id;
+                        });
+                        recent_user_ids.push.apply(recent_user_ids, user_ids);
+                        recent_user_ids = _.uniq(recent_user_ids);
+                    }
+                });
+                $scope.recent_users = _.values(User.bulk_get(recent_user_ids));
+            }
+        }, true);
+
         $scope.getRoster = function () {
-            var recent_user_ids = [];
-            angular.forEach($rootScope.channel_list, function (channel) {
-                var user_ids = _.pluck(channel.users, 'id');
-                recent_user_ids.push.apply(recent_user_ids, _.map(user_ids, function (elem) {
-                    return parseInt(elem, 10);
-                }));
-            });
-            recent_user_ids = _.reject(recent_user_ids, function (user_id) {
-                return user_id === parseInt($rootScope.user_id, 10);
-            });
-            return User.bulk_get(recent_user_ids);
+            return $scope.recent_users;
         };
     }]).controller('ChannelDetailCtrl', ['$scope', '$element', '$timeout', 'channelState', '$routeParams', '$location', function ($scope, $element, $timeout, channelState, $routeParams, $location) {
         channelState.get_channel($routeParams.channel_id, true).then(function (channel) {
