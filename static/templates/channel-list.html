@@ -12,7 +12,7 @@
     <div class="row-fluid">
       <div class='ul-container yui3-u-1'>
           <ul class='unstyled'>
-              <li ng-repeat="channel in (selectedNav == 'inbox' && channel_list || muted_channel_list) | orderBy:['-has_unread', '-recent_message.created_at']" ng-class="{'last':$last}">
+              <li ng-repeat="channel in (selectedNav == 'inbox' && channel_list.slice(0, num_channels_to_show) || muted_channel_list) | orderBy:['-has_unread', '-recent_message.created_at']" ng-class="{'last':$last}">
                   <a href="{{ channel.detail_url() }}">
                       <div class="row {{channel.has_unread && 'unread'}} channel">
                           <div class='pull-left img-block'>
@@ -39,7 +39,7 @@
                       </div>
                   </a>
               </li>
-              <li class='show-older-channels ta-center' ng-show="selectedNav == 'inbox' && has_more_channels && channel_list.length >= channel_fetch_size"><a href='#' ng-click="loadOlderChannels()">Show Older <i class='icon-chevron-down'></i></a></li>
+              <li class='show-older-channels ta-center' ng-show="selectedNav == 'inbox' && has_more_channels() && channel_list.length >= channel_fetch_size"><a href='#' ng-click="loadOlderChannels()">Show Older <i class='icon-chevron-down'></i></a></li>
               <div class='no-channels' ng-show="!channel_list || channel_list.length == 0">No messages yet</div>
           </ul>
       </div>

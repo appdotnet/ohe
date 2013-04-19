@@ -396,34 +396,65 @@
             }
         };
     }]).directive('resizeHeight', ['$timeout', function ($timeout) {
-        return function (scope, element) {
-            var t;
-            var w = $(window);
-            var layout_dimensions = {};
-            var check_dimensions = function () {
-                var dimensions = {
-                    window_height: w.height(),
-                    window_width: w.width(),
-                    container_offset: element.offset()
+        return {
+            restrict: 'A',
+            scope: {
+                // these scope attributes can only be numbers?? apparently
+                bottomMargin: "&bottomMargin",
+                maxHeight: "&maxHeight",
+            },
+            link: function (scope, element) {
+                var t;
+                var w = $(window);
+                var layout_dimensions = {};
+                var check_dimensions = function () {
+                    var dimensions = {
+                        window_height: w.height(),
+                        window_width: w.width(),
+                        container_offset: element.offset()
+                    };
+
+                    if (!_.isEqual(layout_dimensions, dimensions)) {
+                        layout_dimensions = dimensions;
+
+                        // fix dimensions
+                        var min_height = 200;
+                        var bottomMargin = scope.bottomMargin && scope.bottomMargin() || 0;
+                        var maxHeight = scope.maxHeight && scope.maxHeight() || 9999;
+                        var new_height = Math.max(min_height, dimensions.window_height - dimensions.container_offset.top - bottomMargin);
+                        new_height = Math.min(maxHeight, new_height);
+                        element.height(new_height);
+                    }
+                    t = $timeout(check_dimensions, 200, false);
                 };
-
-                if (!_.isEqual(layout_dimensions, dimensions)) {
-                    layout_dimensions = dimensions;
-
-                    // fix dimensions
-                    var min_height = 200;
-                    var new_height = Math.max(min_height, dimensions.window_height - dimensions.container_offset.top - 130);
-                    element.height(new_height);
-                }
-                t = $timeout(check_dimensions, 200, false);
-            };
-            check_dimensions();
+                check_dimensions();
+            }
         };
-    }]).directive('roster', [function () {
+    }]).directive('roster', ['$location', '$rootScope', function ($location, $rootScope) {
         return {
             restrict: 'E',
             templateUrl: 'roster.html',
-            replace: true
+            replace: true,
+            link: function (scope, element) {
+                scope.getChatUrl = function (user_id) {
+                    if ($rootScope.user_id === user_id) {
+                        return;
+                    }
+                    // try to find an existing channel with this user
+                    var to_match = [$rootScope.user_id, user_id].sort().join(',');
+                    var existing_channel = _.find($rootScope.channel_list, function (channel) {
+                        var user_ids = _.pluck(channel.users, 'id');
+                        return user_ids.sort().join(',') === to_match;
+                    });
+
+                    // if found, then change the location to that channel
+                    if (existing_channel) {
+                        return $location.path('/channel/' + existing_channel.id);
+                    } else {
+                        return $location.path('/new-message').search('to', user_id);
+                    }
+                }
+            }
         };
     }]).factory('Message', ['User', '$http', function (User, $http) {
         var Message = function (data) {

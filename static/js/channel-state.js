@@ -5,7 +5,6 @@
     .factory('channelState', ['$http', '$rootScope', '$q', '$routeParams', 'Socket', 'User', 'Channel', 'Message', 'utils', function ($http, $rootScope, $q, $routeParams, Socket, User, Channel, Message, utils) {
         var channel_cache = {};
         var channels_queried = false;
-        var channel_min_id;
 
         var query_messages = function (channel) {
             // TODO: enable this to backfill
@@ -117,47 +116,51 @@
             }
         };
 
-        var query_channels = function (num_to_fetch, fetch_older) {
-            num_to_fetch = num_to_fetch || 0;
-            if (channels_queried && !fetch_older) {
-                var defer = $q.defer();
-                defer.resolve($rootScope.channel_list);
-                return defer.promise;
-            }
-
+        var query_channels = function () {
+            var url = '/adn-proxy/stream/0/channels';
             var params = {
-                count: num_to_fetch,
+                count: 20,
                 include_recent_message: 1,
                 channel_types: 'net.app.core.pm'
             };
 
-            if (channel_min_id) {
-                params.before_id = channel_min_id;
-            }
-
-            var url = '/adn-proxy/stream/0/channels';
-            return $http({
-                method: 'GET',
-                url: url,
-                params: params
-            }).then(function (response) {
-                channel_min_id = response.data.meta.min_id;
-                var fetched_channels = [];
-
-                angular.forEach(response.data.data, function (value) {
-                    var channel = new Channel(value, true);
-                    channel_cache[channel.id] = channel;
-                    fetched_channels.push(channel);
+            var ajax_call = function (before_id) {
+                if (before_id) {
+                    params.before_id = before_id;
+                } else {
+                    delete params.before_id;
+                }
+                return $http({
+                    method: 'GET',
+                    url: url,
+                    params: params
+                }).then(function (response) {
+                    var more_channels = response.data.meta.more;
+                    var min_id = response.data.meta.min_id;
+                    var fetched_channels = [];
+                    angular.forEach(response.data.data, function (value) {
+                          var channel = new Channel(value, true);
+                          channel_cache[channel.id] = channel;
+                          fetched_channels.push(channel);
+                    });
+                    User.fetch_pending();
+                    channels_queried = true;
+                    if (more_channels) {
+                        ajax_call(min_id);
+                    }
+                    $rootScope.channel_list = _.values(channel_cache);
+                    return fetched_channels;
                 });
+            };
 
-                User.fetch_pending();
-
-                channels_queried = true;
-
-                $rootScope.channel_list = _.values(channel_cache);
-
-                return fetched_channels;
-            });
+            if (!channels_queried) {
+                // query all channels so we know which channels the user is in and with whom
+                return ajax_call();
+            } else {
+                var deferred = $q.defer();
+                deferred.resolve();
+                return deferred.promise;
+            }
         };
 
         var fetch_muted_channels = function () {

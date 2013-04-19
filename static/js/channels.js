@@ -88,8 +88,8 @@
 
         return Channel;
     }]).controller('ChannelListCtrl', ['$scope', '$rootScope', '$location', 'Channel', 'Message', 'User', 'channelState', 'utils', function ($scope, $rootScope, $location, Channel, Message, User, channelState, utils) {
-        $scope.has_more_channels = true;
         $scope.channel_fetch_size = 10;
+        $scope.num_channels_to_show = 10;
 
         var watch_notifications = function () {
             $scope.$watch('channel_list', function (newVal, oldVal) {
@@ -101,7 +101,8 @@
         if ($rootScope.selectedNav === 'muted') {
             channelState.fetch_muted_channels();
         } else {
-            channelState.query_channels($scope.channel_fetch_size, false).then(function () {
+            var deferred = channelState.query_channels($scope.channel_fetch_size, false);
+            deferred.then(function () {
                 watch_notifications();
             });
         }
@@ -110,19 +111,23 @@
         $scope.message = new Message();
 
         $scope.loadOlderChannels = function () {
-            channelState.query_channels($scope.channel_fetch_size, true).then(function (channels) {
-                if (channels.length < $scope.channel_fetch_size) {
-                    $scope.has_more_channels = false;
-                }
-            });
+            $scope.num_channels_to_show += $scope.channel_fetch_size;
+        };
+
+        $scope.has_more_channels = function () {
+            return $scope.num_channels_to_show < $rootScope.channel_list.length;
         };
 
         $scope.getRoster = function () {
             var recent_user_ids = [];
             angular.forEach($rootScope.channel_list, function (channel) {
-                recent_user_ids.push.apply(recent_user_ids, _.map(channel.writers.user_ids, function (elem) {
+                var user_ids = _.pluck(channel.users, 'id');
+                recent_user_ids.push.apply(recent_user_ids, _.map(user_ids, function (elem) {
                     return parseInt(elem, 10);
                 }));
+            });
+            recent_user_ids = _.reject(recent_user_ids, function (user_id) {
+                return user_id === parseInt($rootScope.user_id);
             });
             return User.bulk_get(recent_user_ids);
         };

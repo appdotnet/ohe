@@ -35,7 +35,7 @@ html.omega {
 }
 
 .message-list {
-  overflow-y: scroll;
+  overflow-y: auto;
   html.no-overflowscrolling.touch {
     overflow-y: hidden;
   }
@@ -329,7 +329,7 @@ html.omega {
 }
 
 .roster {
-    overflow-y: scroll;
+    overflow-y: auto;
     html.brekapoint-phone & {
         overflow-y: visible;
     }
