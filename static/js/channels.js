@@ -127,7 +127,7 @@
                 }));
             });
             recent_user_ids = _.reject(recent_user_ids, function (user_id) {
-                return user_id === parseInt($rootScope.user_id);
+                return user_id === parseInt($rootScope.user_id, 10);
             });
             return User.bulk_get(recent_user_ids);
         };

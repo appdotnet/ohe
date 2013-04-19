@@ -401,7 +401,7 @@
             scope: {
                 // these scope attributes can only be numbers?? apparently
                 bottomMargin: "&bottomMargin",
-                maxHeight: "&maxHeight",
+                maxHeight: "&maxHeight"
             },
             link: function (scope, element) {
                 var t;
@@ -453,7 +453,7 @@
                     } else {
                         return $location.path('/new-message').search('to', user_id);
                     }
-                }
+                };
             }
         };
     }]).factory('Message', ['User', '$http', function (User, $http) {

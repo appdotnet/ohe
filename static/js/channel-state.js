@@ -139,9 +139,9 @@
                     var min_id = response.data.meta.min_id;
                     var fetched_channels = [];
                     angular.forEach(response.data.data, function (value) {
-                          var channel = new Channel(value, true);
-                          channel_cache[channel.id] = channel;
-                          fetched_channels.push(channel);
+                        var channel = new Channel(value, true);
+                        channel_cache[channel.id] = channel;
+                        fetched_channels.push(channel);
                     });
                     User.fetch_pending();
                     channels_queried = true;
