@@ -12,7 +12,7 @@
     <div class="row-fluid">
       <div class='ul-container yui3-u-1'>
           <ul class='unstyled'>
-              <li ng-repeat="channel in (selectedNav == 'inbox' && channel_list.slice(0, num_channels_to_show) || muted_channel_list) | orderBy:['-has_unread', '-recent_message.created_at']" ng-class="{'last':$last}">
+              <li ng-repeat="channel in (selectedNav == 'inbox' && channel_list || muted_channel_list) | orderBy:['-has_unread', '-recent_message.created_at'] | limitTo:((selectedNav == 'inbox' && num_channels_to_show) || muted_channel_list.length)" ng-class="{'last':$last}">
                   <a href="{{ channel.detail_url() }}">
                       <div class="row {{channel.has_unread && 'unread'}} channel">
                           <div class='pull-left img-block'>

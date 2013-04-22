@@ -119,7 +119,7 @@
         var query_channels = function () {
             var url = '/adn-proxy/stream/0/channels';
             var params = {
-                count: 20,
+                count: 200,
                 include_recent_message: 1,
                 channel_types: 'net.app.core.pm'
             };
