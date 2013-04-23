@@ -115,6 +115,7 @@ app.get('/channel/:channel_id', routes.index);
 app.get('/new-message', routes.index);
 app.get('/return', routes.oauth_return);
 app.get('/logout', routes.logout);
+app.get('/logout-and-login', routes.logout_and_login);
 app.get('/healthcheck', routes.healthcheck);
 app.get('/camofy-url', routes.camofy_url);
 app.get('/file-url', routes.file_url);

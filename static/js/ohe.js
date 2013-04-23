@@ -10,7 +10,7 @@
             var error = function (response) {
                 var status = response.status;
                 if (status === 401) {
-                    window.location.href = window.location.href;
+                    window.location.pathname = '/logout-and-login';
                 }
                 return $q.reject(response);
             };
