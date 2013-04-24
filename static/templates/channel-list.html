@@ -24,7 +24,7 @@
           </div>
           <div ng-switch-when="muted">
               <ul class='unstyled'>
-                  <li ng-repeat="channel in muted_channel_list | orderBy:['-has_unread', '-recent_message.created_at']">
+                  <li ng-repeat="channel in muted_channel_list | orderBy:['-has_unread', '-recent_message.created_at']" ng-class="{'last':$last}">
                       <channel-list-entry></channel-list-entry>
                   </li>
               </ul>
