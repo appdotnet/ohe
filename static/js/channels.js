@@ -172,5 +172,14 @@
         $scope.getRoster = function () {
             return $scope.selectedUsers;
         };
-    }]);
+    }]).directive('channelListEntry', function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'channel-list-entry.html',
+            link: function (scope, element) {
+                
+            }
+        }
+    });
 })();
