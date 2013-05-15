@@ -176,10 +176,7 @@
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: 'channel-list-entry.html',
-            link: function (scope, element) {
-                
-            }
-        }
+            templateUrl: 'channel-list-entry.html'
+        };
     });
 })();
