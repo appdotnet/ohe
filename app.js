@@ -10,6 +10,7 @@ nconf.add('asset_map', {type: 'file', file: asset_map_path});
 var express = require('express');
 var jade = require('jade');
 var app = express();
+var raven = require('raven');
 var server = require('http').createServer(app);
 var redisurl = require('./ohe/redisurl');
 var RedisStore = require('connect-redis')(express);
@@ -23,6 +24,7 @@ var _ = require('underscore');
 var multiprocess = nconf.get('deploy:multiprocess');
 var connect_to_stream = nconf.get('deploy:master') || !multiprocess;
 var on_heroku = nconf.get('deploy:heroku');
+var SENTRY_DSN = nconf.get('sentry:dsn');
 
 if (on_heroku) {
     nconf.set('sessions:redis_url', process.env.REDISTOGO_URL);
@@ -99,6 +101,7 @@ app.configure(function () {
     app.use(express.bodyParser());
     app.use("/static", express['static'](__dirname + '/static'));
     app.use(app.router);
+    app.use(raven.middleware.express(SENTRY_DSN));
     app.use(express.errorHandler());
 });
 
