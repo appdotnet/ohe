@@ -67,7 +67,7 @@ html(lang="en", ng-app="ohe", class="omega new-app-dot-net")
 
   body
     div.wrapper
-      div.nav.header.yui3-u-1
+      div(class="#{is_authenticated ? '' : 'logged-out'} nav header yui3-u-1")
         div.container
           div.yui3-u-1.clearfix
             a.pull-left.logo(href="/")

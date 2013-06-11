@@ -1,8 +1,17 @@
 $grayHighlight: #FBFBFB;
 
 html.omega {
-    .nav.header .logo {
-        background-image: url("/static/images/appdotnet-omega.png");
+    .nav.header {
+        .logo {
+            background-image: url("/static/images/omega-logo.png");
+            width: 146px;
+            height: 32px;
+            background-size: 146px 32px;
+            margin-top: 23px;
+        }
+        &.logged-out .logo {
+            margin-bottom: 23px;
+        }
     }
     .navbar .nav .active > a {
         background-color: $grayHighlight;
@@ -14,6 +23,24 @@ html.omega {
         font-size: 14px;
     }
 }
+html.breakpoint-retina {
+    .nav.header .logo {
+        background-image: url("/static/images/omega-logo@2x.png");
+    }
+}
+html.breakpoint-phone {
+    .nav.header {
+        .logo {
+            margin: 6px 0 0 0;
+            width: 32px;
+            height: 32px;
+        }
+        &.logged-out .logo {
+            margin-bottom: 6px;
+        }
+    }
+}
+
 
 .logged-in-block a {
     outline: 0;
