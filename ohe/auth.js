@@ -97,7 +97,8 @@ exports.get_authenticate_url = function (req) {
         response_type: 'code',
         redirect_uri: redirect_uri,
         scope: scope,
-        client_id: client_id
+        client_id: client_id,
+        new_onboarding: 1
     });
 };
 
