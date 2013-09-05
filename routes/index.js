@@ -39,6 +39,12 @@ exports.logout = function (req, res) {
     });
 };
 
+exports.logout_and_login = function (req, res) {
+    auth.logout(req, function () {
+        res.redirect(auth.get_authenticate_url(req));
+    });
+}
+
 exports.healthcheck = function (req, res) {
     res.send('healthcheck=OK');
 };

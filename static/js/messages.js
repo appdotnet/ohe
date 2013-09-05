@@ -334,7 +334,19 @@
             restrict: 'E',
             controller: 'MessageFormCtrl',
             replace: true,
-            templateUrl: 'message-form.html'
+            templateUrl: 'message-form.html',
+            link: function (scope, element) {
+                $(element).keypress(function (e) {
+                    // prevent Enter key from opening file attachment dialog when
+                    // Send button is disabled
+                    if (e.which === 13) { // Enter key
+                        var submit_btn = $(element).find('button[value="submit"]');
+                        if (submit_btn.attr('disabled') === 'disabled') {
+                            return false;
+                        }
+                    }
+                });
+            }
         };
     }).directive('messageContainer', ['utils', '$http', function (utils, $http) {
         return {

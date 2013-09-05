@@ -15,5 +15,8 @@
     "camo": {
         "host": "",
         "key": ""
+    },
+    "sentry": {
+        "dsn": ""
     }
 }

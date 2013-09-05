@@ -1,0 +1,25 @@
+<a href="{{ channel.detail_url() }}">
+    <div class="row {{channel.has_unread && 'unread'}} channel">
+        <div class='pull-left img-block'>
+            <img width=50 height=50 alt='channel icon {{ channel.get_visible_user().username }}' ng-src="{{ channel.get_visible_user().avatar_image.url }}?w=50">
+        </div>
+        <div class='content-block'>
+            <div class='timestamp pull-right'>
+                <small class='muted'>{{ channel.recent_message.created_at | date:'MMM-d h:mm a' }}</small>
+            </div>
+            <div class='users'>
+                <span ng-repeat="user in channel.get_users()">
+                  <span ng-show="user.is_complete">
+                    {{ user.username }}<span ng-show="!$last">, </span>
+                  </span>
+                </span>
+            </div>
+            <div class='recent-message'>
+                <small class='muted'>
+                    <span ui-if="channel.recent_message.user.id == user_id">&larr; </span>
+                    {{channel.recent_message.text}}
+                </small>
+            </div>
+        </div>
+    </div>
+</a>
