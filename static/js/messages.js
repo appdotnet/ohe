@@ -562,7 +562,7 @@
         };
 
         $scope.enable_send_button = function () {
-            return ($scope.message.text && $scope.message.text.length <= 256);
+            return ($scope.message.text && $scope.message.text.length <= 2048);
         };
     }]).controller('MessageListCtrl', ['$scope', '$element', 'channelState', function ($scope, $element, channelState) {
         $scope.$on('update_marker', function (event, message) {
