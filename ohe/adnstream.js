@@ -43,7 +43,7 @@ ADNStream.prototype.process = function (purge) {
     });
 
     this.request.on('error', function (error) {
-        this.emit('error', error);
+        self.emit('error', error);
     });
 
     this.request.on('response', function (response) {
